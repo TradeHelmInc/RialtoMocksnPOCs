@@ -1,0 +1,16 @@
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\KoreConX.LogicLayer\bin\Debug\input\Companies.json
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\KoreConX.LogicLayer\bin\Debug\input\Securities.json
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\KoreConX.LogicLayer\bin\Debug\input\Shareholders.json
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\KoreConX.LogicLayer\bin\Debug\KoreConX.LogicLayer.dll
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\KoreConX.LogicLayer\bin\Debug\KoreConX.LogicLayer.pdb
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\KoreConX.LogicLayer\bin\Debug\KoreConX.DataAccessLayer.Json.dll
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\KoreConX.LogicLayer\bin\Debug\MDFShared.dll
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\KoreConX.LogicLayer\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\KoreConX.LogicLayer\bin\Debug\ToolsShared.dll
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\KoreConX.LogicLayer\bin\Debug\KoreConX.DataAccessLayer.Json.pdb
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\KoreConX.LogicLayer\obj\Debug\KoreConX.LogicLayer.csprojResolveAssemblyReference.cache
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\KoreConX.LogicLayer\obj\Debug\KoreConX.LogicLayer.dll
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\KoreConX.LogicLayer\obj\Debug\KoreConX.LogicLayer.pdb
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\KoreConX.LogicLayer\bin\Debug\input\Positions.json
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\KoreConX.LogicLayer\bin\Debug\KoreConX.BusinessEntities.dll
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\KoreConX.LogicLayer\bin\Debug\KoreConX.BusinessEntities.pdb

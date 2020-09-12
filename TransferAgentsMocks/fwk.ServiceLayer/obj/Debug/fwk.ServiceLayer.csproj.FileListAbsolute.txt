@@ -1,0 +1,9 @@
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\fwk.ServiceLayer\obj\Debug\fwk.ServiceLayer.csprojResolveAssemblyReference.cache
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\fwk.ServiceLayer\bin\Debug\fwk.ServiceLayer.dll
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\fwk.ServiceLayer\bin\Debug\fwk.ServiceLayer.pdb
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\fwk.ServiceLayer\bin\Debug\fwk.Common.dll
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\fwk.ServiceLayer\bin\Debug\MDFShared.dll
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\fwk.ServiceLayer\bin\Debug\ToolsShared.dll
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\fwk.ServiceLayer\bin\Debug\fwk.Common.pdb
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\fwk.ServiceLayer\obj\Debug\fwk.ServiceLayer.dll
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\fwk.ServiceLayer\obj\Debug\fwk.ServiceLayer.pdb

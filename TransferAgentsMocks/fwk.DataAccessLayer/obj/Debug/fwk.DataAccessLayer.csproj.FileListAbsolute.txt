@@ -1,0 +1,7 @@
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\fwk.DataAccessLayer\bin\Debug\fwk.DataAccessLayer.dll
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\fwk.DataAccessLayer\bin\Debug\fwk.DataAccessLayer.pdb
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\fwk.DataAccessLayer\bin\Debug\MDFShared.dll
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\fwk.DataAccessLayer\bin\Debug\ToolsShared.dll
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\fwk.DataAccessLayer\obj\Debug\fwk.DataAccessLayer.dll
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\fwk.DataAccessLayer\obj\Debug\fwk.DataAccessLayer.pdb
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\fwk.DataAccessLayer\obj\Debug\fwk.DataAccessLayer.csprojResolveAssemblyReference.cache

@@ -1,0 +1,10 @@
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\KoreConXDataAccessLayer\obj\Debug\KoreConXDataAccessLayer.csprojResolveAssemblyReference.cache
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\KoreConXDataAccessLayer\bin\Debug\KoreConXDataAccessLayer.dll
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\KoreConXDataAccessLayer\bin\Debug\KoreConXDataAccessLayer.pdb
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\KoreConXDataAccessLayer\bin\Debug\fwk.DataAccessLayer.dll
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\KoreConXDataAccessLayer\bin\Debug\MDFShared.dll
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\KoreConXDataAccessLayer\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\KoreConXDataAccessLayer\bin\Debug\ToolsShared.dll
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\KoreConXDataAccessLayer\bin\Debug\fwk.DataAccessLayer.pdb
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\KoreConXDataAccessLayer\obj\Debug\KoreConXDataAccessLayer.dll
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\KoreConXDataAccessLayer\obj\Debug\KoreConXDataAccessLayer.pdb

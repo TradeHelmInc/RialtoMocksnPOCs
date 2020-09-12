@@ -1,0 +1,10 @@
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\RialtoToKcxEncryption\obj\Debug\RialtoToKcxEncryption.csprojResolveAssemblyReference.cache
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\RialtoToKcxEncryption\bin\Debug\keys\KCX\pub_key.pem
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\RialtoToKcxEncryption\bin\Debug\RialtoToKcxEncryption.exe.config
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\RialtoToKcxEncryption\bin\Debug\RialtoToKcxEncryption.exe
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\RialtoToKcxEncryption\bin\Debug\RialtoToKcxEncryption.pdb
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\RialtoToKcxEncryption\bin\Debug\fwk.Common.dll
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\RialtoToKcxEncryption\bin\Debug\BouncyCastle.Crypto.dll
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\RialtoToKcxEncryption\bin\Debug\fwk.Common.pdb
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\RialtoToKcxEncryption\obj\Debug\RialtoToKcxEncryption.exe
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\RialtoToKcxEncryption\obj\Debug\RialtoToKcxEncryption.pdb
