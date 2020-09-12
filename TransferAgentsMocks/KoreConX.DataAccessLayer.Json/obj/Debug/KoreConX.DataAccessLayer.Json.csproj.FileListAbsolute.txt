@@ -10,3 +10,15 @@ C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\KoreConX
 C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\KoreConX.DataAccessLayer.Json\bin\Debug\KoreConX.BusinessEntities.dll
 C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\KoreConX.DataAccessLayer.Json\bin\Debug\Newtonsoft.Json.dll
 C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\KoreConX.DataAccessLayer.Json\bin\Debug\KoreConX.BusinessEntities.pdb
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConX.DataAccessLayer.Json\bin\Debug\input\Companies.json
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConX.DataAccessLayer.Json\bin\Debug\input\Positions.json
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConX.DataAccessLayer.Json\bin\Debug\input\Securities.json
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConX.DataAccessLayer.Json\bin\Debug\input\Shareholders.json
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConX.DataAccessLayer.Json\bin\Debug\KoreConX.DataAccessLayer.Json.dll
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConX.DataAccessLayer.Json\bin\Debug\KoreConX.DataAccessLayer.Json.pdb
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConX.DataAccessLayer.Json\bin\Debug\KoreConX.BusinessEntities.dll
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConX.DataAccessLayer.Json\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConX.DataAccessLayer.Json\bin\Debug\KoreConX.BusinessEntities.pdb
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConX.DataAccessLayer.Json\obj\Debug\KoreConX.DataAccessLayer.Json.csprojResolveAssemblyReference.cache
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConX.DataAccessLayer.Json\obj\Debug\KoreConX.DataAccessLayer.Json.dll
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConX.DataAccessLayer.Json\obj\Debug\KoreConX.DataAccessLayer.Json.pdb

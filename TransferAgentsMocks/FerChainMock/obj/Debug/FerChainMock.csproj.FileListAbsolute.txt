@@ -6,3 +6,5 @@ C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\FerChain
 C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\FerChainMock\obj\Debug\FerChainMock.csprojResolveAssemblyReference.cache
 C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\FerChainMock\obj\Debug\FerChainMock.exe
 C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\FerChainMock\obj\Debug\FerChainMock.pdb
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\FerChainMock\obj\Debug\FerChainMock.csprojResolveAssemblyReference.cache
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\FerChainMock\obj\Debug\FerChainMock.exe

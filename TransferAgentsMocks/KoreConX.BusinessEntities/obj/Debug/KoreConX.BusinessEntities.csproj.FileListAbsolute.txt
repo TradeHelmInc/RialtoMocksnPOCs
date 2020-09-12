@@ -2,3 +2,7 @@ C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\KoreConX
 C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\KoreConX.BusinessEntities\bin\Debug\KoreConX.BusinessEntities.pdb
 C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\KoreConX.BusinessEntities\obj\Debug\KoreConX.BusinessEntities.dll
 C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\KoreConX.BusinessEntities\obj\Debug\KoreConX.BusinessEntities.pdb
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConX.BusinessEntities\bin\Debug\KoreConX.BusinessEntities.dll
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConX.BusinessEntities\bin\Debug\KoreConX.BusinessEntities.pdb
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConX.BusinessEntities\obj\Debug\KoreConX.BusinessEntities.dll
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConX.BusinessEntities\obj\Debug\KoreConX.BusinessEntities.pdb
