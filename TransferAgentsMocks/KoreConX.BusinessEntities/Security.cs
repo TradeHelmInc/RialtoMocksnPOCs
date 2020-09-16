@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KoreConX.BusinessEntities
+namespace Mocks.KoreConX.BusinessEntities
 {
     public class Security
     {

@@ -1,8 +1,10 @@
 ﻿using fwk.Common.enums;
 using fwk.ServiceLayer;
 using KoreConX.Common.DTO.Generic;
-using KoreConX.LogicLayer;
-using KoreConX.ServiceLayer.service;
+using Mocks.KoreConX.Common.DTO.Generic;
+using Mocks.KoreConX.Common.DTO.Holdings;
+using Mocks.KoreConX.LogicLayer;
+using Mocks.KoreConX.ServiceLayer.service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +13,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.SelfHost;
 
-namespace KoreConX.ServiceLayer
+namespace Mocks.KoreConX.ServiceLayer
 {
     public class KoreConXServiceLayer : BaseServiceLayer
     {
@@ -48,6 +50,24 @@ namespace KoreConX.ServiceLayer
             return new ValidationResponse() { data = new ExistsEntity() { exists = resp } };
         }
 
+
+        protected TransactionResponse OnReleaseShares(ReleaseSharesDTO releaseDto)
+        {
+
+            string txId = HoldingsLogicLayer.ReleaseShares(releaseDto);
+
+            return new TransactionResponse() { data = new IdEntity() { id = txId } };
+        
+        }
+
+
+        protected TransactionResponse OnHoldShares(HoldSharesDTO holdDto)
+        {
+            string txId = HoldingsLogicLayer.HoldShares(holdDto);
+
+            return new TransactionResponse() { data = new IdEntity() { id = txId } };
+        }
+
         #endregion
 
         #region Protected Methods
@@ -71,6 +91,8 @@ namespace KoreConX.ServiceLayer
              
                 holdingsController.OnLog += DoLog;
                 holdingsController.OnAvailableShares += OnAvailableShares;
+                holdingsController.OnHoldShares += OnHoldShares;
+                holdingsController.OnReleaseShares += OnReleaseShares;
                
 
                 Server = new HttpSelfHostServer(config);

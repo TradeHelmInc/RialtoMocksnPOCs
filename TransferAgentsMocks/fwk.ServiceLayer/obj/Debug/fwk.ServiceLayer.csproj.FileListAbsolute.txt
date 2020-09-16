@@ -17,3 +17,16 @@ C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocks
 C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\fwk.ServiceLayer\bin\Debug\fwk.Common.dll
 C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\fwk.ServiceLayer\bin\Debug\BouncyCastle.Crypto.dll
 C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\fwk.ServiceLayer\bin\Debug\fwk.Common.pdb
+C:\Users\zimzum\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\TransferAgentsMocks\fwk.ServiceLayer\bin\Debug\fwk.ServiceLayer.dll
+C:\Users\zimzum\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\TransferAgentsMocks\fwk.ServiceLayer\bin\Debug\fwk.ServiceLayer.pdb
+C:\Users\zimzum\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\TransferAgentsMocks\fwk.ServiceLayer\bin\Debug\fwk.Common.dll
+C:\Users\zimzum\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\TransferAgentsMocks\fwk.ServiceLayer\bin\Debug\MDFShared.dll
+C:\Users\zimzum\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\TransferAgentsMocks\fwk.ServiceLayer\bin\Debug\System.Net.Http.Formatting.dll
+C:\Users\zimzum\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\TransferAgentsMocks\fwk.ServiceLayer\bin\Debug\System.Web.Http.dll
+C:\Users\zimzum\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\TransferAgentsMocks\fwk.ServiceLayer\bin\Debug\System.Web.Http.SelfHost.dll
+C:\Users\zimzum\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\TransferAgentsMocks\fwk.ServiceLayer\bin\Debug\ToolsShared.dll
+C:\Users\zimzum\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\TransferAgentsMocks\fwk.ServiceLayer\bin\Debug\BouncyCastle.Crypto.dll
+C:\Users\zimzum\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\TransferAgentsMocks\fwk.ServiceLayer\bin\Debug\fwk.Common.pdb
+C:\Users\zimzum\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\TransferAgentsMocks\fwk.ServiceLayer\obj\Debug\fwk.ServiceLayer.csprojResolveAssemblyReference.cache
+C:\Users\zimzum\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\TransferAgentsMocks\fwk.ServiceLayer\obj\Debug\fwk.ServiceLayer.dll
+C:\Users\zimzum\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\TransferAgentsMocks\fwk.ServiceLayer\obj\Debug\fwk.ServiceLayer.pdb

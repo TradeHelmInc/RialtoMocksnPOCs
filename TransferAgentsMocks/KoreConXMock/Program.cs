@@ -1,4 +1,4 @@
-﻿using KoreConX.ServiceLayer;
+﻿using Mocks.KoreConX.ServiceLayer;
 using System;
 using System.Collections.Generic;
 using System.Configuration;

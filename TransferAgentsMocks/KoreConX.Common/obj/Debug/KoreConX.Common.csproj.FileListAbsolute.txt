@@ -6,3 +6,7 @@ C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocks
 C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConX.Common\bin\Debug\KoreConX.Common.pdb
 C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConX.Common\obj\Debug\KoreConX.Common.dll
 C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConX.Common\obj\Debug\KoreConX.Common.pdb
+C:\Users\zimzum\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\TransferAgentsMocks\KoreConX.Common\bin\Debug\Mocks.KoreConX.Common.dll
+C:\Users\zimzum\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\TransferAgentsMocks\KoreConX.Common\bin\Debug\Mocks.KoreConX.Common.pdb
+C:\Users\zimzum\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\TransferAgentsMocks\KoreConX.Common\obj\Debug\Mocks.KoreConX.Common.dll
+C:\Users\zimzum\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\TransferAgentsMocks\KoreConX.Common\obj\Debug\Mocks.KoreConX.Common.pdb

@@ -4,10 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KoreConX.BusinessEntities
+namespace Mocks.KoreConX.BusinessEntities
 {
     public class Position
     {
+        #region Constructors
+
+        public Position()
+        {
+            HoldTransactionIds = new List<string>();
+        }
+
+
+        #endregion
+
         #region Public Attributes
 
         public string KoreSecurityId { get; set; }
@@ -17,6 +27,8 @@ namespace KoreConX.BusinessEntities
         public int Shares { get; set; }
 
         public int OnHold { get; set; }
+
+        public List<string> HoldTransactionIds { get; set; }
         
         #endregion
 

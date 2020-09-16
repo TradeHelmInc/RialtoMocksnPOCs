@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HoldingsLogicLayer.cs" />
+    <Compile Include="HoldSharesDTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -58,9 +59,17 @@
       <Project>{d4695a69-7584-4af2-b56e-517d0a36df23}</Project>
       <Name>KoreConX.BusinessEntities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\KoreConX.Common\KoreConX.Common.csproj">
+      <Project>{361cb23c-9c27-4110-896c-09f23d112c7f}</Project>
+      <Name>KoreConX.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\KoreConX.DataAccessLayer.Json\KoreConX.DataAccessLayer.Json.csproj">
       <Project>{9c6eec93-ac3a-4d19-8fd2-e163f046d38e}</Project>
       <Name>KoreConX.DataAccessLayer.Json</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Rialto.KoreConX.Common\Rialto.KoreConX.Common.csproj">
+      <Project>{7b873223-880f-4734-9c2b-ce46c0b0198d}</Project>
+      <Name>Rialto.KoreConX.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

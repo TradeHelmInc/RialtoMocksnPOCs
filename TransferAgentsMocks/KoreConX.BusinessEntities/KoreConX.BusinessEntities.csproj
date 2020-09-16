@@ -7,8 +7,8 @@
     <ProjectGuid>{D4695A69-7584-4AF2-B56E-517D0A36DF23}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>KoreConX.BusinessEntities</RootNamespace>
-    <AssemblyName>KoreConX.BusinessEntities</AssemblyName>
+    <RootNamespace>Mocks.KoreConX.BusinessEntities</RootNamespace>
+    <AssemblyName>Mocks.KoreConX.BusinessEntities</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

@@ -1,4 +1,4 @@
-﻿using KoreConX.BusinessEntities;
+﻿using Mocks.KoreConX.BusinessEntities;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KoreConX.DataAccessLayer.Json
+namespace Mocks.KoreConX.DataAccessLayer.Json
 {
 
     public class PortfolioManager

@@ -53,7 +53,8 @@
   <ItemGroup>
     <Compile Include="BaseServiceLayer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="REST\BaseREST.cs" />
+    <Compile Include="REST\BaseRESTClient.cs" />
+    <Compile Include="REST\BaseRESTServer.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\fwk.Common\fwk.Common.csproj">

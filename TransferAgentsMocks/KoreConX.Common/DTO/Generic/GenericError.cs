@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KoreConX.Common.DTO.Generic
+namespace Mocks.KoreConX.Common.DTO.Generic
 {
     public class GenericError
     {
