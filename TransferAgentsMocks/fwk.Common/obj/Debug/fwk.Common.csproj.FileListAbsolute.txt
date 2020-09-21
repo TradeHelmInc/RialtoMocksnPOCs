@@ -14,3 +14,4 @@ C:\Users\zimzum\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\TransferAgent
 C:\Users\zimzum\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\TransferAgentsMocks\fwk.Common\bin\Debug\BouncyCastle.Crypto.dll
 C:\Users\zimzum\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\TransferAgentsMocks\fwk.Common\obj\Debug\fwk.Common.dll
 C:\Users\zimzum\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\TransferAgentsMocks\fwk.Common\obj\Debug\fwk.Common.pdb
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\fwk.Common\obj\Debug\fwk.Common.csprojResolveAssemblyReference.cache

@@ -69,7 +69,7 @@ namespace Rialto.KoreConX.ServiceLayer.Client
 
         }
 
-        public TransactionResponse ReleaseShares(HoldSharesDTO dto)
+        public TransactionResponse ReleaseShares(ReleaseSharesDTO dto)
         {
             string url = BaseURL + _RELEASE_SHARES;
 

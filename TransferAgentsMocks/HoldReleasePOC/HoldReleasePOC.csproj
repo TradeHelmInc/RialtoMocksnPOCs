@@ -49,6 +49,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\fwk.Common\fwk.Common.csproj">
+      <Project>{6b88d2e0-1195-45f4-ba2b-3b1b4487553c}</Project>
+      <Name>fwk.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\fwk.ServiceLayer\fwk.ServiceLayer.csproj">
       <Project>{fffaae30-f9dc-4b00-8b1d-92be96b29504}</Project>
       <Name>fwk.ServiceLayer</Name>

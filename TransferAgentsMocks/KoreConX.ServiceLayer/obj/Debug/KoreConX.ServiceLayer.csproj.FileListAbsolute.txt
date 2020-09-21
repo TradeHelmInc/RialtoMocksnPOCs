@@ -28,15 +28,11 @@ C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocks
 C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConX.ServiceLayer\bin\Debug\input\Shareholders.json
 C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConX.ServiceLayer\bin\Debug\KoreConX.ServiceLayer.dll
 C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConX.ServiceLayer\bin\Debug\KoreConX.ServiceLayer.pdb
-C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConX.ServiceLayer\bin\Debug\KoreConX.BusinessEntities.dll
-C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConX.ServiceLayer\bin\Debug\KoreConX.Common.dll
 C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConX.ServiceLayer\bin\Debug\KoreConX.LogicLayer.dll
 C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConX.ServiceLayer\bin\Debug\MDFShared.dll
 C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConX.ServiceLayer\bin\Debug\Newtonsoft.Json.dll
 C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConX.ServiceLayer\bin\Debug\ToolsShared.dll
 C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConX.ServiceLayer\bin\Debug\KoreConX.DataAccessLayer.Json.dll
-C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConX.ServiceLayer\bin\Debug\KoreConX.BusinessEntities.pdb
-C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConX.ServiceLayer\bin\Debug\KoreConX.Common.pdb
 C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConX.ServiceLayer\bin\Debug\KoreConX.LogicLayer.pdb
 C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConX.ServiceLayer\bin\Debug\KoreConX.DataAccessLayer.Json.pdb
 C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConX.ServiceLayer\obj\Debug\KoreConX.ServiceLayer.csprojResolveAssemblyReference.cache
@@ -75,3 +71,7 @@ C:\Users\zimzum\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\TransferAgent
 C:\Users\zimzum\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\TransferAgentsMocks\KoreConX.ServiceLayer\bin\Debug\input\Positions.json
 C:\Users\zimzum\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\TransferAgentsMocks\KoreConX.ServiceLayer\bin\Debug\input\Securities.json
 C:\Users\zimzum\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\TransferAgentsMocks\KoreConX.ServiceLayer\bin\Debug\input\Shareholders.json
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConX.ServiceLayer\bin\Debug\Mocks.KoreConX.BusinessEntities.dll
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConX.ServiceLayer\bin\Debug\Mocks.KoreConX.Common.dll
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConX.ServiceLayer\bin\Debug\Mocks.KoreConX.BusinessEntities.pdb
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConX.ServiceLayer\bin\Debug\Mocks.KoreConX.Common.pdb
