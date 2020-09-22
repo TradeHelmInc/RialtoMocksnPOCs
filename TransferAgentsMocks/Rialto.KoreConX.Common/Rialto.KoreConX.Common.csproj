@@ -39,10 +39,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DTO\Generic\BaseGetResponse.cs" />
     <Compile Include="DTO\Generic\BaseResponse.cs" />
     <Compile Include="DTO\Generic\ErrorMessage.cs" />
     <Compile Include="DTO\Generic\ExistsEntity.cs" />
     <Compile Include="DTO\Generic\GenericError.cs" />
+    <Compile Include="DTO\Generic\GenericGetError.cs" />
+    <Compile Include="DTO\Generic\GenericGetErrorMsg.cs" />
     <Compile Include="DTO\Generic\IdEntity.cs" />
     <Compile Include="DTO\Generic\TransactionResponse.cs" />
     <Compile Include="DTO\Generic\ValidationResponse.cs" />

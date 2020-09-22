@@ -60,33 +60,34 @@ namespace fwk.ServiceLayer.REST
         }
 
 
-    
-
-        protected string DoGetJson(string url, Dictionary<string, string> body)
-        {
-            string content = string.Empty;
-
-            string postStr = "";
-
-            url += body.Keys.Count > 0 ? "?" : "";
-
-            foreach (string key in body.Keys)
-            {
-                postStr += string.Format("{0}={1}&", key, body[key]);
-            }
-
-            url += postStr;
 
 
-            using (var httpClient = new HttpClient())
-            {
-                var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
-                requestMessage.Headers.Add("Accept", "application/json");
-                requestMessage.Headers.Add("ContentType", "application/json");
-                content = httpClient.SendAsync(requestMessage).Result.Content.ReadAsStringAsync().Result;
-            }
-            return content;
-        }
+
+        //protected string DoGetJson(string url, Dictionary<string, string> body)
+        //{
+        //    string content = string.Empty;
+
+        //    string postStr = "";
+
+        //    url += body.Keys.Count > 0 ? "?" : "";
+
+        //    foreach (string key in body.Keys)
+        //    {
+        //        postStr += string.Format("{0}={1}&", key, body[key]);
+        //    }
+
+        //    url += postStr;
+
+
+        //    using (var httpClient = new HttpClient())
+        //    {
+        //        var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
+        //        requestMessage.Headers.Add("Accept", "application/json");
+        //        requestMessage.Headers.Add("ContentType", "application/json");
+        //        content = httpClient.SendAsync(requestMessage).Result.Content.ReadAsStringAsync().Result;
+        //    }
+        //    return content;
+        //}
 
         #endregion
     }

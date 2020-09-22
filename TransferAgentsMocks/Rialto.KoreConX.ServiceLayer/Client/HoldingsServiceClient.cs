@@ -25,6 +25,8 @@ namespace Rialto.KoreConX.ServiceLayer.Client
 
         #region Protected Static Consts
 
+        protected static string _AVAILABLE_SHARES = "/holdings/available-shares";
+
         protected static string _HOLD_SHARES = "/holdings/hold-shares";
 
         protected static string _RELEASE_SHARES = "/holdings/release-shares";
@@ -53,9 +55,45 @@ namespace Rialto.KoreConX.ServiceLayer.Client
         
         }
 
+        protected ValidationResponse ProcessValidationResponse(BaseGetResponse resp)
+        {
+            if (resp.Resp != null)
+            {
+                try
+                {
+                    ValidationResponse valResp = JsonConvert.DeserializeObject<ValidationResponse>(resp.Resp);
+                    return valResp;
+                }
+                catch (Exception ex)
+                {
+                    return new ValidationResponse() { Resp = resp.Resp, message = resp.message };
+
+                }
+            }
+            else
+                return new ValidationResponse() { Resp = resp.Resp, message = resp.message };
+
+        }
+
         #endregion
 
         #region Public Methods
+
+        public ValidationResponse AvailableShares(string securities_holder_id, string koresecurities_id, int number_of_shares,
+                                                    string requestor_id)
+        {
+            string url = BaseURL + _AVAILABLE_SHARES;
+
+
+            Dictionary<string, string> param = new Dictionary<string, string>();
+            param.Add("securities_holder_id", securities_holder_id);
+            param.Add("koresecurities_id", koresecurities_id);
+            param.Add("number_of_shares", number_of_shares.ToString());
+            param.Add("requestor_id", requestor_id);
+
+
+            return ProcessValidationResponse(DoGetJson(url, param));
+        }
 
         public TransactionResponse PutHoldOnShares(HoldSharesDTO dto)
         {

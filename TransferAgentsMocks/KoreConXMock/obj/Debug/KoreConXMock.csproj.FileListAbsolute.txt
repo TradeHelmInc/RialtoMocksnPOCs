@@ -28,10 +28,6 @@ C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\KoreConX
 C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConXMock\bin\Debug\KoreConXMock.exe.config
 C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConXMock\obj\Debug\KoreConXMock.exe
 C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConXMock\obj\Debug\KoreConXMock.pdb
-C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConXMock\bin\Debug\input\Companies.json
-C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConXMock\bin\Debug\input\Positions.json
-C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConXMock\bin\Debug\input\Securities.json
-C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConXMock\bin\Debug\input\Shareholders.json
 C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConXMock\bin\Debug\KoreConXMock.exe
 C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConXMock\bin\Debug\KoreConXMock.pdb
 C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConXMock\bin\Debug\fwk.ServiceLayer.dll
@@ -84,3 +80,7 @@ C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocks
 C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConXMock\bin\Debug\Mocks.KoreConX.BusinessEntities.dll
 C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConXMock\bin\Debug\Mocks.KoreConX.Common.pdb
 C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConXMock\bin\Debug\Mocks.KoreConX.BusinessEntities.pdb
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConXMock\bin\Debug\input\Companies.json
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConXMock\bin\Debug\input\Positions.json
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConXMock\bin\Debug\input\Securities.json
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConXMock\bin\Debug\input\Shareholders.json

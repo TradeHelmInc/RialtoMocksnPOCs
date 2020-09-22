@@ -6,8 +6,12 @@ using System.Threading.Tasks;
 
 namespace Rialto.KoreConX.Common.DTO.Generic
 {
-    public class ValidationResponse : BaseGetResponse
+    public class GenericGetErrorMsg
     {
-        public ExistsEntity data { get; set; }
+        public int code { get; set; }
+
+        public string msg { get; set; }
+
+        public string details { get; set; }
     }
 }

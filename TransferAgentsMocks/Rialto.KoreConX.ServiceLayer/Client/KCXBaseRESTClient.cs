@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -27,6 +28,95 @@ namespace Rialto.KoreConX.ServiceLayer.Client
             return new GenericError() { message = msg };
         
         }
+
+        protected GenericGetErrorMsg GetGenericGetErrorMsg(string msg)
+        {
+            return new GenericGetErrorMsg() { code = 500, msg = msg, details = null };
+        
+        }
+
+        protected bool IsGenericGetError(string msg)
+        {
+            try
+            {
+                GenericGetError error = JsonConvert.DeserializeObject<GenericGetError>(msg);
+
+                return error.message != null;
+            }
+            catch (Exception ex)
+            {
+                return true;
+            }
+        }
+
+        protected ValidationResponse GetGenericGetError(string json)
+        {
+            GenericGetError error = JsonConvert.DeserializeObject<GenericGetError>(json, new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore
+            });
+
+
+            error.GenMessage = JsonConvert.DeserializeObject<GenericGetErrorMsg>(error.message, new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore
+            });
+
+            return new ValidationResponse() { Resp = json, message = error };
+        }
+
+        protected ValidationResponse BuildGetError(string msg)
+        {
+            return new ValidationResponse()
+            {
+                Resp = null,
+                message = new GenericGetError()
+                    {
+                        GenMessage = new GenericGetErrorMsg() { code = 500, msg = msg, details = null },
+                        message=msg
+                        
+                    }
+
+            };
+        }
+
+
+        protected ValidationResponse DoGetJson(string url, Dictionary<string, string> body)
+        {
+            string content = string.Empty;
+
+            string postStr = "";
+
+            url += body.Keys.Count > 0 ? "?" : "";
+
+            foreach (string key in body.Keys)
+            {
+                postStr += string.Format("{0}={1}&", key, body[key]);
+            }
+
+            url += postStr;
+
+
+            using (var httpClient = new HttpClient())
+            {
+                var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
+                requestMessage.Headers.Add("Accept", "application/json");
+                requestMessage.Headers.Add("ContentType", "application/json");
+                try
+                {
+                    content = httpClient.SendAsync(requestMessage).Result.Content.ReadAsStringAsync().Result;
+                    if (!IsGenericGetError(content))
+                        return new ValidationResponse() { Resp = content };
+                    else
+                        return GetGenericGetError(content);
+                }
+                catch (Exception ex)
+                {
+                    return BuildGetError(ex.Message);
+                }
+            }
+        }
+
 
         protected BaseResponse DoPostJson(string url, Dictionary<string, string> headers, string json)
         {

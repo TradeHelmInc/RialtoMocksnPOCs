@@ -41,22 +41,49 @@ namespace HoldReleasePOC
 
         #endregion
 
-        #region Public Statuc Methods
+        #region Private Static Static Methods
 
+        #region Sell Shares
 
-        public static TransactionResponse PutOnHoldExample()
+        private static void AvailableShares()
         {
             //1- First step, once we know the security <KoreSecurityId> to sell and the shareholder <KoreShareholderId> that is selling
             //we can build a HoldSharesDTO
             //The third component of the 2 previous Ids is the ATS Id in the KoreChain: ATS_ID <always a fixed number and populated just once>
             HoldSharesDTO dto = BuildHoldDto();
 
+            //2-First we have to know if we have enough shares to sell, so we invoke service Available Shares
+            //for responses structure see PutOnHold advise in PutOnHold() method
+            DoLog(string.Format("<@Transfer_agent_transactions - status=KCX_REQ_AVAILABLE_SHARES > - Requesting available shares for KoreShareholderId {0} and KoreSecurityId {1}",dto.securities_holder_id, dto.koresecurities_id), MessageType.Information);
+            ValidationResponse resp = HoldingsServiceClient.AvailableShares(dto.securities_holder_id, dto.koresecurities_id, dto.number_of_shares, dto.ats_id);
+            if (resp.message != null)
+            {
+                DoLog(string.Format("<@Transfer_agent_transactions - status=KCX_ERROR_ENOUGH_SHARES > - Error Requesting available shares for KoreShareholderId {0} and KoreSecurityId {1}: {2}",
+                    dto.securities_holder_id, dto.koresecurities_id, resp.message.GenMessage != null ? resp.message.GenMessage.msg : resp.message.message), MessageType.Error);
+            }
+            else
+            {
+                if (resp.data != null && resp.data.exists)
+                {
+                    //3-If everything is ok, we put the shares on hold
+                    DoLog(string.Format("<@Transfer_agent_transactions - status=KCX_ENOUGH_SHARES_VALIDATED > - Enough shares validated for KoreShareholderId {0} and KoreSecurityId {1}", dto.securities_holder_id, dto.koresecurities_id), MessageType.Information);
+                    PutOnHold(dto);
+                }
+                else
+                {
+                    //4-If there are not enough shares, we update the status table, we inform the error. 
+                    DoLog(string.Format("<@Transfer_agent_transactions - status=KCX_NOT_ENOUGH_SHARES > - Not Enough shares available  for KoreShareholderId {0} and KoreSecurityId {1}", dto.securities_holder_id, dto.koresecurities_id), MessageType.Error);
+                }
+            }
+        }
+
+        private static TransactionResponse PutOnHold(HoldSharesDTO dto)
+        {
             TransactionResponse txHoldResp = null;
 
             try
             {
-
-                //2-Put Hold responses can have to different response structures depending if the request was successfull or not
+                //1-Put Hold responses can have to different response structures depending if the request was successfull or not
                 //an unsuccessful response doesn´t has to be a technical issue. It can be that some of the ids used for the request was no longer available at KCX
                 //and sometimes even that there is not enough shares to salle
                 //<ADVISE> -That´s why it´s advisable that the DTO that holds the answer, can handle right and wrong cases
@@ -67,30 +94,33 @@ namespace HoldReleasePOC
 
                 if (txHoldResp.GenericError == null)
                 {
+                    //1.a - If we could put the shares on hold, we update the table Transfer_agent_transactions and we send the order to the exchange.
                     DoLog(string.Format("<@Transfer_agent_transactions - status= KCX_HOLD_SHARES_SUCCESS > - Shares for KoreSecurityId {0} successfully put on hold. TransactionId:{1}", dto.koresecurities_id, txHoldResp.data.id), MessageType.Information);
 
 
                     DoLog("Press any key to release (CANCEL/EXPIRE) the previous hold", MessageType.Debug);
                     Console.ReadKey();
-
+                    //1.b-Once the user cancelled the order (or it expired) we can release the shares
                     ReleaseShares(txHoldResp,dto);
 
                 }
                 else
                 {
+                    //2-The hold was rejected. We update the Transfer_agent_transactions table and the sell cannot continue
                     DoLog(string.Format("<@Transfer_agent_transactions - status= KCX_HOLD_ON_SHARES_REJECTED > - Shares for KoreSecurityId {0} could not be put on hold put. Error:{1}", dto.koresecurities_id, txHoldResp.GenericError.message), MessageType.Error);
                 }
 
             }
             catch (Exception ex)
             {
+                //3-Orders rejected
                 DoLog(string.Format("<@Transfer_agent_transactions - status= KCX_HOLD_ON_SHARES_REJECTED > Critical error putting {0} on hold:{1}", dto.koresecurities_id, ex.Message), MessageType.Error);
             }
 
             return txHoldResp;
         }
 
-        public static void ReleaseShares(TransactionResponse txHoldResp, HoldSharesDTO holdDTO)
+        private static void ReleaseShares(TransactionResponse txHoldResp, HoldSharesDTO holdDTO)
         {
             ReleaseSharesDTO relDto = ReleaseHoldDto(holdDTO);
 
@@ -123,6 +153,18 @@ namespace HoldReleasePOC
             {
                 DoLog(string.Format("<@Transfer_agent_transactions - status= KCX_RELEASE_SHARES_REJECTED > Critical error releasing shares for security {0}:{1}", relDto.koresecurities_id, ex.Message), MessageType.Error);
             }
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Public Static Methods
+
+        public static void OnSell()
+        {
+            AvailableShares();
+        
         }
 
         #endregion
@@ -171,7 +213,7 @@ namespace HoldReleasePOC
 
             HoldingsServiceClient  = new HoldingsServiceClient(BaseURL);
 
-            PutOnHoldExample();
+            OnSell();
 
             Console.ReadKey();
 

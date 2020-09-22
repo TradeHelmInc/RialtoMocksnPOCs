@@ -4,13 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{D76B717E-C705-489B-A8F9-DD69E72FCD5C}</ProjectGuid>
+    <ProjectGuid>{05ADCD21-51C3-44BF-880E-2237AB61202D}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HoldReleasePOC</RootNamespace>
-    <AssemblyName>HoldReleasePOC</AssemblyName>
+    <RootNamespace>KCXToRialtoEncryption</RootNamespace>
+    <AssemblyName>KCXToRialtoEncryption</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -46,28 +47,17 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config">
-      <SubType>Designer</SubType>
-    </None>
+    <None Include="App.config" />
+    <None Include="Rialto\priv_key.pem" />
+    <None Include="Rialto\pub_key.pem" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\fwk.Common\fwk.Common.csproj">
       <Project>{6b88d2e0-1195-45f4-ba2b-3b1b4487553c}</Project>
       <Name>fwk.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\fwk.ServiceLayer\fwk.ServiceLayer.csproj">
-      <Project>{fffaae30-f9dc-4b00-8b1d-92be96b29504}</Project>
-      <Name>fwk.ServiceLayer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Rialto.KoreConX.Common\Rialto.KoreConX.Common.csproj">
-      <Project>{7b873223-880f-4734-9c2b-ce46c0b0198d}</Project>
-      <Name>Rialto.KoreConX.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Rialto.KoreConX.ServiceLayer\Rialto.KoreConX.ServiceLayer.csproj">
-      <Project>{e9b69679-949c-4916-b4e2-d991daf3695a}</Project>
-      <Name>Rialto.KoreConX.ServiceLayer</Name>
-    </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
