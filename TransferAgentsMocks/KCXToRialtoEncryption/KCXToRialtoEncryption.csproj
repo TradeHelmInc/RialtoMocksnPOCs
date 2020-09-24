@@ -48,8 +48,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="Rialto\priv_key.pem" />
-    <None Include="Rialto\pub_key.pem" />
+    <None Include="keys\Rialto\priv_key.pem">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="keys\Rialto\pub_key.pem">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\fwk.Common\fwk.Common.csproj">
