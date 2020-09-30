@@ -1,8 +1,10 @@
 ﻿using fwk.Common.enums;
 using fwk.ServiceLayer;
 using KoreConX.Common.DTO.Generic;
+using KoreConX.ServiceLayer.service;
 using Mocks.KoreConX.Common.DTO.Generic;
 using Mocks.KoreConX.Common.DTO.Holdings;
+using Mocks.KoreConX.Common.DTO.Securities;
 using Mocks.KoreConX.LogicLayer;
 using Mocks.KoreConX.ServiceLayer.service;
 using System;
@@ -42,6 +44,13 @@ namespace Mocks.KoreConX.ServiceLayer
         #endregion
 
         #region Events
+
+        protected TransactionResponse OnTransferShares(TransferSharesDTO transferSharesDto)
+        {
+            string txId = HoldingsLogicLayer.TransferShares(transferSharesDto);
+
+            return new TransactionResponse() { data = new IdEntity() { id = txId } };
+        }
 
         protected ValidationResponse OnAvailableShares(string koreShareholderId, string koreSecurityId, int qty, string koreATSId)
         {
@@ -93,7 +102,9 @@ namespace Mocks.KoreConX.ServiceLayer
                 holdingsController.OnAvailableShares += OnAvailableShares;
                 holdingsController.OnHoldShares += OnHoldShares;
                 holdingsController.OnReleaseShares += OnReleaseShares;
-               
+
+                securitiesController.OnTransferShares += OnTransferShares;
+
 
                 Server = new HttpSelfHostServer(config);
                 Server.OpenAsync().Wait();

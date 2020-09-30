@@ -10,3 +10,4 @@ C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocks
 C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConX.BusinessEntities\bin\Debug\Mocks.KoreConX.BusinessEntities.pdb
 C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConX.BusinessEntities\obj\Debug\Mocks.KoreConX.BusinessEntities.dll
 C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConX.BusinessEntities\obj\Debug\Mocks.KoreConX.BusinessEntities.pdb
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConX.BusinessEntities\obj\Debug\KoreConX.BusinessEntities.csprojResolveAssemblyReference.cache

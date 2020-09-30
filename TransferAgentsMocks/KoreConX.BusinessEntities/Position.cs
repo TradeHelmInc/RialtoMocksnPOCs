@@ -13,6 +13,7 @@ namespace Mocks.KoreConX.BusinessEntities
         public Position()
         {
             HoldTransactionIds = new List<string>();
+            TransferTransactionIds = new List<string>();
         }
 
 
@@ -29,6 +30,8 @@ namespace Mocks.KoreConX.BusinessEntities
         public int OnHold { get; set; }
 
         public List<string> HoldTransactionIds { get; set; }
+
+        public List<string> TransferTransactionIds { get; set; }
         
         #endregion
 

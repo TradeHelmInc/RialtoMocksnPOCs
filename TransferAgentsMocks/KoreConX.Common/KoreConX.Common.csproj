@@ -48,6 +48,7 @@
     <Compile Include="DTO\Generic\ValidationResponse.cs" />
     <Compile Include="DTO\Holdings\HoldSharesDTO.cs" />
     <Compile Include="DTO\Holdings\ReleaseSharesDTO.cs" />
+    <Compile Include="DTO\Securities\TransferSharesDTO.cs" />
     <Compile Include="enums\HoldReasons.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

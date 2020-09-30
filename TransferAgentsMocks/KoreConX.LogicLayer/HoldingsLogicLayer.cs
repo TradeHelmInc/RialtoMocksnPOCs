@@ -1,5 +1,6 @@
 ﻿using Mocks.KoreConX.BusinessEntities;
 using Mocks.KoreConX.Common.DTO.Holdings;
+using Mocks.KoreConX.Common.DTO.Securities;
 using Mocks.KoreConX.DataAccessLayer.Json;
 using System;
 using System.Collections.Generic;
@@ -35,6 +36,67 @@ namespace Mocks.KoreConX.LogicLayer
 
 
         #region Public Mehtods
+
+        public string TransferShares(TransferSharesDTO transferDTO)
+        {
+            Shareholder owner = PortfolioManager.GetShareholder(transferDTO.owner_id);
+
+            if (owner != null)
+            {
+                Shareholder dest = PortfolioManager.GetShareholder(transferDTO.transferred_to_id);
+
+                if (dest != null)
+                {
+
+                    Position posOwner = owner.Positions.Where(x => x.KoreSecurityId == transferDTO.koresecurities_id).FirstOrDefault();
+                    Position posDest = dest.Positions.Where(x => x.KoreSecurityId == transferDTO.koresecurities_id).FirstOrDefault();
+
+
+                    if (posOwner != null)
+                    {
+                        if (posDest == null)
+                        {
+                            posDest = new Position()
+                            {
+                                KoreSecurityId = transferDTO.koresecurities_id,
+                                KoreShareholderId = dest.KoreShareholderId,
+                                OnHold = 0,
+                                Shares = 0
+                            };
+                        }
+
+
+                        if (transferDTO.total_securities > posOwner.GetAvailableShares())
+                        {
+                            throw new Exception(string.Format("Shareholder owner does not have enough shares in his holding!"));
+                        }
+                        else
+                        {
+                            string txtId = Guid.NewGuid().ToString();
+
+                            posOwner.OnHold -= transferDTO.total_securities;
+                            posOwner.Shares -= transferDTO.total_securities;
+                            posOwner.TransferTransactionIds.Add(txtId);
+
+                            posDest.Shares += transferDTO.total_securities;
+                            posDest.TransferTransactionIds.Add(txtId);
+
+                            return txtId;
+                        }
+
+                    }
+                    else
+                        throw new Exception(string.Format(" Invalid position for koreSecurityId {0}", transferDTO.koresecurities_id));
+                }
+                else
+                    throw new Exception(string.Format(" Invalid destination koreShareholderId {0}", transferDTO.transferred_to_id));
+            }
+            else
+                throw new Exception(string.Format(" Invalid owner koreShareholderId {0}", transferDTO.owner_id));
+
+        
+        
+        }
 
         //Returns transactionId
         public string HoldShares(HoldSharesDTO holdDto)
