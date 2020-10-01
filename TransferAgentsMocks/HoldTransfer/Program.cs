@@ -2,6 +2,7 @@
 using Rialto.KoreConX.Common;
 using Rialto.KoreConX.Common.DTO.Generic;
 using Rialto.KoreConX.Common.DTO.Holdings;
+using Rialto.KoreConX.Common.DTO.Securities;
 using Rialto.KoreConX.ServiceLayer.Client;
 using System;
 using System.Collections.Generic;
@@ -20,9 +21,9 @@ namespace HoldTransfer
 
         #endregion
 
-        #region Protected Static Methods
+        #region Private Util Methods
 
-        protected static void DoLog(string msg, MessageType type)
+        private static void DoLog(string msg, MessageType type)
         {
             Console.WriteLine("");
             if (type == MessageType.Error)
@@ -37,6 +38,38 @@ namespace HoldTransfer
 
             Console.WriteLine("");
         }
+
+        private static int GetNumberSharesTraded(HoldSharesDTO dto)
+        {
+            while (true)
+            {
+                DoLog("Enter the number of shares traded:", MessageType.Debug);
+                string strNumberTraded = Console.ReadLine();
+
+                try
+                {
+                    int sharesTraded = Convert.ToInt32(strNumberTraded);
+
+                    if (sharesTraded > dto.number_of_shares)
+                    {
+                        Console.WriteLine(string.Format("You cannot trade mor than {0} sent to sell", dto.number_of_shares));
+                        Console.WriteLine("");
+                    }
+                    else
+                    {
+                        return sharesTraded;
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(string.Format("Value {0} is not a valid number for sell", strNumberTraded));
+                    Console.WriteLine("");
+                }
+
+            }
+        }
+
 
         #endregion
 
@@ -76,49 +109,6 @@ namespace HoldTransfer
             }
         }
 
-        private static TransactionResponse PutOnHold(HoldSharesDTO dto)
-        {
-            TransactionResponse txHoldResp = null;
-
-            try
-            {
-                //1-Put Hold responses can have to different response structures depending if the request was successfull or not
-                //an unsuccessful response doesn´t has to be a technical issue. It can be that some of the ids used for the request was no longer available at KCX
-                //and sometimes even that there is not enough shares to salle
-                //<ADVISE> -That´s why it´s advisable that the DTO that holds the answer, can handle right and wrong cases
-                //but errors should not be handled with exceptions, as valid business scenarios could be handled through error messages which are very easily mistaken by
-                //as technical errors (Ex: connection down)
-                DoLog(string.Format("<@Transfer_agent_transactions - status=KCX_REQ_HOLD_ON_SHARES > - Putting {0} shares on hold for KoreSecurityId {1}", dto.number_of_shares, dto.koresecurities_id), MessageType.Information);
-                txHoldResp = HoldingsServiceClient.PutHoldOnShares(dto);
-
-                if (txHoldResp.GenericError == null)
-                {
-                    //1.a - If we could put the shares on hold, we update the table Transfer_agent_transactions and we send the order to the exchange.
-                    DoLog(string.Format("<@Transfer_agent_transactions - status= KCX_HOLD_SHARES_SUCCESS > - Shares for KoreSecurityId {0} successfully put on hold. TransactionId:{1}", dto.koresecurities_id, txHoldResp.data.id), MessageType.Information);
-
-
-                    DoLog("Press any key to release (CANCEL/EXPIRE) the previous hold", MessageType.Debug);
-                    Console.ReadKey();
-                    //1.b-Once the user cancelled the order (or it expired) we can release the shares
-                    ReleaseShares(txHoldResp, dto);
-
-                }
-                else
-                {
-                    //2-The hold was rejected. We update the Transfer_agent_transactions table and the sell cannot continue
-                    DoLog(string.Format("<@Transfer_agent_transactions - status= KCX_HOLD_ON_SHARES_REJECTED > - Shares for KoreSecurityId {0} could not be put on hold put. Error:{1}", dto.koresecurities_id, txHoldResp.GenericError.message), MessageType.Error);
-                }
-
-            }
-            catch (Exception ex)
-            {
-                //3-Orders rejected
-                DoLog(string.Format("<@Transfer_agent_transactions - status= KCX_HOLD_ON_SHARES_REJECTED > Critical error putting {0} on hold:{1}", dto.koresecurities_id, ex.Message), MessageType.Error);
-            }
-
-            return txHoldResp;
-        }
-
         private static void ReleaseShares(TransactionResponse txHoldResp, HoldSharesDTO holdDTO)
         {
             ReleaseSharesDTO relDto = ReleaseHoldDto(holdDTO);
@@ -154,6 +144,92 @@ namespace HoldTransfer
             }
         }
 
+        
+        private static TransactionResponse PutOnHold(HoldSharesDTO dto)
+        {
+            TransactionResponse txHoldResp = null;
+
+            try
+            {
+                //1-Put Hold responses can have to different response structures depending if the request was successfull or not
+                //an unsuccessful response doesn´t has to be a technical issue. It can be that some of the ids used for the request was no longer available at KCX
+                //and sometimes even that there is not enough shares to salle
+                //<ADVISE> -That´s why it´s advisable that the DTO that holds the answer, can handle right and wrong cases
+                //but errors should not be handled with exceptions, as valid business scenarios could be handled through error messages which are very easily mistaken by
+                //as technical errors (Ex: connection down)
+                DoLog(string.Format("<@Transfer_agent_transactions - status=KCX_REQ_HOLD_ON_SHARES > - Putting {0} shares on hold for KoreSecurityId {1}", dto.number_of_shares, dto.koresecurities_id), MessageType.Information);
+                txHoldResp = HoldingsServiceClient.PutHoldOnShares(dto);
+
+                if (txHoldResp.GenericError == null)
+                {
+                    //1.a - If we could put the shares on hold, we update the table Transfer_agent_transactions and we send the order to the exchange.
+                    DoLog(string.Format("<@Transfer_agent_transactions - status= KCX_HOLD_SHARES_SUCCESS > - Shares for KoreSecurityId {0} successfully put on hold. TransactionId:{1}", dto.koresecurities_id, txHoldResp.data.id), MessageType.Information);
+
+                    int tradedShares = GetNumberSharesTraded(dto);
+                
+                    //1.b-Once the user cancelled the order (or it expired) we can release the shares
+                    TransferShares(dto,txHoldResp, tradedShares);
+
+                    //1.2-We release the remaining shares
+                    dto.number_of_shares=dto.number_of_shares-tradedShares;
+                    ReleaseShares(txHoldResp, dto);
+
+                }
+                else
+                {
+                    //2-The hold was rejected. We update the Transfer_agent_transactions table and the sell cannot continue
+                    DoLog(string.Format("<@Transfer_agent_transactions - status= KCX_HOLD_ON_SHARES_REJECTED > - Shares for KoreSecurityId {0} could not be put on hold put. Error:{1}", dto.koresecurities_id, txHoldResp.GenericError.message), MessageType.Error);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                //3-Orders rejected
+                DoLog(string.Format("<@Transfer_agent_transactions - status= KCX_HOLD_ON_SHARES_REJECTED > Critical error putting {0} on hold:{1}", dto.koresecurities_id, ex.Message), MessageType.Error);
+            }
+
+            return txHoldResp;
+        }
+
+        private static void TransferShares(HoldSharesDTO holdDTO, TransactionResponse txHoldResp, int tradedShares)
+        {
+
+            TransferSharesDTO transferDto = TransferDto(holdDTO, tradedShares);
+
+            //1- The same way we did with Hold/Release, we crate a transfer dto, where we will provde the Hold trnsactionId
+            // Here I will have to know who the buyer is <int his POC we just use the usr id loaded in the config files>. 
+            // But in real ATS I will have to identify who te buy is. Beware I might have multiple buyers! 
+            //In this example I just consider that there is one buyer
+            transferDto.transfer_authorization_transaction_id = txHoldResp.data.id;
+            transferDto.transferred_to_id = ConfigurationManager.AppSettings["KoreBuyerShareholderId"];
+
+
+            TransactionResponse txtTransferResp = null;
+            try
+            {
+                DoLog(string.Format("<@Transfer_agent_transactions - status=KCX_REQ_TRANSFER_SHARES > - Transfering {0} shares for KoreSecurityId {1} and TransactionId {2} from shareholder {3} to shareholder {4}"
+                                    , tradedShares, transferDto.koresecurities_id, transferDto.transfer_authorization_transaction_id, transferDto.owner_id, transferDto.transferred_to_id), MessageType.Information);
+                txtTransferResp = HoldingsServiceClient.TransferShares(transferDto);
+
+                //3- Whatever happened with the release service, leave it properly registered at Transfer_agent_transactions table 
+                //
+                if (txtTransferResp.GenericError == null)
+                {
+                    DoLog(string.Format("<@Transfer_agent_transactions - status= KCX_TRANSFER_SHARES_SUCCESS > - Shares for KoreSecurityId {0} successfully Transfered. TransactionId:{1}", transferDto.koresecurities_id, txtTransferResp.data.id), MessageType.Information);
+
+                }
+                else
+                {
+                    DoLog(string.Format("<@Transfer_agent_transactions - status= KCX_TRANSFER_SHARES_REJECTED > - Shares for KoreSecurityId {0} could not be transferred. Error:{1}", transferDto.koresecurities_id, txtTransferResp.GenericError.message), MessageType.Error);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                DoLog(string.Format("<@Transfer_agent_transactions - status= KCX_TRANSFER_SHARES_REJECTED > Critical error transferring shares for security {0}:{1}", transferDto.koresecurities_id, ex.Message), MessageType.Error);
+            }
+        }
+
         #endregion
 
         #endregion
@@ -180,7 +256,7 @@ namespace HoldTransfer
             dto.last_updated_at = DateTime.Now.ToString("YYYY-MM-dd");
             dto.reason_code = HoldReasons.PendingSell.ToString();
             dto.number_of_shares = Convert.ToInt32(ConfigurationManager.AppSettings["SellQty"]);
-            dto.securities_holder_id = ConfigurationManager.AppSettings["KoreShareholderId"];
+            dto.securities_holder_id = ConfigurationManager.AppSettings["KoreSellerShareholderId"];
 
             return dto;
 
@@ -199,6 +275,22 @@ namespace HoldTransfer
             relDto.securities_holder_id = holdDto.securities_holder_id;
 
             return relDto;
+        }
+
+        public static TransferSharesDTO TransferDto(HoldSharesDTO holdDto,int sharesTraded)
+        {
+
+            TransferSharesDTO transferDto = new TransferSharesDTO();
+            transferDto.company_id = "_???";
+            transferDto.koresecurities_id = holdDto.koresecurities_id;
+            transferDto.owner_id = holdDto.securities_holder_id;
+            transferDto.transferred_to_id = "xxx";
+            transferDto.transfer_authorization_transaction_id = "???";
+            transferDto.total_securities = sharesTraded;
+            transferDto.effective_date = DateTime.Now ;
+
+
+            return transferDto;
         }
 
         public

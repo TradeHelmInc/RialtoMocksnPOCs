@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using Rialto.KoreConX.Common.DTO.Generic;
 using Rialto.KoreConX.Common.DTO.Holdings;
+using Rialto.KoreConX.Common.DTO.Securities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,6 +31,8 @@ namespace Rialto.KoreConX.ServiceLayer.Client
         protected static string _HOLD_SHARES = "/holdings/hold-shares";
 
         protected static string _RELEASE_SHARES = "/holdings/release-shares";
+
+        protected static string _TRANSFER_SHARES = "/securities/transfer";
 
         #endregion
 
@@ -110,6 +113,17 @@ namespace Rialto.KoreConX.ServiceLayer.Client
         public TransactionResponse ReleaseShares(ReleaseSharesDTO dto)
         {
             string url = BaseURL + _RELEASE_SHARES;
+
+            string output = JsonConvert.SerializeObject(dto);
+
+            BaseResponse resp = DoPostJson(url, new Dictionary<string, string>(), output);
+
+            return ProcessTransactionResponse(resp);
+        }
+
+        public TransactionResponse TransferShares(TransferSharesDTO dto)
+        {
+            string url = BaseURL + _TRANSFER_SHARES;
 
             string output = JsonConvert.SerializeObject(dto);
 
