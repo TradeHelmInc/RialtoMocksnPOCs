@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -18,9 +19,13 @@ namespace KCXToRialtoEncryption
 
         protected static string EncryptedFile { get; set; }
 
+        protected static string AESKeyandIV { get; set; }
+
         protected static string TextToEncrypt { get; set; }
 
         protected static string Mode { get; set; }
+
+        protected static string PDToDecrypt { get; set; }
 
 
         protected static void GenerateKeyPair()
@@ -104,6 +109,48 @@ namespace KCXToRialtoEncryption
 
         }
 
+
+        protected static void DecryptAES()
+        {
+            RijndaelManaged AES = new RijndaelManaged();
+            
+            string keyandIV=PemLoader.GetFileContent(AESKeyandIV);
+            Byte[] keyAndIvBytes = UTF8Encoding.UTF8.GetBytes( PemLoader.GetFileContent(AESKeyandIV));
+            Byte[] key = UTF8Encoding.UTF8.GetBytes(keyandIV.Substring(0, 32));
+            Byte[] IV = UTF8Encoding.UTF8.GetBytes(keyandIV.Substring(32, 16));
+            Byte[] inputArr = Convert.FromBase64String(PDToDecrypt);
+            string decrypted = "";
+
+            Console.WriteLine(string.Format("Decrypting PD data field {0}", PDToDecrypt));
+            Console.WriteLine("");
+            using (var provider = new AesCryptoServiceProvider())
+            {
+                provider.Key = key;
+                using (var ms = new MemoryStream(inputArr))
+                {
+                    // Read the first 16 bytes which is the IV.
+                    //byte[] iv = new byte[16];
+                    //ms.Read(iv, 0, 16);
+                    provider.IV = IV;
+
+                    using (var decryptor = provider.CreateDecryptor())
+                    {
+                        using (var cs = new CryptoStream(ms, decryptor, CryptoStreamMode.Read))
+                        {
+                            using (var sr = new StreamReader(cs))
+                            {
+                                decrypted=  sr.ReadToEnd();
+                            }
+                        }
+                    }
+                }
+            }
+
+            Console.WriteLine(string.Format("Decripted PD:{0}",decrypted));
+            Console.WriteLine("");
+            
+        }
+
       
         static void Main(string[] args)
         {
@@ -111,13 +158,18 @@ namespace KCXToRialtoEncryption
             PrivateKeyXmlFile = ConfigurationManager.AppSettings["PrivateKeyFile"];
             EncryptedFile = ConfigurationManager.AppSettings["EncryptedFile"];
             TextToEncrypt = ConfigurationManager.AppSettings["TextToEncrypt"];
+            AESKeyandIV=ConfigurationManager.AppSettings["AESKeyandIV"];
             Mode = ConfigurationManager.AppSettings["Mode"];
+            PDToDecrypt = ConfigurationManager.AppSettings["PDToDecrypt"];
 
             if (Mode=="1")
                 GenerateKeyPair();
             
             if (Mode=="2")
                 DecryptTest();
+
+            if (Mode == "3")
+                DecryptAES();
            
             Console.ReadKey();
         }
