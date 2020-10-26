@@ -40,6 +40,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DTO\Generic\DataEntity.cs" />
+    <Compile Include="DTO\Generic\DataResponse.cs" />
     <Compile Include="DTO\Generic\ErrorMessage.cs" />
     <Compile Include="DTO\Generic\GenericError.cs" />
     <Compile Include="DTO\Generic\ExistsEntity.cs" />
@@ -49,6 +51,7 @@
     <Compile Include="DTO\Holdings\HoldSharesDTO.cs" />
     <Compile Include="DTO\Holdings\ReleaseSharesDTO.cs" />
     <Compile Include="DTO\Securities\TransferSharesDTO.cs" />
+    <Compile Include="DTO\Shareholders\ShareholderSharesDTO.cs" />
     <Compile Include="enums\HoldReasons.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

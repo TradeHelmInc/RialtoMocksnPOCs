@@ -53,6 +53,7 @@
     <Compile Include="HoldingsLogicLayer.cs" />
     <Compile Include="HoldSharesDTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SecuritiesLogicLayer.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\KoreConX.BusinessEntities\KoreConX.BusinessEntities.csproj">

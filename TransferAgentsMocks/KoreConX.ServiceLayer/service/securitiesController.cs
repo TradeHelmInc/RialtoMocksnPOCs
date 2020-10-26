@@ -2,6 +2,7 @@
 using KoreConX.Common.DTO.Generic;
 using Mocks.KoreConX.Common.DTO.Generic;
 using Mocks.KoreConX.Common.DTO.Securities;
+using Mocks.KoreConX.Common.DTO.Shareholders;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,8 @@ using System.Web.Http;
 namespace KoreConX.ServiceLayer.service
 {
     public delegate TransactionResponse OnTransferShares(TransferSharesDTO transferSharesDto);
+
+    public delegate DataResponse OnShareholderRequest(ShareholderSharesDTO shareholdersReqDto);
 
     public class securitiesController : BaseRESTServer
     {
@@ -38,6 +41,8 @@ namespace KoreConX.ServiceLayer.service
         #region Public Static Attributs
 
         public static event OnTransferShares OnTransferShares;
+
+        public static event OnShareholderRequest OnShareholderRequest;
 
         #endregion
 
@@ -77,6 +82,28 @@ namespace KoreConX.ServiceLayer.service
             }
 
         }
+
+        [HttpGet]
+        [ActionName("shareholders")]
+        public HttpResponseMessage ShareholdersRequest(HttpRequestMessage Request, string company_id, string koresecurities_id, string requestor_id)
+        {
+            try
+            {
+                HttpResponseMessage resp = Request.CreateResponse(HttpStatusCode.OK);
+
+                ShareholderSharesDTO shareholdersSharesDTO = new ShareholderSharesDTO() { company_id = company_id, koresecurities_id = koresecurities_id, requestor_id = requestor_id };
+
+                resp.Content = new StringContent(JsonConvert.SerializeObject(OnShareholderRequest(shareholdersSharesDTO)), Encoding.UTF8, "application/json");
+
+                return resp;
+
+            }
+            catch (Exception ex)
+            {
+                return CreateKoreConXError(Request, ex.Message);
+            }
+        }
+
 
 
         #endregion

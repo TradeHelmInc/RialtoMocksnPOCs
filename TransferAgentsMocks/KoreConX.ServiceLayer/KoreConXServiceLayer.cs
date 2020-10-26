@@ -1,10 +1,13 @@
 ﻿using fwk.Common.enums;
 using fwk.ServiceLayer;
 using KoreConX.Common.DTO.Generic;
+using KoreConX.LogicLayer;
 using KoreConX.ServiceLayer.service;
+using Mocks.KoreConX.BusinessEntities;
 using Mocks.KoreConX.Common.DTO.Generic;
 using Mocks.KoreConX.Common.DTO.Holdings;
 using Mocks.KoreConX.Common.DTO.Securities;
+using Mocks.KoreConX.Common.DTO.Shareholders;
 using Mocks.KoreConX.LogicLayer;
 using Mocks.KoreConX.ServiceLayer.service;
 using System;
@@ -27,6 +30,8 @@ namespace Mocks.KoreConX.ServiceLayer
 
         protected HoldingsLogicLayer HoldingsLogicLayer { get; set; }
 
+        protected SecuritiesLogicLayer SecuritiesLogicLayer { get; set; }
+
         #endregion
 
         #region Constructors
@@ -37,6 +42,8 @@ namespace Mocks.KoreConX.ServiceLayer
             RESTURL = pRESTAdddress;
 
             HoldingsLogicLayer = new HoldingsLogicLayer();
+
+            SecuritiesLogicLayer = new SecuritiesLogicLayer();
 
             LoadDocsService();
         }
@@ -67,6 +74,17 @@ namespace Mocks.KoreConX.ServiceLayer
 
             return new TransactionResponse() { data = new IdEntity() { id = txId } };
         
+        }
+
+        protected DataResponse OnShareholderRequest(ShareholderSharesDTO shareholdersReqDto)
+        {
+            Shareholder[] shareholders = SecuritiesLogicLayer.GetShareholders(shareholdersReqDto.koresecurities_id);
+
+            List<string> shareholderIds = new List<string>();
+
+            shareholders.ToList().ForEach(x => shareholderIds.Add(x.KoreShareholderId));
+
+            return new DataResponse() { data = new DataEntity() { data = shareholderIds.ToArray() } };
         }
 
 
@@ -104,6 +122,7 @@ namespace Mocks.KoreConX.ServiceLayer
                 holdingsController.OnReleaseShares += OnReleaseShares;
 
                 securitiesController.OnTransferShares += OnTransferShares;
+                securitiesController.OnShareholderRequest += OnShareholderRequest;
 
 
                 Server = new HttpSelfHostServer(config);

@@ -45,6 +45,8 @@
   <ItemGroup>
     <Compile Include="Client\KCXBaseRESTClient.cs" />
     <Compile Include="Client\HoldingsServiceClient.cs" />
+    <Compile Include="Client\PersonsServiceClient.cs" />
+    <Compile Include="Client\SecuritiesServiceClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
