@@ -51,18 +51,13 @@ namespace Rialto.KoreConX.ServiceLayer.Client
 
         protected ValidationResponse GetGenericGetError(string json)
         {
-            GenericGetError error = JsonConvert.DeserializeObject<GenericGetError>(json, new JsonSerializerSettings
+            GenericGetError errorMsg = JsonConvert.DeserializeObject<GenericGetError>(json, new JsonSerializerSettings
             {
                 NullValueHandling = NullValueHandling.Ignore
             });
 
 
-            error.GenMessage = JsonConvert.DeserializeObject<GenericGetErrorMsg>(error.message, new JsonSerializerSettings
-            {
-                NullValueHandling = NullValueHandling.Ignore
-            });
-
-            return new ValidationResponse() { Resp = json, message = error };
+            return new ValidationResponse() { Resp = json, message = errorMsg };
         }
 
         protected ValidationResponse BuildGetError(string msg)
@@ -72,8 +67,8 @@ namespace Rialto.KoreConX.ServiceLayer.Client
                 Resp = null,
                 message = new GenericGetError()
                     {
-                        GenMessage = new GenericGetErrorMsg() { code = 500, msg = msg, details = null },
-                        message=msg
+                        message = new GenericGetErrorMsg() { code = 500, msg = msg, details = null },
+                        strMessage=msg
                         
                     }
 

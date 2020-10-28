@@ -59,7 +59,7 @@ namespace HoldReleasePOC
             if (resp.message != null)
             {
                 DoLog(string.Format("<@Transfer_agent_transactions - status=KCX_ERROR_ENOUGH_SHARES > - Error Requesting available shares for KoreShareholderId {0} and KoreSecurityId {1}: {2}",
-                    dto.securities_holder_id, dto.koresecurities_id, resp.message.GenMessage != null ? resp.message.GenMessage.msg : resp.message.message), MessageType.Error);
+                    dto.securities_holder_id, dto.koresecurities_id, resp.message.message.msg!= null && resp.message.message != null ? resp.message.message.msg : resp.message.strMessage), MessageType.Error);
             }
             else
             {

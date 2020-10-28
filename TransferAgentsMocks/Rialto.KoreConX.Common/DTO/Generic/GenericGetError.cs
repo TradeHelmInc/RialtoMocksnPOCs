@@ -8,8 +8,8 @@ namespace Rialto.KoreConX.Common.DTO.Generic
 {
     public class GenericGetError
     {
-        public GenericGetErrorMsg GenMessage { get; set; }
+        public GenericGetErrorMsg message { get; set; }
 
-        public string message { get; set; }
+        public string strMessage { get; set; }
     }
 }

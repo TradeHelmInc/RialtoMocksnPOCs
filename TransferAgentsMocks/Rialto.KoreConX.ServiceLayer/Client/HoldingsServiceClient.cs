@@ -60,7 +60,7 @@ namespace Rialto.KoreConX.ServiceLayer.Client
 
         protected ValidationResponse ProcessValidationResponse(BaseGetResponse resp)
         {
-            if (resp.Resp != null)
+            if (resp.message==null)
             {
                 try
                 {

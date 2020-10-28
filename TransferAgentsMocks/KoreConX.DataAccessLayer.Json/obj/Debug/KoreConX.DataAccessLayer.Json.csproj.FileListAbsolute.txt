@@ -34,3 +34,4 @@ C:\Users\zimzum\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\TransferAgent
 C:\Users\zimzum\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\TransferAgentsMocks\KoreConX.DataAccessLayer.Json\bin\Debug\Mocks.KoreConX.BusinessEntities.pdb
 C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConX.DataAccessLayer.Json\bin\Debug\Mocks.KoreConX.BusinessEntities.dll
 C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConX.DataAccessLayer.Json\bin\Debug\Mocks.KoreConX.BusinessEntities.pdb
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\KoreConX.DataAccessLayer.Json\bin\Debug\input\Persons.json
