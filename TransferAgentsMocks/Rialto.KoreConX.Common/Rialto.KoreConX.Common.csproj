@@ -58,6 +58,13 @@
     <Compile Include="DTO\Shareholders\PersonResponse.cs" />
     <Compile Include="enums\HoldReasons.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util\AESEncrypter.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\fwk.Common\fwk.Common.csproj">
+      <Project>{6b88d2e0-1195-45f4-ba2b-3b1b4487553c}</Project>
+      <Name>fwk.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

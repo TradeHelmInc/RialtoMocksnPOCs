@@ -172,7 +172,8 @@ namespace HoldTransfer
 
                     //1.2-We release the remaining shares
                     dto.number_of_shares=dto.number_of_shares-tradedShares;
-                    ReleaseShares(txHoldResp, dto);
+                    if(dto.number_of_shares>0)
+                        ReleaseShares(txHoldResp, dto);
 
                 }
                 else

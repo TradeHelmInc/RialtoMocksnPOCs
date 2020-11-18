@@ -1,10 +1,14 @@
-﻿using Rialto.KoreConX.Common.DTO.Generic;
+﻿using fwk.Common.util.encryption.RSA;
+using Rialto.KoreConX.Common.DTO.Generic;
 using Rialto.KoreConX.Common.DTO.Shareholders;
+using Rialto.KoreConX.Common.Util;
 using Rialto.KoreConX.ServiceLayer.Client;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -24,6 +28,10 @@ namespace OnboardShareholdersPOC
 
         protected static string KoreSecurityId { get; set; }
 
+        protected static string AESKeyandIV { get; set; }
+
+        protected static AESEncrypter AESEncrypter { get; set; }
+
         #endregion
 
         #region Protected Methods
@@ -42,9 +50,22 @@ namespace OnboardShareholdersPOC
                 PersonResponse personResp = PersonsServiceClient.RequestPerson(shareholderId);
 
                 Console.WriteLine(string.Format("Received {0} {1} from {2}. PD field:{3}", personResp.data.first_name, personResp.data.last_name, personResp.data.country, personResp.data.pd));
-                Console.WriteLine("CONTINUE DEVELOPMENT--> Decrypt personal info!!");
 
-                Console.WriteLine("");
+                if (string.IsNullOrEmpty(personResp.data.pd))
+                {
+                    Console.WriteLine(string.Format("Shareholder {0} {1} does not have personal data (PD) loaded. It will be uploaded as a draft", personResp.data.first_name, personResp.data.last_name));
+
+                }
+                else
+                {
+                    string pdFields = AESEncrypter.DecryptAES(personResp.data.pd);
+
+                    Console.WriteLine(string.Format("Decrypting personal information <PD>:{0}", pdFields));
+                }
+
+                
+                Console.ReadKey();
+                Console.Clear();
             }
 
             
@@ -58,6 +79,10 @@ namespace OnboardShareholdersPOC
             KoreATSId = ConfigurationManager.AppSettings["KoreATSId"];
             CompanyId = ConfigurationManager.AppSettings["CompanyId"];
             KoreSecurityId = ConfigurationManager.AppSettings["KoreSecurityId"];
+
+            AESKeyandIV = ConfigurationManager.AppSettings["AESKeyandIV"];
+
+            AESEncrypter = new AESEncrypter(AESKeyandIV);
             
             SecuritiesServiceClient = new SecuritiesServiceClient(BaseURL);
             PersonsServiceClient = new PersonsServiceClient(BaseURL);
