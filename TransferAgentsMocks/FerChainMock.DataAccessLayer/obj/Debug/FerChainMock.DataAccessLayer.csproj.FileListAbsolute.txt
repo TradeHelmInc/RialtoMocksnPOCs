@@ -8,6 +8,10 @@ C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\FerChain
 C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\FerChainMock.DataAccessLayer\bin\Debug\Newtonsoft.Json.dll
 C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\FerChainMock.DataAccessLayer\bin\Debug\ToolsShared.dll
 C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\TransferAgentsMocks\FerChainMock.DataAccessLayer\bin\Debug\fwk.DataAccessLayer.pdb
-C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\FerChainMock.DataAccessLayer\obj\Debug\FerChainMock.DataAccessLayer.csprojResolveAssemblyReference.cache
 C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\FerChainMock.DataAccessLayer\obj\Debug\FerChainMock.DataAccessLayer.dll
 C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\FerChainMock.DataAccessLayer\obj\Debug\FerChainMock.DataAccessLayer.pdb
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\FerChainMock.DataAccessLayer\bin\Debug\FerChainMock.DataAccessLayer.dll
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\FerChainMock.DataAccessLayer\bin\Debug\FerChainMock.DataAccessLayer.pdb
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\FerChainMock.DataAccessLayer\bin\Debug\MDFShared.dll
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\FerChainMock.DataAccessLayer\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\FerChainMock.DataAccessLayer\bin\Debug\ToolsShared.dll

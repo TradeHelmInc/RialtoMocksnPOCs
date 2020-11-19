@@ -266,6 +266,8 @@ namespace Rialto.LogicLayer
                     trade.TradePrice = Math.Min(buyOrder.TradePrice.Value, sellOrder.TradePrice.Value);
                     trade.BuyOrderId = buyOrder.Id;
                     trade.SellOrderId = sellOrder.Id;
+                    trade.TradeNotional = trade.TradeSize * trade.TradePrice;
+                    trade.Status = "Not Cleared";
 
                     trades.Add(trade);
 

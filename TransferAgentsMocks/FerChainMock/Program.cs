@@ -1,4 +1,4 @@
-﻿using FerChainMock.DataAccessLayer;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -11,40 +11,40 @@ namespace FerChainMock
 {
     class Program
     {
-        #region Private Static Methods
+        //#region Private Static Methods
 
-        //This should be logged, but we will write it on the screen for simplicity
-        private static void DoLog(string message)
-        {
-            Console.WriteLine(message);
-        }
+        ////This should be logged, but we will write it on the screen for simplicity
+        //private static void DoLog(string message)
+        //{
+        //    Console.WriteLine(message);
+        //}
 
-        #endregion
+        //#endregion
 
 
         static void Main(string[] args)
         {
-            string RESTAdddress = ConfigurationManager.AppSettings["RESTAdddress"];
+            //string RESTAdddress = ConfigurationManager.AppSettings["RESTAdddress"];
 
 
-            ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls12
-                                                  | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
+            //ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
+            //ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls12
+            //                                      | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
 
 
-            try
-            {
-                FerChainServer server = new FerChainServer(RESTAdddress);
-                server.Start();
-                DoLog(" Service Successfully Started...");
+            //try
+            //{
+            //    FerChainServer server = new FerChainServer(RESTAdddress);
+            //    server.Start();
+            //    DoLog(" Service Successfully Started...");
 
-            }
-            catch (Exception ex)
-            {
-                DoLog(string.Format("Critical error initializing  Service: {0}", ex.Message));
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    DoLog(string.Format("Critical error initializing  Service: {0}", ex.Message));
+            //}
 
-            Console.ReadKey();
+            //Console.ReadKey();
 
         }
     }

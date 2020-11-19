@@ -1,5 +1,7 @@
-﻿using Rialto.BusinessEntities;
-using Rialto.LogicLayer;
+﻿using Newtonsoft.Json;
+using Rialto.BusinessEntities;
+using Rialto.Rialto.Common.DTO.Generic;
+using Rialto.Rialto.ServiceLayer.Client;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -17,7 +19,12 @@ namespace SettleTradesPOC
         protected static string OrderCS = ConfigurationManager.AppSettings["OrdersDBConnectionString"];
         protected static string KCXURL = ConfigurationManager.AppSettings["KCXURL"];
 
-        protected static List<Trade> Trades { get; set; }
+        protected static Trade[] Trades { get; set; }
+
+        protected static TransferServiceClient TransferServiceClient { get; set; }
+
+        protected static GetTradesServiceClient GetTradesServiceClient { get; set; }
+
         #endregion
 
         #region Private Methods
@@ -60,15 +67,19 @@ namespace SettleTradesPOC
 
             if (param.Length >= 1)
             {
-                TradingService tradingSvc = new TradingService(TradingCS, OrderCS, KCXURL);
-                Trades = tradingSvc.GetTradesToClear();
+                GetResponse resp = GetTradesServiceClient.GetTrades();
 
-                int i = 0;
-                Console.WriteLine("============= Trades to Clear =============");
-                foreach (Trade trade in Trades)
+                if (resp.Success)
                 {
-                    DoLog(string.Format("[{0}]-Buyer={1} Seller={2} Security={3} Qty={4} Price={5}", i, trade.BuyerName, trade.SellerName, trade.Symbol, trade.TradeSize, trade.TradePrice));
-                    i++;
+                    Trades= JsonConvert.DeserializeObject<Trade[]>(resp.data.ToString());
+                   
+                    int i = 0;
+                    Console.WriteLine("============= Trades to Clear =============");
+                    foreach (Trade trade in Trades)
+                    {
+                        DoLog(string.Format("[{0}]-Buyer={1} Seller={2} Security={3} Qty={4} Price={5}", i, trade.BuyerName, trade.SellerName, trade.Symbol, trade.TradeSize, trade.TradePrice));
+                        i++;
+                    }
                 }
             }
             else
@@ -84,26 +95,27 @@ namespace SettleTradesPOC
             {
                 int indexToClear = Convert.ToInt32(param[1]);
 
-                if (indexToClear < Trades.Count)
+                if (Trades != null && indexToClear < Trades.Length)
                 {
                     Trade trade = Trades[indexToClear];
 
                     try
                     {
-                        TradingService tradingSvc = new TradingService(TradingCS, OrderCS, KCXURL);
-                        string txId = tradingSvc.TransferShares(trade.BuyerId, trade.SellerId, trade.TradeSize, trade.SecurityId, trade.SellOrderId);
+                        TransactionResponse trans = TransferServiceClient.TransferShares(trade.BuyerId, trade.SellerId, trade.TradeSize, trade.SecurityId, trade.SellOrderId);
 
-                        if(txId!=null)
-                            DoLog(string.Format("Trade {0} successully cleared. KCX Transaction Id = {1}", trade.MatchingId, txId));
+                        if (trans.Success && trans.Id != null)
+                            DoLog(string.Format("Trade {0} successully cleared. KCX Transaction Id = {1}", trade.MatchingId, trans.Id.id));
                         else
-                            DoLog(string.Format("ERROR clearing trade {0} : {1}", trade.MatchingId,"Unknwon trade Id"));
+                            DoLog(string.Format("ERROR clearing trade {0} : {1}", trade.MatchingId, "Unknwon trade Id"));
                     }
                     catch (Exception ex)
                     {
                         DoLog(string.Format("ERROR clearing trade {0} : {1}", trade.MatchingId, ex.Message));
-                    
+
                     }
                 }
+                else
+                    DoLog(string.Format("There is not an trade whose index is {0}", param[1]));
             }
             else
                 DoLog(string.Format("Missing mandatory parameters for GetTradesToClear message"));
@@ -140,8 +152,11 @@ namespace SettleTradesPOC
         static void Main(string[] args)
         {
 
-            //string TransferSericeREST = ConfigurationManager.AppSettings["TransferSericeREST"];
+            string TransferServiceREST = ConfigurationManager.AppSettings["TransferServiceURL"];
+            string GetTradesServiceREST = ConfigurationManager.AppSettings["GetTradesServiceURL"];
 
+            TransferServiceClient = new TransferServiceClient(TransferServiceREST);
+            GetTradesServiceClient = new GetTradesServiceClient(GetTradesServiceREST);
             try
             {
                 ShowCommands();

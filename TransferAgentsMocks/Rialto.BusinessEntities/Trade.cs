@@ -30,9 +30,13 @@ namespace Rialto.BusinessEntities
 
         public double TradePrice { get; set; }
 
+        public double TradeNotional { get; set; }
+
         public int BuyOrderId { get; set; }
 
         public int SellOrderId { get; set; }
+
+        public string Status { get; set; }
 
         #endregion
     }

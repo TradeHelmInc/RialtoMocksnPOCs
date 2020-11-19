@@ -255,7 +255,7 @@ namespace HoldTransfer
             dto.ats_id = ConfigurationManager.AppSettings["KoreATSId"];
             dto.ats_transaction_id = "tr1";
             dto.koresecurities_id = ConfigurationManager.AppSettings["KoreSecurityId"];
-            dto.last_updated_at = DateTime.Now.ToString("YYYY-MM-dd");
+            dto.last_updated_at = DateTime.Now.ToString("yyyy-MM-dd");
             dto.reason_code = HoldReasons.PendingSell.ToString();
             dto.number_of_shares = Convert.ToInt32(ConfigurationManager.AppSettings["SellQty"]);
             dto.securities_holder_id = ConfigurationManager.AppSettings["KoreSellerShareholderId"];

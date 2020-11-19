@@ -34,6 +34,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Newtonsoft.Json 4.5.0\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -54,13 +58,21 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\fwk.ServiceLayer\fwk.ServiceLayer.csproj">
+      <Project>{fffaae30-f9dc-4b00-8b1d-92be96b29504}</Project>
+      <Name>fwk.ServiceLayer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Rialto.BusinessEntities\Rialto.BusinessEntities.csproj">
       <Project>{9581e2dd-6510-4f11-ab29-9a4c44017d90}</Project>
       <Name>Rialto.BusinessEntities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Rialto.LogicLayer\Rialto.LogicLayer.csproj">
-      <Project>{de847274-2b88-42d7-a3ef-4eb647be5db3}</Project>
-      <Name>Rialto.LogicLayer</Name>
+    <ProjectReference Include="..\Rialto.Rialto.Common\Rialto.Rialto.Common.csproj">
+      <Project>{545e569d-8c40-414a-bbc2-2228b6597f98}</Project>
+      <Name>Rialto.Rialto.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Rialto.Rialto.ServiceLayer\Rialto.Rialto.ServiceLayer.csproj">
+      <Project>{5cf20691-5c36-4481-aca9-119baf16e5d4}</Project>
+      <Name>Rialto.Rialto.ServiceLayer</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
