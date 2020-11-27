@@ -38,7 +38,7 @@ namespace Rialto.DataAccessLayer
 
         private static string _GET_ORDER_TO_CEAR_QUERY = @"SELECT id,symbol,qty,side,limit_price,state,leaves_qty,executed_qty,trade_price,datetime_recieved as datetime_received,
                                                              firm_id as shareholder_id,execution_datetime,matching_id 
-                                                            FROM secondaryorder.jhi_order WHERE state='{0}' AND matching_id is not NULL";
+                                                            FROM secondaryorder.jhi_order WHERE state IN ('{0}','{1}') AND matching_id is not NULL";
 
         private static string _GET_KCX_TRANSACTION_QUERY = @"SELECT id,state,transaction_id,order_id,number_of_shares,
                                                                     koresecurities_id as kore_security_id,securities_holder_id as kore_shareholder_id,
@@ -196,7 +196,7 @@ namespace Rialto.DataAccessLayer
         public List<Order> GetOrdersToCear()
         {
             DatabaseConnection = new MySqlConnection(OrderConnectionString);
-            MySqlCommand commandDatabase = new MySqlCommand(string.Format(_GET_ORDER_TO_CEAR_QUERY, Order._STATE_EXECUTED), DatabaseConnection);
+            MySqlCommand commandDatabase = new MySqlCommand(string.Format(_GET_ORDER_TO_CEAR_QUERY, Order._STATE_EXECUTED, Order._STATE_PARTIAL), DatabaseConnection);
             commandDatabase.CommandTimeout = 60;
             MySqlDataReader reader;
             List<Order> orders = new List<Order>();

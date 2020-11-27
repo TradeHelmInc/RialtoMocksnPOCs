@@ -71,8 +71,8 @@ namespace SettleTradesPOC
 
                 if (resp.Success)
                 {
-                    Trades= JsonConvert.DeserializeObject<Trade[]>(resp.data.ToString());
-                   
+                    Trades = JsonConvert.DeserializeObject<Trade[]>(resp.data.ToString());
+
                     int i = 0;
                     Console.WriteLine("============= Trades to Clear =============");
                     foreach (Trade trade in Trades)
@@ -80,6 +80,11 @@ namespace SettleTradesPOC
                         DoLog(string.Format("[{0}]-Buyer={1} Seller={2} Security={3} Qty={4} Price={5}", i, trade.BuyerName, trade.SellerName, trade.Symbol, trade.TradeSize, trade.TradePrice));
                         i++;
                     }
+                }
+                else
+                {
+                    DoLog(string.Format("Error accessing remote service:{0}", resp.Error.msg));
+                
                 }
             }
             else

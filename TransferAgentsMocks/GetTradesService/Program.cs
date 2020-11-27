@@ -25,7 +25,7 @@ namespace GetTradesService
 
                 transService.Run();
 
-                Console.WriteLine(string.Format("Transfer Service successfully initialyzed at {0}", getTradesServiceURL));
+                Console.WriteLine(string.Format("GetTrades successfully initialyzed at {0}", getTradesServiceURL));
 
                 Console.ReadKey();
             }

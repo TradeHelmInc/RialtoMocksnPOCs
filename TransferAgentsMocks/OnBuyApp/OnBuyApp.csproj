@@ -4,15 +4,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9B377428-979B-4DA5-9DE5-BDA72EBF9CFE}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{3D294741-0D69-47B0-A612-5B5B8E5C7E14}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Rialto.Common</RootNamespace>
-    <AssemblyName>Rialto.Common</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <RootNamespace>OnBuyApp</RootNamespace>
+    <AssemblyName>OnBuyApp</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +24,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -31,6 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -39,15 +43,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DTO\Generic\ErrorMessage.cs" />
-    <Compile Include="DTO\Generic\GetResponse.cs" />
-    <Compile Include="DTO\Generic\IdEntity.cs" />
-    <Compile Include="DTO\Generic\TransactionResponse.cs" />
-    <Compile Include="DTO\Services\OnBuyDTO.cs" />
-    <Compile Include="DTO\Services\OnOrderCancelledOrExpiredDTO.cs" />
-    <Compile Include="DTO\Services\OnSellDTO.cs" />
-    <Compile Include="DTO\Services\TransferSharesDTO.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Rialto.ServiceLayer\Rialto.ServiceLayer.csproj">
+      <Project>{9ad96b16-1937-44bb-a060-7679d05bf8ca}</Project>
+      <Name>Rialto.ServiceLayer</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

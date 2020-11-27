@@ -6,26 +6,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TransferSharesApp
+namespace OnSellApp
 {
     class Program
     {
         static void Main(string[] args)
         {
-             try
+            try
             {
                 Console.WriteLine("Initializing Transfer Service");
 
                 string tradingCS = ConfigurationManager.AppSettings["TradingDBConnectionString"];
                 string orderCS = ConfigurationManager.AppSettings["OrdersDBConnectionString"];
                 string kcxURL = ConfigurationManager.AppSettings["KCXURL"];
-                string transferServiceURL = ConfigurationManager.AppSettings["TransferServiceURL"];
+                string holdingServiceURL = ConfigurationManager.AppSettings["HoldingsServiceURL"];
 
-                TransferService transService = new TransferService(tradingCS, orderCS, kcxURL, transferServiceURL);
+                HoldingsService holdingsService = new HoldingsService(tradingCS, orderCS, kcxURL, holdingServiceURL);
 
-                transService.Run();
+                holdingsService.Run();
 
-                Console.WriteLine(string.Format("TransferShares Service successfully initialyzed at {0}", transferServiceURL));
+                Console.WriteLine(string.Format("OnSell Service successfully initialyzed at {0}", holdingServiceURL));
 
                 Console.ReadKey();
             }
@@ -33,7 +33,7 @@ namespace TransferSharesApp
             {
 
                 Console.WriteLine("Critical error initializing Transfer Service");
-            
+
             }
         }
     }

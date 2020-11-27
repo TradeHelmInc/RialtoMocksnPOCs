@@ -32,6 +32,8 @@ namespace Rialto.BusinessEntities
             KoreConXTransactions = new List<KoreConXTransaction>();
         }
 
+       
+
         #endregion
 
         #region Public Attributes
@@ -71,6 +73,12 @@ namespace Rialto.BusinessEntities
         #endregion
 
         #region Public Static Methods
+
+        public bool IsLiveOrder()
+        {
+            return State == State.OPEN || State == State.PARTIAL;
+
+        }
 
 
         public static Side GetSideFromStr(string side)

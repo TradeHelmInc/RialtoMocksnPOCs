@@ -17,51 +17,8 @@ namespace Rialto.ServiceLayer.service
     public delegate string OnTransferShares(int buyShareholderId, int sellShareholderId, double tradeQuantity,int securityId, int sellOrderId);
     public delegate List<Trade> OnGetTradesToClear();
 
-    public class TradingController : BaseRESTServer
+    public class TradingController : BaseController
     {
-
-        #region Private Methods
-
-        public HttpResponseMessage CreateTransactionError(HttpRequestMessage Request, string msg)
-        {
-
-            return Request.CreateResponse(HttpStatusCode.InternalServerError,
-                                            new
-                                            {
-                                                resp = new TransactionResponse()
-                                                {
-
-
-                                                    Success = false,
-                                                    Error = new ErrorMessage { code = 500, msg = msg }
-
-                                                }
-
-                                            }
-                );
-        }
-
-        public HttpResponseMessage CreateGetError(HttpRequestMessage Request, string msg)
-        {
-
-            return Request.CreateResponse(HttpStatusCode.InternalServerError,
-                                            new
-                                            {
-                                                resp = new GetResponse()
-                                                {
-
-
-                                                    Success = false,
-                                                    Error = new ErrorMessage { code = 500, msg = msg }
-
-                                                }
-
-                                            }
-                );
-        }
-
-        #endregion
-
 
         #region Public Static Attributs
 

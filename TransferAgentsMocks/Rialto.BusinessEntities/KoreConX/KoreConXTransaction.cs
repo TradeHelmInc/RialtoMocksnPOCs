@@ -16,8 +16,10 @@ namespace Rialto.BusinessEntities.KoreConX
         public static string _STATE_KCX_TRANSFER_SHARES_SUCCESS = "KCX_TRANSFER_SHARES_SUCCESS";
         public static string _STATE_KCX_TRANSFER_SHARES_REJECTED = "KCX_TRANSFER_SHARES_REJECTED";
         public static string _STATE_KCX_TRANSFER_SHARES_CRITICAL = "KCX_TRANSFER_SHARES_CRITICAL";
-          
-        
+        public static string _STATE_KCX_REQ_RELEASE_SHARES = "KCX_REQ_RELEASE_SHARES";
+        public static string _STATE_KCX_RELEASE_SHARES_SUCCESS_FULL = "KCX_RELEASE_SHARES_SUCCESS";
+        public static string _STATE_KCX_RELEASE_SHARES_REJECTED = "KCX_RELEASE_SHARES_REJECTED";
+
 
         #endregion
 
@@ -49,6 +51,8 @@ namespace Rialto.BusinessEntities.KoreConX
                 return KoreConXTransactionState.KCX_HOLD_SHARES_SUCCESS;
             else if (state == _STATE_KCX_RELEASE_SHARES_SUCCESS)
                 return KoreConXTransactionState.KCX_RELEASE_SHARES_SUCCESS;
+            else if (state == _STATE_KCX_RELEASE_SHARES_SUCCESS_FULL)
+                return KoreConXTransactionState.KCX_RELEASE_SHARES_SUCCESS_FULL;
             else if (state == _STATE_KCX_TRANSFER_SHARES_REQUEST)
                 return KoreConXTransactionState.KCX_TRANSFER_SHARES_REQUEST;
             else if (state == _STATE_KCX_TRANSFER_SHARES_SUCCESS)
@@ -57,6 +61,10 @@ namespace Rialto.BusinessEntities.KoreConX
                 return KoreConXTransactionState.KCX_TRANSFER_SHARES_REJECTED;
             else if (state == _STATE_KCX_TRANSFER_SHARES_CRITICAL)
                 return KoreConXTransactionState.KCX_TRANSFER_SHARES_CRITICAL;
+            else if (state == _STATE_KCX_REQ_RELEASE_SHARES)
+                return KoreConXTransactionState.KCX_REQ_RELEASE_SHARES;
+            else if (state == _STATE_KCX_RELEASE_SHARES_REJECTED)
+                return KoreConXTransactionState.KCX_RELEASE_SHARES_REJECTED;
             else
                 throw new Exception(string.Format(" Unknown KCX Transaction State {0}",state));
         }
@@ -67,6 +75,8 @@ namespace Rialto.BusinessEntities.KoreConX
                 return _STATE_KCX_HOLD_SHARES_SUCCESS;
             else if (State == KoreConXTransactionState.KCX_RELEASE_SHARES_SUCCESS)
                 return _STATE_KCX_RELEASE_SHARES_SUCCESS;
+            else if (State == KoreConXTransactionState.KCX_RELEASE_SHARES_SUCCESS_FULL)
+                return _STATE_KCX_RELEASE_SHARES_SUCCESS_FULL;
             else if (State == KoreConXTransactionState.KCX_TRANSFER_SHARES_REQUEST)
                 return _STATE_KCX_TRANSFER_SHARES_REQUEST;
             else if (State == KoreConXTransactionState.KCX_TRANSFER_SHARES_SUCCESS)
@@ -75,6 +85,10 @@ namespace Rialto.BusinessEntities.KoreConX
                 return _STATE_KCX_TRANSFER_SHARES_REJECTED;
             else if (State == KoreConXTransactionState.KCX_TRANSFER_SHARES_CRITICAL)
                 return _STATE_KCX_TRANSFER_SHARES_CRITICAL;
+            else if (State == KoreConXTransactionState.KCX_REQ_RELEASE_SHARES)
+                return _STATE_KCX_REQ_RELEASE_SHARES;
+            else if (State == KoreConXTransactionState.KCX_RELEASE_SHARES_REJECTED)
+                return _STATE_KCX_RELEASE_SHARES_REJECTED;
             else
                 throw new Exception(string.Format(" Cannot convert to string Transaction State {0}", State));
         }
