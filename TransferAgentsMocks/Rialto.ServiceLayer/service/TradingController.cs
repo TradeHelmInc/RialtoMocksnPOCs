@@ -1,4 +1,5 @@
-﻿using fwk.ServiceLayer.REST;
+﻿using fwk.Common.interfaces;
+using fwk.ServiceLayer.REST;
 using Newtonsoft.Json;
 using Rialto.BusinessEntities;
 using Rialto.Common.DTO.Generic;
@@ -26,6 +27,8 @@ namespace Rialto.ServiceLayer.service
 
         public static event OnGetTradesToClear OnGetTradesToClear;
 
+        public static ILogger Logger { get; set; }
+
         #endregion
 
         #region Public Methods
@@ -44,13 +47,19 @@ namespace Rialto.ServiceLayer.service
                 try
                 {
                     transferDto = JsonConvert.DeserializeObject<TransferSharesDTO>(jsonInput);
+                    Logger.DoLog(string.Format("Incoming TransferShares: BuyShareholderId={0} SellShareholderId={1} SecurityId={2} TradeQuantity={3} ", transferDto.BuyShareholderId, transferDto.SellShareholderId, transferDto.SecurityId, transferDto.TradeQuantity), fwk.Common.enums.MessageType.Information);
+
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception(string.Format("Could not process input json:{0}", ex.Message));
+                    string msg = string.Format("Could not process input json {1}:{0}", ex.Message, jsonInput);
+                    Logger.DoLog(msg, fwk.Common.enums.MessageType.Error);
+                    throw new Exception(msg);
                 }
 
                 string txtId = OnTransferShares(transferDto.BuyShareholderId, transferDto.SellShareholderId, transferDto.TradeQuantity, transferDto.SecurityId, transferDto.SellOrderId);
+
+                Logger.DoLog("TransferShares successfully processed", fwk.Common.enums.MessageType.Information);
 
                 TransactionResponse txResp = new TransactionResponse() { Success = true, Id = new IdEntity() { id = txtId } };
 
@@ -60,6 +69,8 @@ namespace Rialto.ServiceLayer.service
             }
             catch (Exception ex)
             {
+                string msg = string.Format("Error @TransferShares :{0}", ex.Message);
+                Logger.DoLog(msg, fwk.Common.enums.MessageType.Error);
                 return CreateTransactionError(Request, ex.Message);
             }
         }
@@ -71,12 +82,16 @@ namespace Rialto.ServiceLayer.service
             try
             {
                 HttpResponseMessage resp = Request.CreateResponse(HttpStatusCode.OK);
+                Logger.DoLog(string.Format("Incoming GetTradesToClear"), fwk.Common.enums.MessageType.Information);
+
                 GetResponse gResp = new GetResponse()
                 {
                     Success=true,
                     data = OnGetTradesToClear().ToArray()
 
                 };
+
+                Logger.DoLog("GetTradesToClear successfully processed", fwk.Common.enums.MessageType.Information);
                 resp.Content = new StringContent(JsonConvert.SerializeObject(gResp), Encoding.UTF8, "application/json");
 
                 return resp;
@@ -84,6 +99,8 @@ namespace Rialto.ServiceLayer.service
             }
             catch (Exception ex)
             {
+                string msg = string.Format("Error @GetTradesToClear :{0}", ex.Message);
+                Logger.DoLog(msg, fwk.Common.enums.MessageType.Error);
                 return CreateGetError(Request, ex.Message);
             }
         }

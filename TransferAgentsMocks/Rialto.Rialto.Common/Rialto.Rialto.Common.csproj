@@ -44,6 +44,7 @@
     <Compile Include="DTO\Generic\GetResponse.cs" />
     <Compile Include="DTO\Generic\IdEntity.cs" />
     <Compile Include="DTO\Generic\TransactionResponse.cs" />
+    <Compile Include="DTO\Services\OnSellDTO.cs" />
     <Compile Include="DTO\Services\TransfServiceDTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

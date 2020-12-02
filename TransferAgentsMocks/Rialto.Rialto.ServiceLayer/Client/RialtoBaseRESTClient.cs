@@ -98,7 +98,13 @@ namespace Rialto.Rialto.ServiceLayer.Client
                         errContent = sr.ReadToEnd();
                     }
                 }
-                return new TransactionResponse() { Success = false, Error = new ErrorMessage() { code = 500, msg = ex.Message } };
+
+                TransactionResponse errResp = JsonConvert.DeserializeObject<TransactionResponse>(errContent, new JsonSerializerSettings
+                {
+                    NullValueHandling = NullValueHandling.Ignore
+                });
+
+                return errResp;
             }
             catch (Exception ex)
             {

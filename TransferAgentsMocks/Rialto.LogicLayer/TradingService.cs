@@ -1,4 +1,5 @@
-﻿using MySql.Data.MySqlClient;
+﻿using fwk.Common.interfaces;
+using MySql.Data.MySqlClient;
 using Rialto.BusinessEntities;
 using Rialto.BusinessEntities.KoreConX;
 using Rialto.DataAccessLayer;
@@ -15,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace Rialto.LogicLayer
 {
-    public class TradingService
+    public class TradingService : BaseLayer
     {
         #region Protected Attributes
 
@@ -37,7 +38,7 @@ namespace Rialto.LogicLayer
 
         #region Constructors
 
-        public TradingService(string pTradingConnectionString, string pOrderConnectionString,string pKCXURL)
+        public TradingService(string pTradingConnectionString, string pOrderConnectionString, string pKCXURL, ILogger pLogger)
         {
             SecurityManager = new SecurityManager(pTradingConnectionString);
 
@@ -46,6 +47,8 @@ namespace Rialto.LogicLayer
             OrderManager = new OrderManager(pOrderConnectionString, pTradingConnectionString);
 
             TransferAgentManager = new TransferAgentManager(pTradingConnectionString);
+
+            Logger = pLogger;
 
             #region KCX
 
@@ -376,7 +379,7 @@ namespace Rialto.LogicLayer
             //The third component of the 2 previous Ids is the ATS Id in the KoreChain: ATS_ID <always a fixed number and populated just once>
             HoldSharesDTO dto = new HoldSharesDTO();
             dto.ats_id = transfAgent.TransferAgentATSId;
-            dto.ats_transaction_id = string.Format("tr{0}-{1}-{2}", seller.KoreConXShareholderId.KoreShareholderId, sec.KoreConXSecurityId.KoreSecurityId, DateTime.Now.ToString("yyyyMMddhhmmss"));
+            dto.ats_transaction_id = string.Format("tr{0}{1}{2}", seller.KoreConXShareholderId.KoreShareholderId, sec.KoreConXSecurityId.KoreSecurityId, DateTime.Now.ToString("yyyyMMddhhmmss"));
             dto.koresecurities_id = sec.KoreConXSecurityId.KoreSecurityId;
             dto.last_updated_at = DateTime.Now.ToString("yyyy-MM-dd");
             dto.reason_code = HoldReasons.PendingSell.ToString();
@@ -418,46 +421,54 @@ namespace Rialto.LogicLayer
 
         public List<Trade> GetTradesToClear()
         {
-            List<Order> ordersToClear =  OrderManager.GetOrdersToCear();
-
-            List<Trade> trades = new List<Trade>();
-            foreach (Order buyOrder in ordersToClear.Where(x=>x.Side==Side.Buy))
+            try
             {
-                if (!trades.Any(x => x.MatchingId == buyOrder.MatchingId))
+                List<Order> ordersToClear = OrderManager.GetOrdersToCear();
+
+                List<Trade> trades = new List<Trade>();
+                foreach (Order buyOrder in ordersToClear.Where(x => x.Side == Side.Buy))
                 {
+                    if (!trades.Any(x => x.MatchingId == buyOrder.MatchingId))
+                    {
 
-                    Order sellOrder = ordersToClear.Where(x => x.Side==Side.Sell && x.MatchingId == buyOrder.MatchingId).FirstOrDefault();
+                        Order sellOrder = ordersToClear.Where(x => x.Side == Side.Sell && x.MatchingId == buyOrder.MatchingId).FirstOrDefault();
 
-                    Trade trade = new Trade();
+                        Trade trade = new Trade();
 
-                    Security sec = SecurityManager.GetSecurity(buyOrder.Symbol);
-                    Shareholder buyer= ShareholderManager.GetShareholder(buyOrder.ShareholderId);
-                    Shareholder seller= ShareholderManager.GetShareholder(sellOrder.ShareholderId);
+                        Security sec = SecurityManager.GetSecurity(buyOrder.Symbol);
+                        Shareholder buyer = ShareholderManager.GetShareholder(buyOrder.ShareholderId);
+                        Shareholder seller = ShareholderManager.GetShareholder(sellOrder.ShareholderId);
 
-                    ValidateTradesToClear(sec, buyer, seller, buyOrder, sellOrder);
+                        ValidateTradesToClear(sec, buyer, seller, buyOrder, sellOrder);
 
-                    trade.ExecutionDate = buyOrder.ExecutionTime.Value;
-                    trade.SecurityId = sec.Id;
-                    trade.Symbol = sec.Symbol;
-                    trade.BuyerId = buyOrder.ShareholderId;
-                    trade.BuyerName = buyer.Name;
-                    trade.SellerId = sellOrder.ShareholderId;
-                    trade.SellerName = seller.Name;
-                    trade.TradeSize = Convert.ToInt32(Math.Min(buyOrder.ExecutedQty.Value, sellOrder.ExecutedQty.Value));
-                    trade.TradePrice = Math.Min(buyOrder.TradePrice.Value, sellOrder.TradePrice.Value);
-                    trade.BuyOrderId = buyOrder.Id;
-                    trade.SellOrderId = sellOrder.Id;
-                    trade.TradeNotional = trade.TradeSize * trade.TradePrice;
-                    trade.Status = "Not Cleared";
+                        trade.ExecutionDate = buyOrder.ExecutionTime.Value;
+                        trade.SecurityId = sec.Id;
+                        trade.Symbol = sec.Symbol;
+                        trade.BuyerId = buyOrder.ShareholderId;
+                        trade.BuyerName = buyer.Name;
+                        trade.SellerId = sellOrder.ShareholderId;
+                        trade.SellerName = seller.Name;
+                        trade.TradeSize = Convert.ToInt32(Math.Min(buyOrder.ExecutedQty.Value, sellOrder.ExecutedQty.Value));
+                        trade.TradePrice = Math.Min(buyOrder.TradePrice.Value, sellOrder.TradePrice.Value);
+                        trade.BuyOrderId = buyOrder.Id;
+                        trade.SellOrderId = sellOrder.Id;
+                        trade.TradeNotional = trade.TradeSize * trade.TradePrice;
+                        trade.Status = "Not Cleared";
 
-                    trades.Add(trade);
+                        trades.Add(trade);
 
+                    }
+                    else
+                        throw new Exception(string.Format("There is not a counterparty for Matching Id {0}", buyOrder.MatchingId));
                 }
-                else
-                    throw new Exception(string.Format("There is not a counterparty for Matching Id {0}", buyOrder.MatchingId));
-            }
 
-            return trades;
+                return trades;
+            }
+            catch (Exception ex)
+            {
+                DoLog(ex.Message, fwk.Common.enums.MessageType.Error);
+                throw;
+            }
         }
 
         public bool CreateTrade(int buyShareholderId, int sellShareholderId, int securityId, double tradeQuantity, double price)
@@ -470,54 +481,77 @@ namespace Rialto.LogicLayer
 
         public string TransferShares(int buyShareholderId,int sellShareholderId,double tradeQuantity,int securityId,int sellOrderId)
         {
+            try
+            {
+                Security sec = GetSecurity(securityId);
+                Shareholder buyer = GetShareholder(buyShareholderId);
+                Shareholder seller = GetShareholder(sellShareholderId);
+                Order sellOrder = GetOrder(sellOrderId);
 
-            Security sec = GetSecurity(securityId);
-            Shareholder buyer = GetShareholder(buyShareholderId);
-            Shareholder seller = GetShareholder(sellShareholderId);
-            Order sellOrder = GetOrder(sellOrderId);
+                TransferAgent transfAgent = null;
 
-            TransferAgent transfAgent = null;
-
-            if (sec.KoreConXSecurityId != null)
-                transfAgent = TransferAgentManager.GetTransferAgent(TransferAgentManager._KCX_ID);
+                if (sec.KoreConXSecurityId != null)
+                    transfAgent = TransferAgentManager.GetTransferAgent(TransferAgentManager._KCX_ID);
 
 
-            ValidateTransferShares(sec, buyer, seller, sellOrder, transfAgent);
+                ValidateTransferShares(sec, buyer, seller, sellOrder, transfAgent);
 
-            if (sec.KoreConXSecurityId != null)
-                return KCXDoTransferShares(sec, buyer, seller, sellOrder, Convert.ToInt32(tradeQuantity));
-            else
-                return null;
+                if (sec.KoreConXSecurityId != null)
+                    return KCXDoTransferShares(sec, buyer, seller, sellOrder, Convert.ToInt32(tradeQuantity));
+                else
+                    return null;
+            }
+            catch (Exception ex)
+            {
+                DoLog(ex.Message, fwk.Common.enums.MessageType.Error);
+                throw;
+            }
         
         }
 
         public string OnSell(int sellShareholderId, int securityId, double orderQty)
         {
-            Security sec = GetSecurity(securityId);
+            try
+            {
+                Security sec = GetSecurity(securityId);
 
-            Shareholder seller = GetShareholder(sellShareholderId);
+                Shareholder seller = GetShareholder(sellShareholderId);
 
-            TransferAgent transfAgent = ValidateSell(seller, sec);
+                TransferAgent transfAgent = ValidateSell(seller, sec);
 
-            if (sec.KoreConXSecurityId != null)
-                return SellOnKoreConX(seller, sec, transfAgent, orderQty);
-            else
-                throw new Exception(string.Format("The security {0} does not have a valid transfer agent assigned", sec.Symbol));
+                if (sec.KoreConXSecurityId != null)
+                    return SellOnKoreConX(seller, sec, transfAgent, orderQty);
+                else
+                    throw new Exception(string.Format("The security {0} does not have a valid transfer agent assigned", sec.Symbol));
+            }
+            catch (Exception ex)
+            {
+                DoLog(ex.Message, fwk.Common.enums.MessageType.Error);
+                throw;
+            }
         }
 
         public void OnBuy(int buyShareholderId, int securityId, double orderQty)
         {
-            Security sec = GetSecurity(securityId);
-            Shareholder buyer = GetShareholder(buyShareholderId);
+            try
+            {
+                Security sec = GetSecurity(securityId);
+                Shareholder buyer = GetShareholder(buyShareholderId);
 
-            if (sec == null)
-                throw new Exception(string.Format("Could not find a security for Id {0}", securityId));
+                if (sec == null)
+                    throw new Exception(string.Format("Could not find a security for Id {0}", securityId));
 
-            if (buyer == null)
-                throw new Exception(string.Format("Could not find a firm (investor) for ShareholderId {0}", buyShareholderId));
+                if (buyer == null)
+                    throw new Exception(string.Format("Could not find a firm (investor) for ShareholderId {0}", buyShareholderId));
 
-            ValidateBuy(buyer, sec);
+                ValidateBuy(buyer, sec);
+            }
+            catch (Exception ex)
+            {
 
+                DoLog(ex.Message, fwk.Common.enums.MessageType.Error);
+                throw;
+            }
         }
 
         //Cancel,Release,Rejected
@@ -564,6 +598,7 @@ namespace Rialto.LogicLayer
             catch (Exception ex)
             {
                 //TODO: Impl REASON!
+                DoLog(ex.Message, fwk.Common.enums.MessageType.Error);
                 KCXDoPersistKCXTransction(order, Convert.ToInt32(releaseQty), KoreConXTransactionState.KCX_RELEASE_SHARES_REJECTED);
                 throw;
             }

@@ -1,4 +1,6 @@
-﻿using Rialto.BusinessEntities;
+﻿using fwk.Common.enums;
+using fwk.Common.interfaces;
+using Rialto.BusinessEntities;
 using Rialto.LogicLayer;
 using Rialto.ServiceLayer.service;
 using System;
@@ -21,22 +23,31 @@ namespace Rialto.ServiceLayer
 
         protected static HttpSelfHostServer Server { get; set; }
 
+        protected ILogger Logger{get;set;}
+
         #endregion
 
         #region Constructors
 
-        public HoldingsService(string pTradingCS, string pOrderCS, string pKcxURL, string pHoldingsServiceURL)
+        public HoldingsService(string pTradingCS, string pOrderCS, string pKcxURL, string pHoldingsServiceURL,ILogger pLogger)
         {
 
             HoldingsServiceURL = pHoldingsServiceURL;
 
-            TradingService = new TradingService(pTradingCS, pOrderCS, pKcxURL);
+            TradingService = new TradingService(pTradingCS, pOrderCS, pKcxURL, pLogger);
+
+            Logger = pLogger;
 
         }
 
         #endregion
 
         #region Protected Methods
+
+        protected void DoLog(string msg, MessageType type)
+        {
+            Logger.DoLog(msg,type);
+        }
 
         protected string OnSell(int sellShareholderId, int securityId, double orderQty)
         {
@@ -59,12 +70,13 @@ namespace Rialto.ServiceLayer
 
         public void Run()
         {
-
+            DoLog("HoldingsService.Run()", MessageType.Information);
             HttpSelfHostConfiguration config = new HttpSelfHostConfiguration(HoldingsServiceURL);
 
             HoldingController.OnSell += OnSell;
             HoldingController.OnBuy += OnBuy;
             HoldingController.OnOrderCancelledOrExpired += OnOrderCancelledOrExpired;
+            HoldingController.Logger = Logger;
    
 
             config.Routes.MapHttpRoute(name: "DefaultApi",
@@ -73,6 +85,7 @@ namespace Rialto.ServiceLayer
 
             Server = new HttpSelfHostServer(config);
             Server.OpenAsync().Wait();
+            DoLog("HoldingsService.Run() successfully started", MessageType.Information);
         
         }
 

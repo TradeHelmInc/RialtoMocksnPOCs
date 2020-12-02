@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using fwk.Common.interfaces;
+using Newtonsoft.Json;
 using Rialto.Common.DTO.Generic;
 using Rialto.Common.DTO.Services;
 using System;
@@ -29,6 +30,8 @@ namespace Rialto.ServiceLayer.service
 
         public static event OnOrderCancelledOrExpired OnOrderCancelledOrExpired;
 
+        public static ILogger Logger { get; set; }
+
         #endregion
 
         #region Public Methods
@@ -43,18 +46,24 @@ namespace Rialto.ServiceLayer.service
                 string jsonInput = content.ReadAsStringAsync().Result;
                 HttpResponseMessage resp = Request.CreateResponse(HttpStatusCode.OK);
 
-
+               
                 OnSellDTO onSellDTO = null;
                 try
                 {
                     onSellDTO = JsonConvert.DeserializeObject<OnSellDTO>(jsonInput);
+                    Logger.DoLog(string.Format("Incoming OnSell: SellShareholderId={0} SecurityId={1} OrderQty={2}", onSellDTO.SellShareholderId, onSellDTO.SecurityId, onSellDTO.OrderQty), fwk.Common.enums.MessageType.Information);
+
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception(string.Format("Could not process input json:{0}", ex.Message));
+                    string msg = string.Format("Could not process input json {1}:{0}", ex.Message, jsonInput);
+                    Logger.DoLog(msg, fwk.Common.enums.MessageType.Error);
+                    throw new Exception(msg);
                 }
 
                 string txtId = OnSell(onSellDTO.SellShareholderId, onSellDTO.SecurityId, onSellDTO.OrderQty);
+
+                Logger.DoLog("OnSell successfully processed", fwk.Common.enums.MessageType.Information);
 
                 TransactionResponse txResp = new TransactionResponse() { Success = true, Id = new IdEntity() { id = txtId } };
 
@@ -64,6 +73,8 @@ namespace Rialto.ServiceLayer.service
             }
             catch (Exception ex)
             {
+                string msg = string.Format("Error @OnSell :{0}", ex.Message);
+                Logger.DoLog(msg, fwk.Common.enums.MessageType.Error);
                 return CreateTransactionError(Request, ex.Message);
             }
         }
@@ -83,13 +94,19 @@ namespace Rialto.ServiceLayer.service
                 try
                 {
                     onBuyDTO = JsonConvert.DeserializeObject<OnBuyDTO>(jsonInput);
+                    Logger.DoLog(string.Format("Incoming OnBuy: BuyShareholderId={0} SecurityId={1} OrderQty={2}", onBuyDTO.BuyShareholderId, onBuyDTO.SecurityId, onBuyDTO.OrderQty), fwk.Common.enums.MessageType.Information);
+
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception(string.Format("Could not process input json:{0}", ex.Message));
+                    string msg = string.Format("Could not process input json {1}:{0}", ex.Message, jsonInput);
+                    Logger.DoLog(msg, fwk.Common.enums.MessageType.Error);
+                    throw new Exception(msg);
                 }
 
                 string txtId = OnBuy(onBuyDTO.BuyShareholderId, onBuyDTO.SecurityId, onBuyDTO.OrderQty);
+
+                Logger.DoLog("OnBuy successfully processed", fwk.Common.enums.MessageType.Information);
 
                 TransactionResponse txResp = new TransactionResponse() { Success = true, Id = new IdEntity() { id = txtId } };
 
@@ -99,6 +116,8 @@ namespace Rialto.ServiceLayer.service
             }
             catch (Exception ex)
             {
+                string msg = string.Format("Error @OnBuy :{0}", ex.Message);
+                Logger.DoLog(msg, fwk.Common.enums.MessageType.Error);
                 return CreateTransactionError(Request, ex.Message);
             }
         }
@@ -118,13 +137,19 @@ namespace Rialto.ServiceLayer.service
                 try
                 {
                     onOrderCxlOrExpDTO = JsonConvert.DeserializeObject<OnOrderCancelledOrExpiredDTO>(jsonInput);
+                    Logger.DoLog(string.Format("Incoming OnOrderCancelledOrExpiredSvc: SellOrderId={0} ReleaseQty={1} ", onOrderCxlOrExpDTO.SellOrderId, onOrderCxlOrExpDTO.ReleaseQty), fwk.Common.enums.MessageType.Information);
+
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception(string.Format("Could not process input json:{0}", ex.Message));
+                    string msg = string.Format("Could not process input json {1}:{0}", ex.Message, jsonInput);
+                    Logger.DoLog(msg, fwk.Common.enums.MessageType.Error);
+                    throw new Exception(msg);
                 }
 
                 string txtId = OnOrderCancelledOrExpired(onOrderCxlOrExpDTO.SellOrderId, onOrderCxlOrExpDTO.ReleaseQty);
+
+                Logger.DoLog("OnOrderCancelledOrExpired successfully processed", fwk.Common.enums.MessageType.Information);
 
                 TransactionResponse txResp = new TransactionResponse() { Success = true, Id = new IdEntity() { id = txtId } };
 
@@ -134,6 +159,8 @@ namespace Rialto.ServiceLayer.service
             }
             catch (Exception ex)
             {
+                string msg = string.Format("Error @OnOrderCancelledOrExpiredSvc :{0}", ex.Message);
+                Logger.DoLog(msg, fwk.Common.enums.MessageType.Error);
                 return CreateTransactionError(Request, ex.Message);
             }
         }

@@ -1,4 +1,5 @@
-﻿using Rialto.BusinessEntities;
+﻿using fwk.Common.interfaces;
+using Rialto.BusinessEntities;
 using Rialto.LogicLayer;
 using Rialto.ServiceLayer.service;
 using System;
@@ -22,16 +23,20 @@ namespace Rialto.ServiceLayer
 
         protected static HttpSelfHostServer Server { get; set; }
 
+        protected ILogger Logger { get; set; }
+
         #endregion
 
         #region Constructors
 
-        public TransferService(string pTradingCS, string pOrderCS, string pKcxURL, string pTransferServiceURL)
+        public TransferService(string pTradingCS, string pOrderCS, string pKcxURL, string pTransferServiceURL, ILogger pLogger)
         {
 
             TransferServiceURL = pTransferServiceURL;
 
-            TradingService = new TradingService(pTradingCS, pOrderCS, pKcxURL);
+            TradingService = new TradingService(pTradingCS, pOrderCS, pKcxURL, pLogger);
+
+            Logger = pLogger;
 
         }
 
@@ -61,6 +66,8 @@ namespace Rialto.ServiceLayer
 
             TradingController.OnTransferShares += OnTransferShares;
             TradingController.OnGetTradesToClear += OnGetTradesToClear;
+
+            TradingController.Logger = Logger;
 
             config.Routes.MapHttpRoute(name: "DefaultApi",
                                        routeTemplate: "{controller}/{action}",

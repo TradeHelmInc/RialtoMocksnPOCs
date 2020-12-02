@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MDFShared">
+      <HintPath>..\..\packages\MDFShared.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -41,6 +44,10 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="ToolsShared, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\ToolsShared.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
@@ -52,6 +59,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\fwk.Common\fwk.Common.csproj">
+      <Project>{6b88d2e0-1195-45f4-ba2b-3b1b4487553c}</Project>
+      <Name>fwk.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Rialto.ServiceLayer\Rialto.ServiceLayer.csproj">
       <Project>{9ad96b16-1937-44bb-a060-7679d05bf8ca}</Project>
       <Name>Rialto.ServiceLayer</Name>
