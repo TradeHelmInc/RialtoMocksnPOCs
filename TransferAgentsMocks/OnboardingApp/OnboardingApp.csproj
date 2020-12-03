@@ -4,16 +4,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{DE847274-2B88-42D7-A3EF-4EB647BE5DB3}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{54BE0967-9D33-4352-A7B6-7E35559628D5}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Rialto.LogicLayer</RootNamespace>
-    <AssemblyName>Rialto.LogicLayer</AssemblyName>
+    <RootNamespace>OnboardingApp</RootNamespace>
+    <AssemblyName>OnboardingApp</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,6 +24,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -31,48 +33,36 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MySql.Data, Version=8.0.22.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\MySql\v4.5.2\MySql.Data.dll</HintPath>
+    <Reference Include="MDFShared">
+      <HintPath>..\..\packages\MDFShared.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="ToolsShared">
+      <HintPath>..\..\packages\ToolsShared.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseLayer.cs" />
-    <Compile Include="ManagementLogic.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TradingLogic.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\fwk.Common\fwk.Common.csproj">
       <Project>{6b88d2e0-1195-45f4-ba2b-3b1b4487553c}</Project>
       <Name>fwk.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\fwk.ServiceLayer\fwk.ServiceLayer.csproj">
-      <Project>{fffaae30-f9dc-4b00-8b1d-92be96b29504}</Project>
-      <Name>fwk.ServiceLayer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Rialto.BusinessEntities\Rialto.BusinessEntities.csproj">
-      <Project>{9581e2dd-6510-4f11-ab29-9a4c44017d90}</Project>
-      <Name>Rialto.BusinessEntities</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Rialto.DataAccessLayer\Rialto.DataAccessLayer.csproj">
-      <Project>{708a5f40-cc3c-4f0a-aca5-b07085fa8be8}</Project>
-      <Name>Rialto.DataAccessLayer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Rialto.KoreConX.Common\Rialto.KoreConX.Common.csproj">
-      <Project>{7b873223-880f-4734-9c2b-ce46c0b0198d}</Project>
-      <Name>Rialto.KoreConX.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Rialto.KoreConX.ServiceLayer\Rialto.KoreConX.ServiceLayer.csproj">
-      <Project>{e9b69679-949c-4916-b4e2-d991daf3695a}</Project>
-      <Name>Rialto.KoreConX.ServiceLayer</Name>
+    <ProjectReference Include="..\Rialto.ServiceLayer\Rialto.ServiceLayer.csproj">
+      <Project>{9ad96b16-1937-44bb-a060-7679d05bf8ca}</Project>
+      <Name>Rialto.ServiceLayer</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

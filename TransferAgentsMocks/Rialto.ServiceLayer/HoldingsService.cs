@@ -19,7 +19,7 @@ namespace Rialto.ServiceLayer
 
         protected static string HoldingsServiceURL { get; set; }
 
-        protected TradingService TradingService {get;set;}
+        protected TradingLogic TradingLogic {get;set;}
 
         protected static HttpSelfHostServer Server { get; set; }
 
@@ -34,7 +34,7 @@ namespace Rialto.ServiceLayer
 
             HoldingsServiceURL = pHoldingsServiceURL;
 
-            TradingService = new TradingService(pTradingCS, pOrderCS, pKcxURL, pLogger);
+            TradingLogic = new TradingLogic(pTradingCS, pOrderCS, pKcxURL, pLogger);
 
             Logger = pLogger;
 
@@ -51,17 +51,17 @@ namespace Rialto.ServiceLayer
 
         protected string OnSell(int sellShareholderId, int securityId, double orderQty)
         {
-            return TradingService.OnSell(sellShareholderId, securityId, orderQty);
+            return TradingLogic.OnSell(sellShareholderId, securityId, orderQty);
         }
 
         protected string OnBuy(int sellShareholderId, int securityId, double orderQty)
         {
-            return TradingService.OnSell(sellShareholderId, securityId, orderQty);
+            return TradingLogic.OnSell(sellShareholderId, securityId, orderQty);
         }
 
         protected string OnOrderCancelledOrExpired(int sellOrderId, double releaseQty)
         {
-            return TradingService.OnOrderCancelledOrExpired(sellOrderId, releaseQty);
+            return TradingLogic.OnOrderCancelledOrExpired(sellOrderId, releaseQty);
         }
 
         #endregion

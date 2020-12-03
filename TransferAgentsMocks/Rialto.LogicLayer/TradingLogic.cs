@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace Rialto.LogicLayer
 {
-    public class TradingService : BaseLayer
+    public class TradingLogic : BaseLayer
     {
         #region Protected Attributes
 
@@ -38,7 +38,7 @@ namespace Rialto.LogicLayer
 
         #region Constructors
 
-        public TradingService(string pTradingConnectionString, string pOrderConnectionString, string pKCXURL, ILogger pLogger)
+        public TradingLogic(string pTradingConnectionString, string pOrderConnectionString, string pKCXURL, ILogger pLogger)
         {
             SecurityManager = new SecurityManager(pTradingConnectionString);
 

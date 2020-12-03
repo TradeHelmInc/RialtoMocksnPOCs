@@ -19,7 +19,7 @@ namespace Rialto.ServiceLayer
 
         protected static string TransferServiceURL { get; set; }
 
-        protected TradingService TradingService {get;set;}
+        protected TradingLogic TradingLogic {get;set;}
 
         protected static HttpSelfHostServer Server { get; set; }
 
@@ -34,7 +34,7 @@ namespace Rialto.ServiceLayer
 
             TransferServiceURL = pTransferServiceURL;
 
-            TradingService = new TradingService(pTradingCS, pOrderCS, pKcxURL, pLogger);
+            TradingLogic = new TradingLogic(pTradingCS, pOrderCS, pKcxURL, pLogger);
 
             Logger = pLogger;
 
@@ -47,12 +47,12 @@ namespace Rialto.ServiceLayer
         protected string OnTransferShares(int buyShareholderId, int sellShareholderId, double tradeQuantity,
                                                     int securityId, int sellOrderId)
         {
-            return TradingService.TransferShares(buyShareholderId, sellShareholderId, tradeQuantity, securityId, sellOrderId);
+            return TradingLogic.TransferShares(buyShareholderId, sellShareholderId, tradeQuantity, securityId, sellOrderId);
         }
 
         protected List<Trade> OnGetTradesToClear()
         {
-            return TradingService.GetTradesToClear();
+            return TradingLogic.GetTradesToClear();
         }
 
         #endregion

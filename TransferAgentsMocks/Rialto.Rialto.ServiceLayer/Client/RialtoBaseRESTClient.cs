@@ -41,6 +41,7 @@ namespace Rialto.Rialto.ServiceLayer.Client
 
             using (var httpClient = new HttpClient())
             {
+                httpClient.Timeout = new TimeSpan(0, 2, 0);
                 var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
                 requestMessage.Headers.Add("Accept", "application/json");
                 requestMessage.Headers.Add("ContentType", "application/json");

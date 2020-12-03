@@ -44,6 +44,8 @@
     <Compile Include="DTO\Generic\IdEntity.cs" />
     <Compile Include="DTO\Generic\TransactionResponse.cs" />
     <Compile Include="DTO\Services\OnBuyDTO.cs" />
+    <Compile Include="DTO\Services\OnKCXOnboardingApprovedDTO.cs" />
+    <Compile Include="DTO\Services\OnKCXOnboardingStaredDTO.cs" />
     <Compile Include="DTO\Services\OnOrderCancelledOrExpiredDTO.cs" />
     <Compile Include="DTO\Services\OnSellDTO.cs" />
     <Compile Include="DTO\Services\TransferSharesDTO.cs" />
