@@ -27,13 +27,13 @@ namespace Rialto.ServiceLayer
         #endregion
 
         #region Constructors
-
-        public ManagementService(string pTradingCS, string pOrderCS, string pKcxURL, string pManagementServiceURL, ILogger pLogger)
+        
+        public ManagementService(string pTradingCS, string pOrderCS, string pManagementServiceURL, string pKcxURL, string kcxKeyAndIV, ILogger pLogger)
         {
 
             ManagementServiceURL = pManagementServiceURL;
 
-            ManagementLogic = new ManagementLogic(pTradingCS, pOrderCS, pKcxURL, pLogger);
+            ManagementLogic = new ManagementLogic(pTradingCS, pOrderCS, pKcxURL, kcxKeyAndIV, pLogger);
 
             Logger = pLogger;
 
@@ -43,9 +43,9 @@ namespace Rialto.ServiceLayer
 
         #region Protected Methods
 
-        protected string OnKCXOnboardingApproved(string SSN,string koreShareholderId)
+        protected string OnKCXOnboardingApproved(string koreShareholderId)
         {
-            return ManagementLogic.OnKCXOnboardingApproved(SSN,koreShareholderId);
+            return ManagementLogic.OnKCXOnboardingApproved(koreShareholderId);
         }
 
         protected string OnKCXOnboardingStarted(string koreShareholderId)
@@ -63,9 +63,9 @@ namespace Rialto.ServiceLayer
             HttpSelfHostConfiguration config = new HttpSelfHostConfiguration(ManagementServiceURL);
 
             ManagementController.OnKCXOnboardingApproved += OnKCXOnboardingApproved;
-            ManagementController.OnKCXOnboardingStarted += OnKCXOnboardingStarted;
+            //ManagementController.OnKCXOnboardingStarted += OnKCXOnboardingStarted;
 
-            TradingController.Logger = Logger;
+            ManagementController.Logger = Logger;
 
             config.Routes.MapHttpRoute(name: "DefaultApi",
                                        routeTemplate: "{controller}/{action}",

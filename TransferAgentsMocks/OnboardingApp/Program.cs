@@ -1,5 +1,6 @@
 ﻿using fwk.Common.enums;
 using fwk.Common.interfaces;
+using fwk.Common.util.encryption.common;
 using Rialto.ServiceLayer;
 using System;
 using System.Collections.Generic;
@@ -81,7 +82,7 @@ namespace OnboardingApp
                 string orderCS = ConfigurationManager.AppSettings["OrdersDBConnectionString"];
                 string kcxURL = ConfigurationManager.AppSettings["KCXURL"];
                 string onboardingServiceURL = ConfigurationManager.AppSettings["OnboardingServiceURL"];
-
+                string kcxKeyAndIVPath = ConfigurationManager.AppSettings["KCXKeyAndIVPath"];
 
 
                 logger.Logger = new PerDayFileLogSource(Directory.GetCurrentDirectory() + "\\Log", Directory.GetCurrentDirectory() + "\\Log\\Backup")
@@ -92,7 +93,9 @@ namespace OnboardingApp
 
                 logger.DoLog("Initializing Get Trades service", MessageType.Information);
 
-                ManagementService transService = new ManagementService(tradingCS, orderCS, kcxURL, onboardingServiceURL, logger);
+                string kcxKeyAndIV = FileLoader.GetFileContent(kcxKeyAndIVPath);
+
+                ManagementService transService = new ManagementService(tradingCS, orderCS, onboardingServiceURL, kcxURL, kcxKeyAndIV, logger);
 
                 transService.Run();
 

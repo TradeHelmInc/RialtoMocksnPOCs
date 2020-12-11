@@ -173,6 +173,17 @@ namespace Rialto.KoreConX.Common.DTO.Shareholders
 
     public class PersonMainInfo
     {
+
+        #region Public Static Consts
+
+        public static string _COUNTRY_USA = "USA";
+
+        public static string _COUNTRY_CODE_US = "US";
+
+        #endregion
+
+        #region Public Attributes
+
         public string first_name { get; set; }
 
         public string middle_name { get; set; }
@@ -202,6 +213,8 @@ namespace Rialto.KoreConX.Common.DTO.Shareholders
         public string pd { get; set; }
 
         public PersonVerification verifications { get; set; }
+
+        #endregion
 
     }
 

@@ -1,4 +1,4 @@
-﻿using fwk.Common.util.encryption.RSA;
+﻿using fwk.Common.util.encryption.common;
 using Rialto.KoreConX.Common.DTO.Generic;
 using Rialto.KoreConX.Common.DTO.Shareholders;
 using Rialto.KoreConX.Common.Util;
@@ -28,9 +28,9 @@ namespace OnboardShareholdersPOC
 
         protected static string KoreSecurityId { get; set; }
 
-        protected static string AESKeyandIV { get; set; }
+        protected static string AESKeyandIVPath { get; set; }
 
-        protected static AESEncrypter AESEncrypter { get; set; }
+        protected static AESManager AESDeccrypter { get; set; }
 
         #endregion
 
@@ -58,7 +58,7 @@ namespace OnboardShareholdersPOC
                 }
                 else
                 {
-                    string pdFields = AESEncrypter.DecryptAES(personResp.data.pd);
+                    string pdFields = AESDeccrypter.DecryptAES(personResp.data.pd);
 
                     Console.WriteLine(string.Format("Decrypting personal information <PD>:{0}", pdFields));
                 }
@@ -80,9 +80,9 @@ namespace OnboardShareholdersPOC
             CompanyId = ConfigurationManager.AppSettings["CompanyId"];
             KoreSecurityId = ConfigurationManager.AppSettings["KoreSecurityId"];
 
-            AESKeyandIV = ConfigurationManager.AppSettings["AESKeyandIV"];
+            AESKeyandIVPath = ConfigurationManager.AppSettings["AESKeyandIV"];
 
-            AESEncrypter = new AESEncrypter(AESKeyandIV);
+            AESDeccrypter = new AESManager(FileLoader.GetFileContent(AESKeyandIVPath));
             
             SecuritiesServiceClient = new SecuritiesServiceClient(BaseURL);
             PersonsServiceClient = new PersonsServiceClient(BaseURL);

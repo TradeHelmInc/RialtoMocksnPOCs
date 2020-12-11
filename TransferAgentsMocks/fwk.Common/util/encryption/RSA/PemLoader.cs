@@ -18,6 +18,7 @@ using Org.BouncyCastle.OpenSsl;
 using Org.BouncyCastle.Pkcs;
 using Org.BouncyCastle.Security;
 using Org.BouncyCastle.X509;
+using fwk.Common.util.encryption.common;
 
 namespace fwk.Common.util.encryption.RSA
 {
@@ -25,19 +26,6 @@ namespace fwk.Common.util.encryption.RSA
     {
 
         #region Private Static Methods
-
-        //READ THIS FILE with WHATEVER READER METHOD YOU HAVE IN C++
-        public static string GetFileContent(string file)
-        {
-            string result = "";
-            using (StreamReader streamReader = new StreamReader(file))
-            {
-                result = streamReader.ReadToEnd();
-            }
-
-            return result;
-
-        }
 
         //This is the C# way to get a StreamReader from publickey in format PEM
         //See file publicKey.pem to see the Pem format
@@ -61,7 +49,7 @@ namespace fwk.Common.util.encryption.RSA
 
         public static string GetPublicKeyFromPemFile(string pemPath)
         {
-            return GetFileContent(pemPath);
+            return FileLoader.GetFileContent(pemPath);
 
         }
 

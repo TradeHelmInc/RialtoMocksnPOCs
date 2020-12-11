@@ -47,6 +47,7 @@
     <Compile Include="interfaces\ILogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="enum\MessageType.cs" />
+    <Compile Include="util\encryption\common\FileLoader.cs" />
     <Compile Include="util\encryption\RSA\PemLoader.cs" />
     <Compile Include="util\encryption\RSA\RSAEncryption.cs" />
     <Compile Include="util\encryption\RSA\RSAKeyGenerator.cs" />

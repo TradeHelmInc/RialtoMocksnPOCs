@@ -10,7 +10,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace fwk.Common.util.encryption.RSA
+namespace fwk.Common.util.encryption.common
 {
     public class RSAKeyGenerator
     {

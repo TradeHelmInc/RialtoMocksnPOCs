@@ -1,4 +1,4 @@
-﻿using fwk.Common.util.encryption.RSA;
+﻿using fwk.Common.util.encryption.common;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Rialto.KoreConX.Common.Util
 {
-    public class AESEncrypter
+    public class AESManager
     {
 
         #region Protected Attributes
@@ -20,7 +20,7 @@ namespace Rialto.KoreConX.Common.Util
 
         #region Constructors
 
-        public AESEncrypter(string pAESKeyandIV)
+        public AESManager(string pAESKeyandIV)
         {
             AESKeyandIV = pAESKeyandIV;
         }
@@ -32,8 +32,7 @@ namespace Rialto.KoreConX.Common.Util
         {
             RijndaelManaged AES = new RijndaelManaged();
 
-            string keyandIV = PemLoader.GetFileContent(AESKeyandIV);
-            Byte[] keyAndIvBytes = UTF8Encoding.UTF8.GetBytes(PemLoader.GetFileContent(AESKeyandIV));
+            string keyandIV = AESKeyandIV;
             Byte[] key = UTF8Encoding.UTF8.GetBytes(keyandIV.Substring(0, 32));
             Byte[] IV = UTF8Encoding.UTF8.GetBytes(keyandIV.Substring(32, 16));
             Byte[] inputArr = Convert.FromBase64String(PDToDecrypt);

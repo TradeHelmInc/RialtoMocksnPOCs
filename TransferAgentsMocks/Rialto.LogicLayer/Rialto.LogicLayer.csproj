@@ -35,6 +35,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\MySql\v4.5.2\MySql.Data.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Advent\csharp\v2.0.0.0\packages\Newtonsoft.Json 4.5.0\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -73,6 +77,10 @@
     <ProjectReference Include="..\Rialto.KoreConX.ServiceLayer\Rialto.KoreConX.ServiceLayer.csproj">
       <Project>{e9b69679-949c-4916-b4e2-d991daf3695a}</Project>
       <Name>Rialto.KoreConX.ServiceLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Rialto.Solidus.Common\Rialto.Solidus.Common.csproj">
+      <Project>{cb9851ba-6651-4de8-9e39-d8ef6314f081}</Project>
+      <Name>Rialto.Solidus.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

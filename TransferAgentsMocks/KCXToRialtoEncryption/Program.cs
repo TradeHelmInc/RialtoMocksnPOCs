@@ -1,4 +1,4 @@
-﻿using fwk.Common.util.encryption.RSA;
+﻿using fwk.Common.util.encryption.common;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
