@@ -39,6 +39,8 @@ namespace Rialto.DataAccessLayer
 
         private static string _SP_GET_FIRMS = "get_firms";
 
+        private static string _SP_PERSIST_FIRMS = "persist_firms";
+
        
         #endregion
 
@@ -49,15 +51,30 @@ namespace Rialto.DataAccessLayer
         
             Shareholder sh = new Shareholder()
             {
-                Id=reader.GetInt64("id"),
-                Name=reader.GetString("firm_legal_name")
+                Id=reader.GetInt32("id"),
+                Name=GetSafeString(reader,"firm_legal_name"),
+                Address = GetSafeString(reader,"firm_address"),
+                FirmLimit = GetSafeDouble(reader, "firm_limit"),
+                Phone = GetSafeString(reader,"phone"),
+                Email = GetSafeString(reader,"email"),
+                Enabled = reader.GetBoolean("enabled"),
+                FirmAccountNumber = GetSafeString(reader,"firm_account_number"),
+                Principal = GetSafeString(reader,"principal"),
+                PepStatus = GetSafeString(reader,"pep_status"),
+                InsiderStatus = GetSafeString(reader,"insider_status"),
+                FeeMatrix = GetSafeString(reader,"fee_matrix"),
+                IssuerFirmCheckbox = GetSafeString(reader,"issuer_firm_checkbox"),
+                LargeTraderId = GetSafeString(reader,"large_trader_id"),
+                UniqueId = GetSafeString(reader,"unique_id"),
+                Status = GetSafeString(reader,"status"),//PROCESAR
+                LargeTraderFlag = GetSafeString(reader,"large_trader_flag"),
             };
 
-            if(!string.IsNullOrEmpty(reader.GetString("kore_chain_id")))
+            if(!string.IsNullOrEmpty(GetSafeString(reader,"kore_chain_id")))
             {
                 KoreConXShareholderId kcxShareholderId = new KoreConXShareholderId()
                 {
-                    KoreShareholderId=reader.GetString("kore_chain_id")
+                    KoreShareholderId=GetSafeString(reader,"kore_chain_id")
 
                 };
 
@@ -71,23 +88,105 @@ namespace Rialto.DataAccessLayer
 
         #region Public Methods
 
-        public List<Shareholder> GetShareholdersByKoreChainId(string koreChainId)
+        public long PersistShareholder(Shareholder shareholder)
         {
-        
-            DatabaseConnection = new MySqlConnection(ConnectionString);
-            MySqlCommand cmd = new MySqlCommand();
+
+            //DatabaseConnection = new MySqlConnection(ConnectionString);
+            MySqlCommand cmd = new MySqlCommand(_SP_PERSIST_FIRMS, new MySqlConnection(ConnectionString));
             cmd.CommandTimeout = 60;
 
-
-            cmd.CommandText=_SP_GET_FIRMS;
             cmd.CommandType = CommandType.StoredProcedure;
 
-            cmd.Parameters.AddWithValue("@kore_chain_id",koreChainId);
+            cmd.Parameters.AddWithValue("@id", shareholder.Id);
+            cmd.Parameters["@id"].Direction = ParameterDirection.Input;
+
+            cmd.Parameters.AddWithValue("@firm_legal_name", shareholder.Name);
+            cmd.Parameters["@firm_legal_name"].Direction = ParameterDirection.Input;
+
+            cmd.Parameters.AddWithValue("@firm_address", shareholder.Address);
+            cmd.Parameters["@firm_address"].Direction = ParameterDirection.Input;
+
+            cmd.Parameters.AddWithValue("@firm_limit", shareholder.FirmLimit);
+            cmd.Parameters["@firm_limit"].Direction = ParameterDirection.Input;
+
+            cmd.Parameters.AddWithValue("@phone", shareholder.Phone);
+            cmd.Parameters["@phone"].Direction = ParameterDirection.Input;
+
+            cmd.Parameters.AddWithValue("@email", shareholder.Email);
+            cmd.Parameters["@email"].Direction = ParameterDirection.Input;
+
+            cmd.Parameters.AddWithValue("@enabled", shareholder.Enabled);
+            cmd.Parameters["@enabled"].Direction = ParameterDirection.Input;
+
+            cmd.Parameters.AddWithValue("@firm_account_number", shareholder.FirmAccountNumber);
+            cmd.Parameters["@firm_account_number"].Direction = ParameterDirection.Input;
+
+            cmd.Parameters.AddWithValue("@principal", shareholder.Principal);
+            cmd.Parameters["@principal"].Direction = ParameterDirection.Input;
+
+            cmd.Parameters.AddWithValue("@firm_tax_id", shareholder.FirmTaxId);
+            cmd.Parameters["@firm_tax_id"].Direction = ParameterDirection.Input;
+
+            cmd.Parameters.AddWithValue("@pep_status", shareholder.PepStatus);
+            cmd.Parameters["@pep_status"].Direction = ParameterDirection.Input;
+
+            cmd.Parameters.AddWithValue("@insider_status", shareholder.InsiderStatus);
+            cmd.Parameters["@insider_status"].Direction = ParameterDirection.Input;
+
+            cmd.Parameters.AddWithValue("@fee_matrix", shareholder.FeeMatrix);
+            cmd.Parameters["@fee_matrix"].Direction = ParameterDirection.Input;
+
+            cmd.Parameters.AddWithValue("@issuer_firm_checkbox", shareholder.IssuerFirmCheckbox);
+            cmd.Parameters["@issuer_firm_checkbox"].Direction = ParameterDirection.Input;
+
+            cmd.Parameters.AddWithValue("@large_trader_id", shareholder.LargeTraderId);
+            cmd.Parameters["@large_trader_id"].Direction = ParameterDirection.Input;
+
+            cmd.Parameters.AddWithValue("@unique_id", shareholder.UniqueId);
+            cmd.Parameters["@unique_id"].Direction = ParameterDirection.Input;
+
+            cmd.Parameters.AddWithValue("@firm_status", shareholder.Status);
+            cmd.Parameters["@firm_status"].Direction = ParameterDirection.Input;
+
+            cmd.Parameters.AddWithValue("@large_trader_flag", shareholder.LargeTraderFlag);
+            cmd.Parameters["@large_trader_flag"].Direction = ParameterDirection.Input;
+
+
+            MySqlDataReader reader;
+            List<Shareholder> shareholders = new List<Shareholder>();
+
+            try
+            {
+                // Run Query
+                object shareholderId = cmd.ExecuteScalar();
+
+                return Convert.ToInt64(shareholderId);
+            }
+            finally
+            {
+                cmd.Connection.Close();
+            }
+        }
+
+        public List<Shareholder> GetShareholders(string koreChainId,string firmTaxId)
+        {
+        
+            //DatabaseConnection = new MySqlConnection(ConnectionString);
+            MySqlCommand cmd = new MySqlCommand(_SP_GET_FIRMS,new MySqlConnection(ConnectionString));
+            cmd.CommandTimeout = 60;
+
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            cmd.Parameters.AddWithValue("@kore_chain_id", koreChainId);
             cmd.Parameters["@kore_chain_id"].Direction = ParameterDirection.Input;
+
+            cmd.Parameters.AddWithValue("@firm_tax_id", firmTaxId);
+            cmd.Parameters["@firm_tax_id"].Direction = ParameterDirection.Input;
+
+            cmd.Connection.Open();
 
             int count = 0;
             // Open DB
-            DatabaseConnection.Open();
 
             MySqlDataReader reader;
             List<Shareholder> shareholders = new List<Shareholder>();
@@ -107,7 +206,7 @@ namespace Rialto.DataAccessLayer
             }
             finally
             {
-                DatabaseConnection.Close();
+                cmd.Connection.Close();
             }
 
             return shareholders;
@@ -134,7 +233,7 @@ namespace Rialto.DataAccessLayer
                 {
                     while (reader.Read())
                     {
-                        koreShrId = new KoreConXShareholderId() { KoreShareholderId = reader.GetString("kore_shareholder_id") };
+                        koreShrId = new KoreConXShareholderId() { KoreShareholderId = GetSafeString(reader,"kore_shareholder_id") };
                         count++;
                     }
                 }
@@ -174,7 +273,7 @@ namespace Rialto.DataAccessLayer
                     {
                         // En nuestra base de datos, el array contiene:  ID 0, FIRST_NAME 1,LAST_NAME 2, ADDRESS 3
                         // Hacer algo con cada fila obtenida
-                        shr = new Shareholder() { Id = reader.GetInt32("id"), Name = reader.GetString("name") };
+                        shr = new Shareholder() { Id = reader.GetInt32("id"), Name = GetSafeString(reader,"name") };
                     }
                 }
             }

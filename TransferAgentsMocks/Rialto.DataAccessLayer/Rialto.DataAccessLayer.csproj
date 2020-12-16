@@ -62,6 +62,7 @@
     <Compile Include="SecurityManager.cs" />
     <Compile Include="ShareholderManager.cs" />
     <Compile Include="TransferAgentManager.cs" />
+    <Compile Include="UserManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Rialto.BusinessEntities\Rialto.BusinessEntities.csproj">

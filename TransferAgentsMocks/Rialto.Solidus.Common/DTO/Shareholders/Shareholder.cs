@@ -102,5 +102,56 @@ namespace Rialto.Solidus.Common.DTO.Shareholders
         public bool? accreditedInvestor { get; set; }
 
         #endregion
+
+        #region Public Methods
+
+        public string GetFullName()
+        {
+            string name = "";
+
+            if (firstName != null)
+                name += firstName + " " ;
+
+            if (middleName != null)
+                name += middleName + " ";
+
+            if (lastName != null)
+                name += lastName + " ";
+
+            return name;
+            
+        }
+
+        public string GetAddress()
+        {
+            string address = "";
+
+            if (residenceStreetAddress != null)
+                address += residenceStreetAddress + " ";
+
+            if (residenceCity != null)
+                address += residenceCity + " ";
+
+            if (residenceState != null)
+                address += residenceState + " ";
+
+            if (residencePostalCode != null)
+                address += " ZIP " + residencePostalCode + " ";
+
+
+            return address.Substring(0, 200);
+        
+        
+        }
+
+        public string GetPhone()
+        {
+            string phone = phoneCountryCode + " " + phoneNumber;
+
+            return phone.Substring(0, 200);
+        }
+
+
+        #endregion
     }
 }
