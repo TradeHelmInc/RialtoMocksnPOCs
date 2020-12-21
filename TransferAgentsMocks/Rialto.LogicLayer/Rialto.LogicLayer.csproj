@@ -41,6 +41,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -82,6 +83,10 @@
     <ProjectReference Include="..\Rialto.Solidus.Common\Rialto.Solidus.Common.csproj">
       <Project>{cb9851ba-6651-4de8-9e39-d8ef6314f081}</Project>
       <Name>Rialto.Solidus.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Rialto.Solidus.ServiceLayer\Rialto.Solidus.ServiceLayer.csproj">
+      <Project>{1e50e8da-75bc-454b-acb4-f7fe5789c1e5}</Project>
+      <Name>Rialto.Solidus.ServiceLayer</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

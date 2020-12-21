@@ -9,6 +9,11 @@ namespace Rialto.LogicLayer.Builders
 {
     public class SolidusToRialtoBuilder
     {
+        #region Private static consts
+
+        private static string _DEFAULT_PASSWORD = "$2a$10$n8gKFcm6QD5K9rsq3Bk.vO5Y56gOFGkGmyQqei6QXqlpvojgSmGwu";
+
+        #endregion
 
         #region Private Static Methods
 
@@ -19,11 +24,11 @@ namespace Rialto.LogicLayer.Builders
             User userInfo = new User();
             userInfo.Id = rialtoSh.GetUser(email) != null ? rialtoSh.GetUser(email).Id : 0;
             userInfo.Login = solidusSh.emailAddress;
-            userInfo.PasswordHash = rialtoSh.GetUser(email) != null ? rialtoSh.GetUser(email).PasswordHash : null;
+            userInfo.PasswordHash = rialtoSh.GetUser(email) != null ? rialtoSh.GetUser(email).PasswordHash : _DEFAULT_PASSWORD;
             userInfo.FirstName = solidusSh.firstName;
             userInfo.LastName = solidusSh.lastName;
             userInfo.Email = solidusSh.emailAddress;
-            userInfo.Activated = false;//Users are put back no not active
+            userInfo.Activated = true;//Users are put back no not active
             userInfo.LangKey = rialtoSh.GetUser(email) != null ? rialtoSh.GetUser(email).LangKey : null;
             userInfo.ActivationKey = rialtoSh.GetUser(email) != null ? rialtoSh.GetUser(email).ActivationKey : null;
             userInfo.ResetKey = rialtoSh.GetUser(email) != null ? rialtoSh.GetUser(email).ResetKey : null;
@@ -76,7 +81,7 @@ namespace Rialto.LogicLayer.Builders
 
             rialtoSh.Principal = null;
 
-            rialtoSh.FirmTaxId = null;
+            rialtoSh.FirmTaxId = solidusSh.taxIdOrSSNNumber;
 
             rialtoSh.PepStatus = null;
 
@@ -84,21 +89,61 @@ namespace Rialto.LogicLayer.Builders
 
             rialtoSh.FeeMatrix = null;
 
-            rialtoSh.IssuerFirmCheckbox = null;
+            rialtoSh.IssuerFirmCheckbox = false;
 
             rialtoSh.LargeTraderId = null;
 
             rialtoSh.UniqueId = null;
 
-            rialtoSh.LargeTraderFlag = null;
+            rialtoSh.LargeTraderFlag = false;
 
-            rialtoSh.Status = Rialto.BusinessEntities.Shareholder._STATUS_ONBOARDING;
+            rialtoSh.Status = false;
 
             rialtoSh.FirmType = Rialto.BusinessEntities.Shareholder._FIRM_TYPE_INDIV_RETAIL ;
 
-            rialtoSh.Users.Add(BuildUser(solidusSh, rialtoSh));
+            rialtoSh.Users.Add(BuildUserFromSolidus(solidusSh));
 
             rialtoSh.KoreConXShareholderId = new KoreConXShareholderId(){KoreShareholderId=koreShareholderId};
+        }
+
+
+        public static User BuildUserFromSolidus(Rialto.Solidus.Common.DTO.Shareholders.Shareholder solidusSh)
+        {
+            string email = solidusSh.emailAddress;
+
+            User userInfo = new User();
+            userInfo.Id = 0;
+            userInfo.Login = solidusSh.emailAddress;
+            userInfo.PasswordHash = _DEFAULT_PASSWORD;
+            userInfo.FirstName = solidusSh.firstName;
+            userInfo.LastName = solidusSh.lastName;
+            userInfo.Email = solidusSh.emailAddress;
+            userInfo.Activated = true;//Users are put back no not active
+            userInfo.LangKey =  null;
+            userInfo.ActivationKey = null;
+            userInfo.ResetKey = null;
+            userInfo.CreatedBy = User._CREATED_BY_ONBOARDING_SERVICE;
+            userInfo.CreatedDate = DateTime.Now;
+            userInfo.ResetDate = null;
+            userInfo.LastModifiedBy = User._CREATED_BY_ONBOARDING_SERVICE;
+            userInfo.LastModifiedDate = DateTime.Now;
+            userInfo.PasswordModifyDate =null;
+            userInfo.LastActive = null;
+            userInfo.BuyingPower =  0;
+            userInfo.UsedLimit =  0;
+            userInfo.Phone =  null;
+            userInfo.Disclaimer = true;
+            userInfo.UsedLimit =  0;
+            userInfo.TradeLimit =  0;
+            userInfo.RegulatoryFlag = false;
+            userInfo.POCFirmId = null;
+            userInfo.Capacity = null;
+            userInfo.CashOnHand =  0;
+            userInfo.PledgedFund =  0;
+            userInfo.Enabled = true;
+
+            return userInfo;
+
         }
 
         #endregion

@@ -8,6 +8,16 @@ namespace Rialto.BusinessEntities
 {
     public class Shareholder
     {
+
+        #region Constructors
+
+        public Shareholder()
+        {
+            Users = new List<User>();
+        }
+
+        #endregion
+
         #region Public Static Consts
 
         public static string _STATUS_ONBOARDING = "ONBOARDING";
@@ -18,7 +28,7 @@ namespace Rialto.BusinessEntities
 
         #region Public Methods
 
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         public string Name { get; set; }
 
@@ -42,19 +52,21 @@ namespace Rialto.BusinessEntities
 
         public string FeeMatrix { get; set; }
 
-        public string IssuerFirmCheckbox { get; set; }
+        public bool IssuerFirmCheckbox { get; set; }
 
         public string LargeTraderId { get; set; }
 
         public string UniqueId { get; set; }
 
-        public string Status { get; set; }
+        public bool Status { get; set; }
 
-        public string LargeTraderFlag { get; set; }
+        public bool LargeTraderFlag { get; set; }
 
         public int FirmType { get; set; }
 
         public bool Enabled { get; set; }
+
+        public string OnboardinStatus { get; set; }
 
         public List<User> Users { get; set; }
 
@@ -83,9 +95,9 @@ namespace Rialto.BusinessEntities
 
         public User GetUser(string email)
         {
-            if (Users != null && Users.Where(x=>x.Email==email).Count()>0)
+            if (Users != null && Users.Where(x => x.Email == email).Count() > 0)
             {
-                return Users.Where(x=>x.Email==email).FirstOrDefault();
+                return Users.Where(x => x.Email == email).FirstOrDefault();
 
             }
             else
@@ -94,7 +106,7 @@ namespace Rialto.BusinessEntities
 
         public string GetFullName()
         {
-            string msg = Name + "(id=" + Id + ")";
+            string msg = Name + "( id=" + Id + ")";
 
             return msg;
         }

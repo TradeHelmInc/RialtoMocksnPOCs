@@ -18,7 +18,7 @@ namespace Rialto.BusinessEntities
 
         #region JHI Attributes
 
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         public string Login { get; set; }
 

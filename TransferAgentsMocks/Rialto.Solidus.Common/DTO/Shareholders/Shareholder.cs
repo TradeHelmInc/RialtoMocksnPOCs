@@ -139,7 +139,7 @@ namespace Rialto.Solidus.Common.DTO.Shareholders
                 address += " ZIP " + residencePostalCode + " ";
 
 
-            return address.Substring(0, 200);
+            return address.Length > 200 ? address.Substring(0, 200) : address;
         
         
         }
@@ -148,7 +148,7 @@ namespace Rialto.Solidus.Common.DTO.Shareholders
         {
             string phone = phoneCountryCode + " " + phoneNumber;
 
-            return phone.Substring(0, 200);
+            return phone.Length > 200 ? phone.Substring(0, 200) : phone;
         }
 
 

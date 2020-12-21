@@ -28,12 +28,12 @@ namespace Rialto.ServiceLayer
 
         #region Constructors
         
-        public ManagementService(string pTradingCS, string pOrderCS, string pManagementServiceURL, string pKcxURL, string kcxKeyAndIV, ILogger pLogger)
+        public ManagementService(string pTradingCS, string pOrderCS, string pManagementServiceURL, string pKcxURL, string kcxKeyAndIV,string pSolidusURL, ILogger pLogger)
         {
 
             ManagementServiceURL = pManagementServiceURL;
 
-            ManagementLogic = new ManagementLogic(pTradingCS, pOrderCS, pKcxURL, kcxKeyAndIV, pLogger);
+            ManagementLogic = new ManagementLogic(pTradingCS, pOrderCS, pKcxURL, kcxKeyAndIV, pSolidusURL, pLogger);
 
             Logger = pLogger;
 

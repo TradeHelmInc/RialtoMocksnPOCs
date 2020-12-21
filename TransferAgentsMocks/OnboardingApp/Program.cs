@@ -81,6 +81,7 @@ namespace OnboardingApp
                 string tradingCS = ConfigurationManager.AppSettings["TradingDBConnectionString"];
                 string orderCS = ConfigurationManager.AppSettings["OrdersDBConnectionString"];
                 string kcxURL = ConfigurationManager.AppSettings["KCXURL"];
+                string solidusURL = ConfigurationManager.AppSettings["SolidusURL"];
                 string onboardingServiceURL = ConfigurationManager.AppSettings["OnboardingServiceURL"];
                 string kcxKeyAndIVPath = ConfigurationManager.AppSettings["KCXKeyAndIVPath"];
 
@@ -95,7 +96,7 @@ namespace OnboardingApp
 
                 string kcxKeyAndIV = FileLoader.GetFileContent(kcxKeyAndIVPath);
 
-                ManagementService transService = new ManagementService(tradingCS, orderCS, onboardingServiceURL, kcxURL, kcxKeyAndIV, logger);
+                ManagementService transService = new ManagementService(tradingCS, orderCS, onboardingServiceURL, kcxURL, kcxKeyAndIV, solidusURL, logger);
 
                 transService.Run();
 

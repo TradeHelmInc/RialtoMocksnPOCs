@@ -25,7 +25,7 @@ namespace Rialto.DataAccessLayer
 
         private static string _SP_GET_USERS = "get_users";
 
-        private static string _SP_PERSIST_USERS = "persist_users";
+        private static string _SP_PERSIST_USER = "persist_user";
 
         #endregion
 
@@ -80,16 +80,16 @@ namespace Rialto.DataAccessLayer
         {
 
             //DatabaseConnection = new MySqlConnection(ConnectionString);
-            MySqlCommand cmd = new MySqlCommand(_SP_PERSIST_USERS, new MySqlConnection(ConnectionString));
+            MySqlCommand cmd = new MySqlCommand(_SP_PERSIST_USER, new MySqlConnection(ConnectionString));
             cmd.CommandTimeout = 60;
 
             cmd.CommandType = CommandType.StoredProcedure;
 
-            cmd.Parameters.AddWithValue("@id", user.Id);
-            cmd.Parameters["@id"].Direction = ParameterDirection.Input;
+            //cmd.Parameters.AddWithValue("@_id", user.Id);
+            //cmd.Parameters["@_id"].Direction = ParameterDirection.Input;
 
-            cmd.Parameters.AddWithValue("@login", user.Login);
-            cmd.Parameters["@login"].Direction = ParameterDirection.Input;
+            cmd.Parameters.AddWithValue("@_login", user.Login);
+            cmd.Parameters["@_login"].Direction = ParameterDirection.Input;
 
             cmd.Parameters.AddWithValue("@password_hash", user.PasswordHash);
             cmd.Parameters["@password_hash"].Direction = ParameterDirection.Input;
@@ -103,8 +103,8 @@ namespace Rialto.DataAccessLayer
             cmd.Parameters.AddWithValue("@email", user.Email);
             cmd.Parameters["@email"].Direction = ParameterDirection.Input;
 
-            //cmd.Parameters.AddWithValue("@image_url", user.);
-            //cmd.Parameters["@image_url"].Direction = ParameterDirection.Input;
+            cmd.Parameters.AddWithValue("@image_url", null);
+            cmd.Parameters["@image_url"].Direction = ParameterDirection.Input;
 
             cmd.Parameters.AddWithValue("@activated", user.Activated);
             cmd.Parameters["@activated"].Direction = ParameterDirection.Input;
@@ -176,6 +176,7 @@ namespace Rialto.DataAccessLayer
 
             MySqlDataReader reader;
 
+            cmd.Connection.Open();
 
             try
             {
@@ -191,7 +192,7 @@ namespace Rialto.DataAccessLayer
         }
 
 
-        public List<User> GetUsers(int firmId)
+        public List<User> GetUsers(long firmId)
         {
             //DatabaseConnection = new MySqlConnection(ConnectionString);
             MySqlCommand cmd = new MySqlCommand(_SP_GET_USERS, new MySqlConnection(ConnectionString));

@@ -39,7 +39,9 @@ namespace Rialto.DataAccessLayer
 
         private static string _SP_GET_FIRMS = "get_firms";
 
-        private static string _SP_PERSIST_FIRMS = "persist_firms";
+        private static string _SP_PERSIST_FIRM = "persist_firm";
+
+        private static string _SP_PERSIST_KCX_KORE_SHAREHOLDER_ID = "persist_kcx_kore_shareholder_id";
 
        
         #endregion
@@ -48,26 +50,28 @@ namespace Rialto.DataAccessLayer
 
         private Shareholder BuildShareholder(MySqlDataReader reader)
         {
-        
+
             Shareholder sh = new Shareholder()
             {
-                Id=reader.GetInt32("id"),
-                Name=GetSafeString(reader,"firm_legal_name"),
-                Address = GetSafeString(reader,"firm_address"),
+                Id = reader.GetInt32("id"),
+                Name = GetSafeString(reader, "firm_legal_name"),
+                Address = GetSafeString(reader, "firm_address"),
                 FirmLimit = GetSafeDouble(reader, "firm_limit"),
-                Phone = GetSafeString(reader,"phone"),
-                Email = GetSafeString(reader,"email"),
+                Phone = GetSafeString(reader, "phone"),
+                Email = GetSafeString(reader, "email"),
                 Enabled = reader.GetBoolean("enabled"),
-                FirmAccountNumber = GetSafeString(reader,"firm_account_number"),
-                Principal = GetSafeString(reader,"principal"),
-                PepStatus = GetSafeString(reader,"pep_status"),
-                InsiderStatus = GetSafeString(reader,"insider_status"),
-                FeeMatrix = GetSafeString(reader,"fee_matrix"),
-                IssuerFirmCheckbox = GetSafeString(reader,"issuer_firm_checkbox"),
-                LargeTraderId = GetSafeString(reader,"large_trader_id"),
-                UniqueId = GetSafeString(reader,"unique_id"),
-                Status = GetSafeString(reader,"status"),//PROCESAR
-                LargeTraderFlag = GetSafeString(reader,"large_trader_flag"),
+                FirmAccountNumber = GetSafeString(reader, "firm_account_number"),
+                Principal = GetSafeString(reader, "principal"),
+                FirmTaxId = GetSafeString(reader, "firm_tax_id"),
+                PepStatus = GetSafeString(reader, "pep_status"),
+                InsiderStatus = GetSafeString(reader, "insider_status"),
+                FeeMatrix = GetSafeString(reader, "fee_matrix"),
+                IssuerFirmCheckbox = GetSafeBoolean(reader, "issuer_firm_checkbox"),
+                LargeTraderId = GetSafeString(reader, "large_trader_id"),
+                UniqueId = GetSafeString(reader, "unique_id"),
+                Status = GetSafeBoolean(reader, "status"),
+                LargeTraderFlag = GetSafeBoolean(reader, "large_trader_flag"),
+                
             };
 
             if(!string.IsNullOrEmpty(GetSafeString(reader,"kore_chain_id")))
@@ -88,17 +92,50 @@ namespace Rialto.DataAccessLayer
 
         #region Public Methods
 
-        public long PersistShareholder(Shareholder shareholder)
+        public void PersistKCXKoreShareholderId(long shareholderId,string koreChainKd)
         {
 
             //DatabaseConnection = new MySqlConnection(ConnectionString);
-            MySqlCommand cmd = new MySqlCommand(_SP_PERSIST_FIRMS, new MySqlConnection(ConnectionString));
+            MySqlCommand cmd = new MySqlCommand(_SP_PERSIST_KCX_KORE_SHAREHOLDER_ID, new MySqlConnection(ConnectionString));
             cmd.CommandTimeout = 60;
 
             cmd.CommandType = CommandType.StoredProcedure;
 
-            cmd.Parameters.AddWithValue("@id", shareholder.Id);
-            cmd.Parameters["@id"].Direction = ParameterDirection.Input;
+            cmd.Parameters.AddWithValue("@_firm_id", shareholderId);
+            cmd.Parameters["@_firm_id"].Direction = ParameterDirection.Input;
+
+            cmd.Parameters.AddWithValue("@_transfer_agent_name", _KCX_ID);
+            cmd.Parameters["@_transfer_agent_name"].Direction = ParameterDirection.Input;
+
+            cmd.Parameters.AddWithValue("@_kore_chain_id", koreChainKd);
+            cmd.Parameters["@_kore_chain_id"].Direction = ParameterDirection.Input;
+
+            MySqlDataReader reader;
+            List<Shareholder> shareholders = new List<Shareholder>();
+
+            cmd.Connection.Open();
+            try
+            {
+                // Run Query
+                cmd.ExecuteScalar();
+            }
+            finally
+            {
+                cmd.Connection.Close();
+            }
+        }
+
+        public long PersistShareholder(Shareholder shareholder)
+        {
+
+            //DatabaseConnection = new MySqlConnection(ConnectionString);
+            MySqlCommand cmd = new MySqlCommand(_SP_PERSIST_FIRM, new MySqlConnection(ConnectionString));
+            cmd.CommandTimeout = 60;
+
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            cmd.Parameters.AddWithValue("@_id", shareholder.Id);
+            cmd.Parameters["@_id"].Direction = ParameterDirection.Input;
 
             cmd.Parameters.AddWithValue("@firm_legal_name", shareholder.Name);
             cmd.Parameters["@firm_legal_name"].Direction = ParameterDirection.Input;
@@ -145,7 +182,7 @@ namespace Rialto.DataAccessLayer
             cmd.Parameters.AddWithValue("@unique_id", shareholder.UniqueId);
             cmd.Parameters["@unique_id"].Direction = ParameterDirection.Input;
 
-            cmd.Parameters.AddWithValue("@firm_status", shareholder.Status);
+            cmd.Parameters.AddWithValue("@firm_status", true);
             cmd.Parameters["@firm_status"].Direction = ParameterDirection.Input;
 
             cmd.Parameters.AddWithValue("@large_trader_flag", shareholder.LargeTraderFlag);
@@ -154,6 +191,8 @@ namespace Rialto.DataAccessLayer
 
             MySqlDataReader reader;
             List<Shareholder> shareholders = new List<Shareholder>();
+
+            cmd.Connection.Open();
 
             try
             {
