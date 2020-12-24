@@ -12,6 +12,10 @@ namespace Rialto.BusinessEntities
 
         public static string _CREATED_BY_ONBOARDING_SERVICE = "onboarding_service";
 
+        public static string _ROLE_USER = "USER_ROLE";
+
+        public static string _ROLE_ADMIN = "ADMIN_ROLE";
+
         #endregion
 
         #region Public Attributes
@@ -51,6 +55,8 @@ namespace Rialto.BusinessEntities
         public DateTime? PasswordModifyDate { get; set; }
 
         public DateTime? LastActive { get; set; }
+
+        public string Role { get; set; }
 
         #endregion
 

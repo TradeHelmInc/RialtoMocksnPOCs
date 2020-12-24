@@ -51,6 +51,7 @@ namespace Rialto.LogicLayer.Builders
             userInfo.CashOnHand = rialtoSh.GetUser(email) != null ? rialtoSh.GetUser(email).CashOnHand : 0;
             userInfo.PledgedFund = rialtoSh.GetUser(email) != null ? rialtoSh.GetUser(email).PledgedFund : 0;
 
+            userInfo.Role = User._ROLE_USER;
             userInfo.Enabled = true;
 
             return userInfo;
@@ -141,6 +142,8 @@ namespace Rialto.LogicLayer.Builders
             userInfo.CashOnHand =  0;
             userInfo.PledgedFund =  0;
             userInfo.Enabled = true;
+
+            userInfo.Role = User._ROLE_USER;
 
             return userInfo;
 

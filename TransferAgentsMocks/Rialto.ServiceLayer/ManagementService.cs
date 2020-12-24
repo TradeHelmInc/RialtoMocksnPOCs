@@ -62,6 +62,9 @@ namespace Rialto.ServiceLayer
 
             HttpSelfHostConfiguration config = new HttpSelfHostConfiguration(ManagementServiceURL);
 
+            //SwaggerConfig.Register(config);
+            //WebApiConfig.Register(config);
+          
             ManagementController.OnKCXOnboardingApproved += OnKCXOnboardingApproved;
             //ManagementController.OnKCXOnboardingStarted += OnKCXOnboardingStarted;
 
@@ -70,6 +73,8 @@ namespace Rialto.ServiceLayer
             config.Routes.MapHttpRoute(name: "DefaultApi",
                                        routeTemplate: "{controller}/{action}",
                                        defaults: new { id = RouteParameter.Optional });
+
+          
 
             Server = new HttpSelfHostServer(config);
             Server.OpenAsync().Wait();

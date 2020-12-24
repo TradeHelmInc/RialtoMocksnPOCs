@@ -44,7 +44,6 @@ namespace Rialto.ServiceLayer.service
                 string jsonInput = content.ReadAsStringAsync().Result;
                 HttpResponseMessage resp = Request.CreateResponse(HttpStatusCode.OK);
 
-
                 OnKCXOnboardingApprovedDTO onKCXOnboardingApproved = null;
                 try
                 {

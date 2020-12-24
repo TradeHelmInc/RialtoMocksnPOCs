@@ -96,6 +96,7 @@ namespace OnboardingApp
 
                 string kcxKeyAndIV = FileLoader.GetFileContent(kcxKeyAndIVPath);
 
+
                 ManagementService transService = new ManagementService(tradingCS, orderCS, onboardingServiceURL, kcxURL, kcxKeyAndIV, solidusURL, logger);
 
                 transService.Run();

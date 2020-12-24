@@ -174,6 +174,8 @@ namespace Rialto.DataAccessLayer
 
             cmd.Parameters.AddWithValue("@pledged_fund", user.PledgedFund);
 
+            cmd.Parameters.AddWithValue("@user_role", user.Role);
+
             MySqlDataReader reader;
 
             cmd.Connection.Open();
