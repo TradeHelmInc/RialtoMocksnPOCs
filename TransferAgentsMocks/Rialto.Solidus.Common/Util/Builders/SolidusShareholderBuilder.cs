@@ -81,8 +81,10 @@ namespace Rialto.Solidus.Common.Util.Builders
 
         private static string BuildNationalityFromKCX(PersonPassport passport)
         {
-
-            return Shareholder._NATIONALITY_AMERICAN;
+            if (passport != null)//Both entities are supposed to use the same ISO-3166 2-digit country codes
+                return passport.country;
+            else
+                return null;
         }
 
         private static string BuildNationalIdFromKCX(string[] nationalId)
@@ -96,16 +98,7 @@ namespace Rialto.Solidus.Common.Util.Builders
 
         private static string BuildCountryFromKCX(string country)
         {
-
-            if (country != null)
-            {
-                if(country==PersonMainInfo._COUNTRY_USA)
-                    return Shareholder._COUNTRY_US;
-                else
-                    throw new Exception(string.Format("Country '{0}' not supported. Contact administrator",country));
-            }
-            else
-                return null;
+            return country;//Both entities are supposed to use the same ISO-3166 2-digit country codes
         }
 
         private static long BuildCountryCodeFromKCX(string countryCode)

@@ -1,4 +1,5 @@
 ﻿using fwk.Common.util.encryption.common;
+using fwk.Common.util.encryption.TripleDES;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,15 +15,19 @@ namespace Rialto.KoreConX.Common.Util
 
         #region Protected Attributes
 
-        protected string AESKeyandIV { get; set; }
+        protected string AESKeyandIVEncr { get; set; }
+
+        protected bool AESKeyIsEncrypted { get; set; }
 
         #endregion
 
         #region Constructors
 
-        public AESManager(string pAESKeyandIV)
+        public AESManager(string pAESKeyandIVEncr, bool pAESKeyIsEncrypted)
         {
-            AESKeyandIV = pAESKeyandIV;
+            AESKeyandIVEncr = pAESKeyandIVEncr;
+
+            AESKeyIsEncrypted = pAESKeyIsEncrypted;
         }
 
         #endregion
@@ -31,8 +36,13 @@ namespace Rialto.KoreConX.Common.Util
         public string DecryptAES(string PDToDecrypt)
         {
             RijndaelManaged AES = new RijndaelManaged();
+           
 
-            string keyandIV = AESKeyandIV;
+            string description="";
+
+            string keyandIV = AESKeyIsEncrypted ? DPAPI.Decrypt(AESKeyandIVEncr, null, out description) : AESKeyandIVEncr;
+
+            //string keyandIV = AESKeyandIVEncr;
             Byte[] key = UTF8Encoding.UTF8.GetBytes(keyandIV.Substring(0, 32));
             Byte[] IV = UTF8Encoding.UTF8.GetBytes(keyandIV.Substring(32, 16));
             Byte[] inputArr = Convert.FromBase64String(PDToDecrypt);

@@ -84,6 +84,16 @@ namespace PlaidValidateBalance
             }
         }
 
+
+        //3- Validate Balance
+        // The algorithm is prretty simple, until told otherwise, we will only consider those accounts with TYPE=depository and SUB_TYPE=savings
+        protected static void ValidateValance(GetBalanceResp getBalanceResp)
+        {
+            DoLog(string.Format("The plaid account has an available balance of {0} {1}", getBalanceResp.GetBalanceForTrading().ToString("0.00"), getBalanceResp.GetBalanceCurrency()), MessageType.Information);
+
+            DoLog(string.Format("If the order notional (Price x Size) is bigger than that , it should be rejected. Otherwise it should be allowed"), MessageType.Information);
+        }
+
         // The authentication depends on the creation of 3 tokens
         //  A- Link token
         //  B- Public token
@@ -183,7 +193,7 @@ namespace PlaidValidateBalance
 
                 GetBalanceResp getBalanceResp = GetBalance(authReq);
 
-                //TODO>validate accounts
+                ValidateValance(getBalanceResp);
             }
             catch (Exception ex)
             {

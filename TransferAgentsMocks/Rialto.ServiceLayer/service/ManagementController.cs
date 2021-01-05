@@ -13,7 +13,7 @@ using System.Web.Http;
 
 namespace Rialto.ServiceLayer.service
 {
-    public delegate string OnKCXOnboardingApproved(string koreShareholderId);
+    public delegate string OnKCXOnboardingApproved(string koreShareholderId,string key,string IV);
 
     //public delegate string OnKCXOnboardingStarted(string koreShareholderId);
 
@@ -48,7 +48,10 @@ namespace Rialto.ServiceLayer.service
                 try
                 {
                     onKCXOnboardingApproved = JsonConvert.DeserializeObject<OnKCXOnboardingApprovedDTO>(jsonInput);
-                    Logger.DoLog(string.Format("Incoming OnKCXOnboardingApproved: KoreShareholderId={0} ", onKCXOnboardingApproved.KoreShareholderId), fwk.Common.enums.MessageType.Information);
+                    Logger.DoLog(string.Format("Incoming OnKCXOnboardingApproved: KoreShareholderId={0}  Key={1} IV={2} ",
+                                                  onKCXOnboardingApproved.KoreShareholderId
+                                                , onKCXOnboardingApproved.Key != null ? onKCXOnboardingApproved.Key : "??"
+                                                , onKCXOnboardingApproved.IV != null ? onKCXOnboardingApproved.IV : "??"), fwk.Common.enums.MessageType.Information);
 
                 }
                 catch (Exception ex)
@@ -58,7 +61,7 @@ namespace Rialto.ServiceLayer.service
                     throw new Exception(msg);
                 }
 
-                string txtId = OnKCXOnboardingApproved( onKCXOnboardingApproved.KoreShareholderId);
+                string txtId = OnKCXOnboardingApproved(onKCXOnboardingApproved.KoreShareholderId, onKCXOnboardingApproved.Key, onKCXOnboardingApproved.IV);
 
                 Logger.DoLog("OnKCXOnboardingApproved successfully processed", fwk.Common.enums.MessageType.Information);
 

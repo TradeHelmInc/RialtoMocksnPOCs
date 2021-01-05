@@ -9,5 +9,9 @@ namespace Rialto.Common.DTO.Services
     public class OnKCXOnboardingApprovedDTO
     {
         public string KoreShareholderId { get; set; }
+
+        public string Key { get; set; }
+
+        public string IV { get; set; }
     }
 }

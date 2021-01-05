@@ -1,4 +1,5 @@
 ﻿using fwk.Common.util.encryption.common;
+using fwk.Common.util.encryption.RSA;
 using fwk.Common.util.logger;
 using System;
 using System.Collections.Generic;
@@ -24,6 +25,11 @@ namespace RialtoToKcxEncryption
             string pubKeyFile = ConfigurationManager.AppSettings["KCXPublicKeyPath"];
             string textToEncrypt = ConfigurationManager.AppSettings["TextToEncrypt"];
 
+            string fileWithTextToEncrypt = ConfigurationManager.AppSettings["FileWithTextToEncrypt"];
+
+            if(!string.IsNullOrEmpty(fileWithTextToEncrypt))
+                textToEncrypt = FileLoader.GetFileContent(fileWithTextToEncrypt);
+
             Logger=new Logger();
 
             try
@@ -32,7 +38,7 @@ namespace RialtoToKcxEncryption
 
                 Logger.DoLog(string.Format("Loading public key file in path {0}",pubKeyFile),fwk.Common.enums.MessageType.Information);
 
-                string xmlPubKey = encrypter.GetXmlPubKey(pubKeyFile);
+                string xmlPubKey = encrypter.GetXmlFromPemKey(pubKeyFile);
 
                 Logger.DoLog(string.Format("Encrypting text = {0}", textToEncrypt), fwk.Common.enums.MessageType.Information);
 
@@ -43,6 +49,22 @@ namespace RialtoToKcxEncryption
                 //Logger.DoLog(string.Format(" Decrypting roundtrip..."), fwk.Common.enums.MessageType.Information);
 
                 //encrypter.DecryptFromStr(output);
+
+
+                ////we retrieve the private key from xml file
+                //Console.WriteLine(string.Format("Retrieving private key from file: {0}", ConfigurationManager.AppSettings["KCXPrivateKeyPath"]));
+                //string privKeyXml = FileLoader.GetFileContent(ConfigurationManager.AppSettings["KCXPrivateKeyPath"]);
+                //RSACryptoServiceProvider rsaDecrypter = new RSACryptoServiceProvider();
+                //rsaDecrypter.FromXmlString(privKeyXml);
+                //Console.WriteLine(string.Format("Xml Private Key Loaded: {0}", privKeyXml));
+                //Console.WriteLine("");
+
+
+                ////We decrypt the text
+                //var encrArr = Convert.FromBase64String(output);
+                //byte[] decrArr = rsaDecrypter.Decrypt(encrArr, RSAEncryptionPadding.Pkcs1);
+                //string strDecripted = Encoding.UTF8.GetString(decrArr);
+
 
             }
             catch (Exception ex)

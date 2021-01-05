@@ -30,7 +30,7 @@ namespace Rialto.Rialto.ServiceLayer.Client.KCX
 
         #region Public Methods
 
-        public TransactionResponse OnKCXOnboardingApproved(string koreShareholderId)
+        public TransactionResponse OnKCXOnboardingApproved(string koreShareholderId,string key=null,string iv=null)
         {
             try
             {
@@ -38,7 +38,7 @@ namespace Rialto.Rialto.ServiceLayer.Client.KCX
 
                 Dictionary<string, string> param = new Dictionary<string, string>();
 
-                OnKCXOnboardingApprovedDTO dto = new OnKCXOnboardingApprovedDTO() { KoreShareholderId = koreShareholderId };
+                OnKCXOnboardingApprovedDTO dto = new OnKCXOnboardingApprovedDTO() { KoreShareholderId = koreShareholderId, Key = key, IV = iv };
 
                 string output = JsonConvert.SerializeObject(dto);
 

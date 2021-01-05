@@ -1,0 +1,13 @@
+﻿# Default ignored files
+/shelf/
+/workspace.xml
+# Rider ignored files
+/modules.xml
+/.idea.Rialto_ATS_Services.iml
+/projectSettingsUpdater.xml
+/contentModel.xml
+# Datasource local storage ignored files
+/../../../../../../../../../../:\Users\zimzum\Desktop\.net core tests\Rialto_ATS_Services\Rialto_ATS_Services\.idea\.idea.Rialto_ATS_Services\.idea/dataSources/
+/dataSources.local.xml
+# Editor-based HTTP Client requests
+/httpRequests/

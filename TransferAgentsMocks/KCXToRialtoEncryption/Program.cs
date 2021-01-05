@@ -1,4 +1,5 @@
 ﻿using fwk.Common.util.encryption.common;
+using fwk.Common.util.encryption.RSA;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -80,21 +81,21 @@ namespace KCXToRialtoEncryption
 
             //We retrieve the public key from pem file
             Console.WriteLine(string.Format("Retrieving public key from file: {0}", PublicPemFile));
-            string xmlPubKey = encrypter.GetXmlPubKey(PublicPemFile);
+            string xmlPubKey = encrypter.GetXmlFromPemKey(PublicPemFile);
             RSACryptoServiceProvider rsaEncrypter = new RSACryptoServiceProvider();
             rsaEncrypter.FromXmlString(xmlPubKey);
             Console.WriteLine(string.Format("Xml Public Key Received: {0}", xmlPubKey));
             Console.WriteLine("");
 
             //we retrieve the encrypted text that we received
-            string encryptedText = PemLoader.GetFileContent(EncryptedFile);
+            string encryptedText = FileLoader.GetFileContent(EncryptedFile);
             var encrArr = Convert.FromBase64String(encryptedText);
             Console.WriteLine(string.Format("Retrieving encrypted text: {0}", encryptedText));
             Console.WriteLine("");
             
             //we retrieve the private key from xml file
             Console.WriteLine(string.Format("Retrieving private key from file: {0}", PrivateKeyXmlFile));
-            string privKeyXml = PemLoader.GetFileContent(PrivateKeyXmlFile);
+            string privKeyXml = FileLoader.GetFileContent(PrivateKeyXmlFile);
             RSACryptoServiceProvider rsaDecrypter = new RSACryptoServiceProvider();
             rsaDecrypter.FromXmlString(privKeyXml);
             Console.WriteLine(string.Format("Xml Private Key Loaded: {0}", privKeyXml));
@@ -113,9 +114,9 @@ namespace KCXToRialtoEncryption
         protected static void DecryptAES()
         {
             RijndaelManaged AES = new RijndaelManaged();
-            
-            string keyandIV=PemLoader.GetFileContent(AESKeyandIV);
-            Byte[] keyAndIvBytes = UTF8Encoding.UTF8.GetBytes( PemLoader.GetFileContent(AESKeyandIV));
+
+            string keyandIV = FileLoader.GetFileContent(AESKeyandIV);
+            Byte[] keyAndIvBytes = UTF8Encoding.UTF8.GetBytes(FileLoader.GetFileContent(AESKeyandIV));
             Byte[] key = UTF8Encoding.UTF8.GetBytes(keyandIV.Substring(0, 32));
             Byte[] IV = UTF8Encoding.UTF8.GetBytes(keyandIV.Substring(32, 16));
             Byte[] inputArr = Convert.FromBase64String(PDToDecrypt);

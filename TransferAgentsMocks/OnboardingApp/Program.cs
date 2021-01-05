@@ -1,6 +1,7 @@
 ﻿using fwk.Common.enums;
 using fwk.Common.interfaces;
 using fwk.Common.util.encryption.common;
+using fwk.Common.util.encryption.RSA;
 using Rialto.ServiceLayer;
 using System;
 using System.Collections.Generic;
@@ -83,7 +84,16 @@ namespace OnboardingApp
                 string kcxURL = ConfigurationManager.AppSettings["KCXURL"];
                 string solidusURL = ConfigurationManager.AppSettings["SolidusURL"];
                 string onboardingServiceURL = ConfigurationManager.AppSettings["OnboardingServiceURL"];
-                string kcxKeyAndIVPath = ConfigurationManager.AppSettings["KCXKeyAndIVPath"];
+
+
+                string kcxEncryptedKeyAndIVPath = ConfigurationManager.AppSettings["KCXEncryptedKeyAndIVPath"];
+                string kcxDeccryptedKeyAndIVPath = ConfigurationManager.AppSettings["KCXDecryptedKeyAndIVPath"];
+
+                string kcxEncryptedRSAPrivateKeyPath = ConfigurationManager.AppSettings["KCXEncryptedRSAPrivateKeyPath"];
+                string kcxDeccryptedRSAPrivateKeyPath = ConfigurationManager.AppSettings["KCXDeccryptedRSAPrivateKeyPath"];
+
+                bool AESKeyEncrypted = Convert.ToBoolean(ConfigurationManager.AppSettings["AESSKeyEncrypted"]);
+                bool RSAKeyEncrypted = Convert.ToBoolean(ConfigurationManager.AppSettings["RSAPrivateKeyEncrypted"]);
 
 
                 logger.Logger = new PerDayFileLogSource(Directory.GetCurrentDirectory() + "\\Log", Directory.GetCurrentDirectory() + "\\Log\\Backup")
@@ -94,10 +104,13 @@ namespace OnboardingApp
 
                 logger.DoLog("Initializing Get Trades service", MessageType.Information);
 
-                string kcxKeyAndIV = FileLoader.GetFileContent(kcxKeyAndIVPath);
+                logger.DoLog("Extracting AES key", MessageType.Information);
+                string kcxKeyAndIV = AESKeyEncrypted ? FileLoader.GetFileContent(kcxEncryptedKeyAndIVPath) : FileLoader.GetFileContent(kcxDeccryptedKeyAndIVPath);
 
+                string kcxRSAPrivateKeyPath = RSAKeyEncrypted ? kcxEncryptedRSAPrivateKeyPath : kcxDeccryptedRSAPrivateKeyPath;
 
-                ManagementService transService = new ManagementService(tradingCS, orderCS, onboardingServiceURL, kcxURL, kcxKeyAndIV, solidusURL, logger);
+                ManagementService transService = new ManagementService(tradingCS, orderCS, onboardingServiceURL, kcxURL, kcxKeyAndIV, AESKeyEncrypted,
+                                                                        kcxRSAPrivateKeyPath, RSAKeyEncrypted, solidusURL, logger);
 
                 transService.Run();
 

@@ -68,7 +68,16 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="KCXKeys\AESKey.txt">
+    <Content Include="KCXKeys\DecRSAPrivateKey.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="KCXKeys\EncRSAPrivateKey.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="KCXKeys\DecAESKey.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="KCXKeys\EncAESKey.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

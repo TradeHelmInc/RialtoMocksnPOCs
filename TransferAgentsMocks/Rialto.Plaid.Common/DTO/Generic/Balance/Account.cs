@@ -8,6 +8,15 @@ namespace Rialto.Plaid.Common.DTO.Generic.Balance
 {
     public class Account
     {
+        #region Public static consts
+
+        public static string _ACCOUNT_TYPE_DEPOSITORY = "depository";
+        public static string _ACCOUNT_SUBTYPE_SAVINGS = "savings";
+
+        public static string _ACCOUNT_CURRENCY_USD = "USD";
+
+        #endregion
+
         #region Public Attributes
 
         public string account_id { get; set; }
@@ -16,9 +25,10 @@ namespace Rialto.Plaid.Common.DTO.Generic.Balance
         public string name { get; set; }
         public string official_name { get; set; }
         public string type { get; set; }
-        public string sybtype { get; set; }
+        public string subtype { get; set; }
         public string loan { get; set; }
 
         #endregion
+
     }
 }

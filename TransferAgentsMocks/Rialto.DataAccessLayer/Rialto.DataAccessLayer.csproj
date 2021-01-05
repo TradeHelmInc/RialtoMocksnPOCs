@@ -56,6 +56,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountManager.cs" />
     <Compile Include="BaseManager.cs" />
     <Compile Include="OrderManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

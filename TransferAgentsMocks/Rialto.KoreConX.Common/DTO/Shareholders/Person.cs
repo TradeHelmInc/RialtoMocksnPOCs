@@ -19,7 +19,7 @@ namespace Rialto.KoreConX.Common.DTO.Shareholders
         public string state { get; set; }
     }
 
-    public struct PersonPassport
+    public class PersonPassport
     {
         public string number { get; set; }
 

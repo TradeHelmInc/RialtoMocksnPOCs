@@ -27,13 +27,14 @@ namespace Rialto.ServiceLayer
         #endregion
 
         #region Constructors
-        
-        public ManagementService(string pTradingCS, string pOrderCS, string pManagementServiceURL, string pKcxURL, string kcxKeyAndIV,string pSolidusURL, ILogger pLogger)
+
+        public ManagementService(string pTradingCS, string pOrderCS, string pManagementServiceURL, string pKcxURL, string kcxKeyAndIV, bool pAESKeyEncrypted,
+                                string pRASPrivateKeyPath, bool pRSAKeyEncrypted, string pSolidusURL, ILogger pLogger)
         {
 
             ManagementServiceURL = pManagementServiceURL;
 
-            ManagementLogic = new ManagementLogic(pTradingCS, pOrderCS, pKcxURL, kcxKeyAndIV, pSolidusURL, pLogger);
+            ManagementLogic = new ManagementLogic(pTradingCS, pOrderCS, pKcxURL, kcxKeyAndIV, pAESKeyEncrypted, pRASPrivateKeyPath, pRSAKeyEncrypted, pSolidusURL, pLogger);
 
             Logger = pLogger;
 
@@ -43,9 +44,9 @@ namespace Rialto.ServiceLayer
 
         #region Protected Methods
 
-        protected string OnKCXOnboardingApproved(string koreShareholderId)
+        protected string OnKCXOnboardingApproved(string koreShareholderId, string key, string IV)
         {
-            return ManagementLogic.OnKCXOnboardingApproved(koreShareholderId);
+            return ManagementLogic.OnKCXOnboardingApproved(koreShareholderId, key, IV);
         }
 
         protected string OnKCXOnboardingStarted(string koreShareholderId)

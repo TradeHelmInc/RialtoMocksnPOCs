@@ -18,3 +18,5 @@ C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocks
 C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\RialtoToKcxEncryption\obj\Debug\RialtoToKcxEncryption.csprojResolveAssemblyReference.cache
 C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\RialtoToKcxEncryption\obj\Debug\RialtoToKcxEncryption.exe
 C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\RialtoToKcxEncryption\obj\Debug\RialtoToKcxEncryption.pdb
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\RialtoToKcxEncryption\bin\Debug\test\dec_iv.txt
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\RialtoToKcxEncryption\bin\Debug\test\dec_key.txt

@@ -51,6 +51,7 @@
     <Compile Include="util\encryption\RSA\PemLoader.cs" />
     <Compile Include="util\encryption\RSA\RSAEncryption.cs" />
     <Compile Include="util\encryption\RSA\RSAKeyGenerator.cs" />
+    <Compile Include="util\encryption\TripleDES\DPAPI.cs" />
     <Compile Include="util\logger\Logger.cs" />
   </ItemGroup>
   <ItemGroup />
