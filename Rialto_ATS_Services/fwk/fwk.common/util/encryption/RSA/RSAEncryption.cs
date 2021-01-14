@@ -33,6 +33,16 @@ namespace fwk.Common.util.encryption.RSA
             PrivateKeyFilePath = pPrivateKeyFilePaht;
         
         }
+        
+        public RSAEncryption()
+        {
+            RSACryptoServiceProvider = new RSACryptoServiceProvider();
+
+            IsEncrypted = false;
+
+            PrivateKeyFilePath = null;
+        
+        }
 
         #endregion
 

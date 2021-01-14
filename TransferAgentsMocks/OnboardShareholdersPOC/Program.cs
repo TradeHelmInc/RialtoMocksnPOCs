@@ -82,7 +82,7 @@ namespace OnboardShareholdersPOC
 
             AESKeyandIVPath = ConfigurationManager.AppSettings["AESKeyandIV"];
 
-            AESDeccrypter = new AESManager(FileLoader.GetFileContent(AESKeyandIVPath));
+            AESDeccrypter = new AESManager(FileLoader.GetFileContent(AESKeyandIVPath),false);
             
             SecuritiesServiceClient = new SecuritiesServiceClient(BaseURL);
             PersonsServiceClient = new PersonsServiceClient(BaseURL);

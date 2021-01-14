@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="Client\GetTradesServiceClient.cs" />
     <Compile Include="Client\KCX\OnKCXOnboardingApprovedServiceClient.cs" />
+    <Compile Include="Client\OnPlaidCredentialsLoadClient.cs" />
     <Compile Include="Client\OnSellServiceClient.cs" />
     <Compile Include="Client\RialtoBaseRESTClient.cs" />
     <Compile Include="Client\TransferServiceClient.cs" />

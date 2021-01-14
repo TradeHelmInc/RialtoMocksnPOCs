@@ -6,7 +6,6 @@ using Rialto.KoreConX.Common.DTO.Shareholders;
 using Rialto.KoreConX.Common.Util;
 using Rialto.KoreConX.ServiceLayer.Client;
 using Rialto.LogicLayer.Builders;
-using Rialto.Solidus.Common.DTO.Shareholders;
 using Rialto.Solidus.Common.Util.Builders;
 using Rialto.Solidus.ServiceLayer.Client;
 using System;
@@ -15,6 +14,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
+using Rialto.BusinessEntities;
+using Rialto.BusinessEntities.Plaid;
+using Rialto.DataAccessLayer.Plaid;
+using Shareholder = Rialto.Solidus.Common.DTO.Shareholders.Shareholder;
 
 namespace Rialto.LogicLayer
 {
@@ -25,6 +28,8 @@ namespace Rialto.LogicLayer
         protected static string _KCX_ONBOARDING_APPROVED_OK = "OK";
 
         protected static string _KCX_ONBOARDING_STARTED_OK = "OK";
+        
+        protected static string _PLAID_CREDENTIALS_LOADED = "OK";
 
         #endregion
 
@@ -35,10 +40,14 @@ namespace Rialto.LogicLayer
         protected UserManager UserManager { get; set; }
 
         protected AccountManager AccountManager { get; set; }
+        
+        protected PlaidCredentialsManager PlaidCredentialsManager { get; set; }
 
         protected AESManager AESmanager { get; set; }
 
         protected RSAEncryption RSAEncryption { get; set; }
+        
+        protected string RSAPublicKey { get; set; }
 
         protected bool AESKeyEncrypted { get; set; }
 
@@ -80,6 +89,23 @@ namespace Rialto.LogicLayer
             ShareholdersServiceClient = new Solidus.ServiceLayer.Client.ShareholdersServiceClient(pSolidusURL);
 
             #endregion
+
+            Logger = pLogger;
+        }
+        
+        public ManagementLogic(string pTradingConnectionString, string pOrderConnectionString,string pRSAPublicKey, ILogger pLogger)
+        {
+            ShareholderManager = new ShareholderManager(pTradingConnectionString);
+
+            UserManager = new UserManager(pTradingConnectionString);
+
+            AccountManager = new AccountManager(pTradingConnectionString);
+
+            PlaidCredentialsManager = new PlaidCredentialsManager(pTradingConnectionString);
+            
+            RSAEncryption=new  RSAEncryption();
+
+            RSAPublicKey = pRSAPublicKey;
 
             Logger = pLogger;
         }
@@ -454,6 +480,31 @@ namespace Rialto.LogicLayer
                 throw new Exception(string.Format("Critical error requesting personal information of Kore Share Holder {0}:{1}", koreShareholderId, ex.Message));
             }
         }
+
+        public string OnPlaidCredentialsLoad(string userIdentifier, string plaidAccessToken, string plaidItemId)
+        {
+            User user = UserManager.GetUser(userIdentifier);//User Identifier has to be the email
+
+            if (user == null)
+                throw new Exception(string.Format("Could not find user for email (user identifier){0}",
+                    userIdentifier));
+
+            string encAccessToken = RSAEncryption.EncryptToStr(RSAPublicKey, plaidAccessToken);
+
+            PlaidCredential plaidCred = new PlaidCredential()
+            {
+                User = user,
+                AccessToken = encAccessToken,
+                UserIdentifier = userIdentifier,
+                PlaidItemId = plaidItemId
+            };
+            
+            PlaidCredentialsManager.PersistPlaidCredentials(plaidCred);
+            
+            return _PLAID_CREDENTIALS_LOADED;
+        }
+        
+        
         #endregion
     }
 }

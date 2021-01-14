@@ -18,6 +18,8 @@ namespace KCXToRialtoEncryption
 
         protected static string PrivateKeyXmlFile { get; set; }
 
+        protected static string PublicKeyXmlFile { get; set; }
+
         protected static string EncryptedFile { get; set; }
 
         protected static string AESKeyandIV { get; set; }
@@ -38,7 +40,7 @@ namespace KCXToRialtoEncryption
             cspParams.KeyContainerName = CONTAINER_NAME;
             cspParams.Flags = CspProviderFlags.UseMachineKeyStore;
             cspParams.ProviderName = "Microsoft Strong Cryptographic Provider";
-            RSACryptoServiceProvider rsa = new RSACryptoServiceProvider(cspParams);
+            RSACryptoServiceProvider rsa = new RSACryptoServiceProvider(4096,cspParams);
 
             //Pair of public and private key as XML string.
             //Do not share this to other party
@@ -47,6 +49,7 @@ namespace KCXToRialtoEncryption
             //Public Key to file in Pem format
             string publicOnlyKeyXML = rsa.ToXmlString(false);
             string pemPublic = PemLoader.PublicXmlToPem(rsa);
+            PemLoader.WriteToFile(publicOnlyKeyXML, PublicKeyXmlFile);
             PemLoader.WritePublicToPem(rsa, PublicPemFile);
             Console.WriteLine(string.Format("Public Key generated and saved: {0}", pemPublic));
             Console.WriteLine("");
@@ -155,8 +158,9 @@ namespace KCXToRialtoEncryption
       
         static void Main(string[] args)
         {
-            PublicPemFile = ConfigurationManager.AppSettings["PublicKeyFile"];
+            PublicPemFile = ConfigurationManager.AppSettings["PublicKeyPmlFile"];
             PrivateKeyXmlFile = ConfigurationManager.AppSettings["PrivateKeyFile"];
+            PublicKeyXmlFile = ConfigurationManager.AppSettings["PublicKeyXmlFile"];
             EncryptedFile = ConfigurationManager.AppSettings["EncryptedFile"];
             TextToEncrypt = ConfigurationManager.AppSettings["TextToEncrypt"];
             AESKeyandIV=ConfigurationManager.AppSettings["AESKeyandIV"];

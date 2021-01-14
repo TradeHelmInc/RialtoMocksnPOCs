@@ -232,7 +232,48 @@ namespace Rialto.DataAccessLayer
             return users;
         }
 
+        public User GetUser(string email)
+        {
+            //DatabaseConnection = new MySqlConnection(ConnectionString);
+            MySqlCommand cmd = new MySqlCommand(_SP_GET_USERS, new MySqlConnection(ConnectionString));
+            cmd.CommandTimeout = 60;
 
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            cmd.Parameters.AddWithValue("@_email", email);
+            cmd.Parameters["@_email"].Direction = ParameterDirection.Input;
+            
+            cmd.Parameters.AddWithValue("@firm_id", null);
+            cmd.Parameters["@firm_id"].Direction = ParameterDirection.Input;
+
+            cmd.Connection.Open();
+
+            // Open DB
+            MySqlDataReader reader;
+            User user=null;
+            
+            try
+            {
+                // Run Query
+                reader = cmd.ExecuteReader();
+
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        user=BuildUser(reader);
+                    }
+                }
+            }
+            finally
+            {
+                cmd.Connection.Close();
+            }
+
+            return user;
+
+        }
+        
         #endregion
     }
 }
