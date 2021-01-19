@@ -1,11 +1,18 @@
 ﻿using fwk.Common.util.encryption.common;
 using fwk.Common.util.encryption.RSA;
+using Org.BouncyCastle.Crypto;
+using Org.BouncyCastle.Crypto.Digests;
+using Org.BouncyCastle.Crypto.Encodings;
+using Org.BouncyCastle.Crypto.Engines;
+using Org.BouncyCastle.Crypto.Parameters;
+using Org.BouncyCastle.OpenSsl;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,7 +21,9 @@ namespace KCXToRialtoEncryption
     class Program
     {
 
-        protected static string PublicPemFile { get; set; }
+        protected static string PublicKeyPemFile { get; set; }
+
+        protected static string PrivateKeyPemFile { get; set; }
 
         protected static string PrivateKeyXmlFile { get; set; }
 
@@ -50,7 +59,7 @@ namespace KCXToRialtoEncryption
             string publicOnlyKeyXML = rsa.ToXmlString(false);
             string pemPublic = PemLoader.PublicXmlToPem(rsa);
             PemLoader.WriteToFile(publicOnlyKeyXML, PublicKeyXmlFile);
-            PemLoader.WritePublicToPem(rsa, PublicPemFile);
+            PemLoader.WritePublicToPem(rsa, PublicKeyPemFile);
             Console.WriteLine(string.Format("Public Key generated and saved: {0}", pemPublic));
             Console.WriteLine("");
 
@@ -78,13 +87,16 @@ namespace KCXToRialtoEncryption
                 Console.WriteLine("ENCRYPTION TEST NOT SUCESSFULL!");
         }
 
-        protected static void DecryptTest()
+
+     
+
+        protected static void DecryptRSA1024Test()
         {
             RSAEncryption encrypter = new RSAEncryption();
 
             //We retrieve the public key from pem file
-            Console.WriteLine(string.Format("Retrieving public key from file: {0}", PublicPemFile));
-            string xmlPubKey = encrypter.GetXmlFromPemKey(PublicPemFile);
+            Console.WriteLine(string.Format("Retrieving public key from file: {0}", PublicKeyPemFile));
+            string xmlPubKey = encrypter.GetXmlFromPemKeyFile(PublicKeyPemFile,KeyStrength.s1024);
             RSACryptoServiceProvider rsaEncrypter = new RSACryptoServiceProvider();
             rsaEncrypter.FromXmlString(xmlPubKey);
             Console.WriteLine(string.Format("Xml Public Key Received: {0}", xmlPubKey));
@@ -95,7 +107,7 @@ namespace KCXToRialtoEncryption
             var encrArr = Convert.FromBase64String(encryptedText);
             Console.WriteLine(string.Format("Retrieving encrypted text: {0}", encryptedText));
             Console.WriteLine("");
-            
+
             //we retrieve the private key from xml file
             Console.WriteLine(string.Format("Retrieving private key from file: {0}", PrivateKeyXmlFile));
             string privKeyXml = FileLoader.GetFileContent(PrivateKeyXmlFile);
@@ -111,6 +123,18 @@ namespace KCXToRialtoEncryption
 
             Console.WriteLine(string.Format("The decrypted string is : {0}", strDecripted));
 
+        }
+
+        protected static void DecryptRSA4096Test()
+        {
+            string decriptedText = RSA4096Encryption.DecryptWithPrivate(File.OpenText(EncryptedFile).ReadToEnd(), PrivateKeyPemFile);
+            Console.WriteLine(string.Format("The decrypted string is : {0}", decriptedText));
+        }
+
+        protected static void DecryptRSA4096WithPublicTest()
+        {
+            string decriptedText = RSA4096Encryption.DecryptWithPublic(File.OpenText(EncryptedFile).ReadToEnd(), PublicKeyPemFile);
+            Console.WriteLine(string.Format("The decrypted string is : {0}", decriptedText));
         }
 
 
@@ -158,11 +182,15 @@ namespace KCXToRialtoEncryption
       
         static void Main(string[] args)
         {
-            PublicPemFile = ConfigurationManager.AppSettings["PublicKeyPmlFile"];
-            PrivateKeyXmlFile = ConfigurationManager.AppSettings["PrivateKeyFile"];
+            PublicKeyPemFile = ConfigurationManager.AppSettings["PublicKeyPemFile"];
+            PrivateKeyPemFile = ConfigurationManager.AppSettings["PrivateKeyPemFile"];
+
+            PrivateKeyXmlFile = ConfigurationManager.AppSettings["PrivateKeyXmlFile"];
             PublicKeyXmlFile = ConfigurationManager.AppSettings["PublicKeyXmlFile"];
+            
             EncryptedFile = ConfigurationManager.AppSettings["EncryptedFile"];
             TextToEncrypt = ConfigurationManager.AppSettings["TextToEncrypt"];
+
             AESKeyandIV=ConfigurationManager.AppSettings["AESKeyandIV"];
             Mode = ConfigurationManager.AppSettings["Mode"];
             PDToDecrypt = ConfigurationManager.AppSettings["PDToDecrypt"];
@@ -171,10 +199,16 @@ namespace KCXToRialtoEncryption
                 GenerateKeyPair();
             
             if (Mode=="2")
-                DecryptTest();
+                DecryptRSA1024Test();
 
             if (Mode == "3")
                 DecryptAES();
+
+            if (Mode == "4")
+                DecryptRSA4096Test();
+
+            if (Mode == "5")
+                DecryptRSA4096WithPublicTest();
            
             Console.ReadKey();
         }

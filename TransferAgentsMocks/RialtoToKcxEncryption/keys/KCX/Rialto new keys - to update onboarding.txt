@@ -1,0 +1,36 @@
+qgX5MI1a0pBnF/ZIfomhloJUg7tmRXVBjngCiGzvwgduP1Lu18VDHFWRzauCqxZsLLKEcBWNs7cNj023C8RN3dfNF7T9XUXZyzGWdLHMgk9lFwGAbctTOT0YspTbRXttK//UrFKhy/DtHKmV+vj8jF1nl8UMGfBGMCQPCBWElCvtBTys9p8yE51PgQbugtymZpC2FWi7RH4jz+O1ku7xyhibPJD6Zm3RdqJM3BUoWTuLGTioMa/C6PFuF9xN/eGZ3B7OtJ/yjhcejUgDvDFpk2bRkDBriCKg7B9g972iDTKM4gL+nKA4XBYerhPdMyQlnq4tHRiXi2cR/Wuw2LdEZCOP9vXnrerGZBM7MkyAlAZsbQn0eBJNCqdlV6xjPcqH9SqD4AliwwtFaHJ9kcba/llA8jOTHjOUAykDyQxTbp3oEY/6usf9UzaQpsR9WwgkttcFt7bJzp5fTR1b/XeAntroiRaRVA3RYASV81O9CYAP/UlLz15rjsQg08AAFe6nH4/Nx+R6DMzS6KJbc2MBjrX+1gyOu/HsOPGqZYdOtje1kEZ276up0khiEl4v3YGQA60uOUWyHR9JrfNUVO9y89An4tnPtyBDS4Z7gSWRPGBXHHLcmJxEfWm5DEY1rTtN66pcxkxXG3oC9VVTCgjQxdbHK18qXq/9RcNvHm/mivQ=
+
+
+KoreChainId for shareholder <Gary Miller>
+72dd2c49cd8562dcd3bbd07057881636541c342ee5799665de910f2f5c6d17f7
+
+
+CompanyId <??>:IceChain - ICHN
+7da45fef1e493d1db276bd68e567fc85b2985e6be57b38108e9f6c748e986473
+
+SecurityId:
+f8ce5b0d60a944b523ad166225e03a68f9bb86d1c5b30a67a8dbebf54ee8c24c
+
+
+ATSId:
+556704e4719448883c9d3b5334a142394b8bb01314fc52a903341ece76eec509
+
+
+
+
+============== OLD
+
+KoreChainId for shareholder! <D. Smith>
+add282c84aee684115bc4bc0cfb6f0a413b02babdf40e946d32d3d0c69bb8a5a
+<!--<add key="KoreShareholderId" value="3cce0c5facd798adef0182c2e5d5149663e0f14c8dfc759554c50d0aaf1b4e84"></add>--><!--JohnQ-->
+<!--<add key="KoreShareholderId" value="be566729c0eb2243ea5a1b6b2fce392d7eab73c8ed4bd9cddd9b00e81a963ad7"></add>--><!--MaryJ-->
+
+CompanyId <??>:
+0ceed471e79b07a937c8ca1d769469748dbc2a7958886b31b547cdbd93908538
+
+SecurityId:
+91e6149d2fab8bf5ef1d48970456a342460c58b38a3de01e388fcd19858f12ff
+
+
+ATSId:
+ae55cb322ceb3afee59d3ddc8387c7fd5f9be23aff261469252f270b08a93977

@@ -47,7 +47,7 @@ namespace OnboardShareholdersPOC
                 //TODO: Request all the persoanl information for shareholderId
                 Console.WriteLine(string.Format("Requesting personal information for shareholder id {0}", shareholderId));
 
-                PersonResponse personResp = PersonsServiceClient.RequestPerson(shareholderId);
+                PersonResponse personResp = PersonsServiceClient.RequestPerson(shareholderId, CompanyId, KoreATSId);
 
                 Console.WriteLine(string.Format("Received {0} {1} from {2}. PD field:{3}", personResp.data.first_name, personResp.data.last_name, personResp.data.country, personResp.data.pd));
 

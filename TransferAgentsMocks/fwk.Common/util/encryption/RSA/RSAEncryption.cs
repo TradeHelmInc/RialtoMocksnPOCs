@@ -1,7 +1,14 @@
 ﻿using fwk.Common.util.encryption.common;
 using fwk.Common.util.encryption.TripleDES;
+using Org.BouncyCastle.Crypto;
+using Org.BouncyCastle.Crypto.Digests;
+using Org.BouncyCastle.Crypto.Encodings;
+using Org.BouncyCastle.Crypto.Engines;
+using Org.BouncyCastle.Crypto.Parameters;
+using Org.BouncyCastle.OpenSsl;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -9,6 +16,12 @@ using System.Threading.Tasks;
 
 namespace fwk.Common.util.encryption.RSA
 {
+    public enum KeyStrength
+    { 
+        s1024,
+        s4096
+    
+    }
     public class RSAEncryption
     {
 
@@ -38,7 +51,9 @@ namespace fwk.Common.util.encryption.RSA
 
         #region Public Methods
 
-        public string GetXmlFromPemKey(string file)
+        
+
+        public string GetXmlFromPemKeyFile(string file,KeyStrength strength=KeyStrength.s1024)
         {
             string pemKey = null;
 
@@ -53,7 +68,12 @@ namespace fwk.Common.util.encryption.RSA
                 pemKey = PemLoader.GetPublicKeyFromPemFile(file);
             }
 
-            string xmlKey = PemLoader.GetXMLKeyFromPemKey(pemKey);
+            string xmlKey = "";
+
+            if(strength==KeyStrength.s1024)
+                xmlKey = PemLoader.GetXMLKeyFromPemKey(pemKey);
+            else
+                xmlKey = PemLoader.Get4096XMLKeyFromPemKey(pemKey);
             
             return xmlKey;
         

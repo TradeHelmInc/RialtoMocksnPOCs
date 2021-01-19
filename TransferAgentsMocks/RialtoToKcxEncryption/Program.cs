@@ -38,7 +38,8 @@ namespace RialtoToKcxEncryption
 
                 Logger.DoLog(string.Format("Loading public key file in path {0}",pubKeyFile),fwk.Common.enums.MessageType.Information);
 
-                string xmlPubKey = encrypter.GetXmlFromPemKey(pubKeyFile);
+                //string xmlPubKey = encrypter.GetXmlFromPemKey(pubKeyFile);
+                string xmlPubKey = encrypter.GetXmlFromPemKeyFile(pubKeyFile,KeyStrength.s4096);
 
                 Logger.DoLog(string.Format("Encrypting text = {0}", textToEncrypt), fwk.Common.enums.MessageType.Information);
 

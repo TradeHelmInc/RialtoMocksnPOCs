@@ -54,11 +54,15 @@ namespace Rialto.KoreConX.ServiceLayer.Client
 
         #region Public Methods
 
-        public PersonResponse RequestPerson(string shareholderId)
+        public PersonResponse RequestPerson(string shareholderId, string company_id, string requestor_id)
         {
             string url = BaseURL + _PERSON_SHOW + shareholderId;;
 
             Dictionary<string, string> param = new Dictionary<string, string>();
+            param.Add("company_id", company_id);
+            param.Add("requestor_id", requestor_id);
+
+
             return ProcessDataResponse(DoGetJson(url, param));
         }
 
