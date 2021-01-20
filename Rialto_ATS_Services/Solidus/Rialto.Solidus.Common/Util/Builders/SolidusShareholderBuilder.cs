@@ -16,6 +16,9 @@ namespace Rialto.Solidus.Common.Util.Builders
         private static string _KCX_DATE_OF_BIRTH_FORMAT = "yyyy-MM-dd";
         private static string _SOLIDUS_DATE_OF_BIRTH_FORMAT = "yyyy-MM-dd";
 
+        private static string _KCX_MALE_GENDER = "M";
+        private static string _KCX_FEMALE_GENDER = "F";
+
         #endregion
 
         #region Private Static Methods
@@ -46,13 +49,18 @@ namespace Rialto.Solidus.Common.Util.Builders
                 return "unknown shareholder";
         }
 
-        private static void ValidateKCXPersonMainInfo(PersonMainInfo person)
+        private static string ConvertKCXGender(string gender)
         {
-            if (person == null)
-                throw new Exception("Cannot send a null person to Solidus");
+            if (gender==null)
+                return Shareholder._GENDER_PREFER_NOT_TO_IDENTIFY;
 
-            if (person.email == null)
-                throw new Exception(string.Format("The following shareholder DOES NOT have an email wich is a mandatory field: {0}", GetPersonBasicIdsFromKCX(person)));
+            if (gender.Equals(_KCX_MALE_GENDER))
+                return Shareholder._GENDER_MALE;
+            else if (gender.Equals(_KCX_FEMALE_GENDER))
+                return Shareholder._GENDER_FEMALE;
+            else
+                return Shareholder._GENDER_NON_BINARY;
+
 
         }
 
@@ -78,49 +86,59 @@ namespace Rialto.Solidus.Common.Util.Builders
                 return null;
         
         }
-
-        private static string BuildNationalityFromKCX(PersonPassport passport)
-        {
-
-            return Shareholder._NATIONALITY_AMERICAN;
-        }
-
-        private static string BuildNationalIdFromKCX(string[] nationalId)
-        {
-
-            if (nationalId != null && nationalId.Length > 0)
-                return nationalId[0];
-            else
-                return null;
-        }
-
-        private static string BuildCountryFromKCX(string country)
-        {
-
-            if (country != null)
-            {
-                if(country==PersonMainInfo._COUNTRY_USA)
-                    return Shareholder._COUNTRY_US;
-                else
-                    throw new Exception(string.Format("Country '{0}' not supported. Contact administrator",country));
-            }
-            else
-                return null;
-        }
-
-        private static long BuildCountryCodeFromKCX(string countryCode)
-        {
-            if (countryCode == null)
-            {
-                if (countryCode == PersonMainInfo._COUNTRY_CODE_US)
-                    return Shareholder.COUNTRY_CODE_US = 1;
-                else
-                    throw new Exception(string.Format("Country Code '{0}' not supported. Contact administrator",countryCode));
-            }
-            else
-                return 0;
         
+        private static void ValidateKCXPersonMainInfo(PersonMainInfo person)
+        {
+            if (person == null)
+                throw new Exception("Cannot send a null person to Solidus");
+
+            if (person.email == null)
+                throw new Exception(string.Format("The following shareholder DOES NOT have an email wich is a mandatory field: {0}", GetPersonBasicIdsFromKCX(person)));
+
         }
+
+        // private static string BuildNationalityFromKCX(PersonPassport passport)
+        // {
+        //
+        //     return Shareholder._NATIONALITY_AMERICAN;
+        // }
+        //
+        // private static string BuildNationalIdFromKCX(string[] nationalId)
+        // {
+        //
+        //     if (nationalId != null && nationalId.Length > 0)
+        //         return nationalId[0];
+        //     else
+        //         return null;
+        // }
+        //
+        // private static string BuildCountryFromKCX(string country)
+        // {
+        //
+        //     if (country != null)
+        //     {
+        //         if(country==PersonMainInfo._COUNTRY_USA)
+        //             return Shareholder._COUNTRY_US;
+        //         else
+        //             throw new Exception(string.Format("Country '{0}' not supported. Contact administrator",country));
+        //     }
+        //     else
+        //         return null;
+        // }
+        //
+        // private static long BuildCountryCodeFromKCX(string countryCode)
+        // {
+        //     if (countryCode == null)
+        //     {
+        //         if (countryCode == PersonMainInfo._COUNTRY_CODE_US)
+        //             return Shareholder.COUNTRY_CODE_US = 1;
+        //         else
+        //             throw new Exception(string.Format("Country Code '{0}' not supported. Contact administrator",countryCode));
+        //     }
+        //     else
+        //         return 0;
+        //
+        // }
 
         private static long BuildPhoneFromKCX(string phone)
         {
@@ -166,23 +184,24 @@ namespace Rialto.Solidus.Common.Util.Builders
         public static Shareholder BuildSolidusShareholderFromKCX(PersonMainInfo person)
         {
             Shareholder solidusShareholder = new Shareholder();
-
+            ValidateKCXPersonMainInfo(person);
+            
             solidusShareholder.emailAddress = person.email;
             solidusShareholder.title = "";
             solidusShareholder.firstName = person.first_name;
             solidusShareholder.middleName = person.middle_name;
             solidusShareholder.lastName = person.last_name;
             solidusShareholder.suffix = "";
-            solidusShareholder.gender = Shareholder._GENDER_PREFER_NOT_TO_IDENTIFY;
-            solidusShareholder.dateOfBirth = ConvertKCXDateOfBirth(person.date_of_birth);
-            solidusShareholder.nationality = BuildNationalityFromKCX(person.passport);
-            solidusShareholder.taxIdOrSSNNumber = BuildNationalIdFromKCX(person.national_id);
-            solidusShareholder.residenceStreetAddress = person.address;
-            solidusShareholder.residenceCountry = BuildCountryFromKCX(person.country);
-            solidusShareholder.phoneCountryCode = BuildCountryCodeFromKCX(person.country_code);
-            solidusShareholder.phoneNumber = BuildPhoneFromKCX(person.phone);
-            solidusShareholder.employer = "";
-            solidusShareholder.jobTitle = "";
+            solidusShareholder.gender = ConvertKCXGender(person.gender);
+            solidusShareholder.dateOfBirth = ConvertKCXDateOfBirth(person.DOB);
+            solidusShareholder.nationality = person.national_id_country;//ISO FORMAT
+            solidusShareholder.taxIdOrSSNNumber = person.national_id;
+            solidusShareholder.residenceStreetAddress = person.address1;
+            solidusShareholder.residenceCountry = person.country;//ISO FORMAT
+            solidusShareholder.phoneCountryCode = 1;
+            solidusShareholder.phoneNumber = BuildPhoneFromKCX(person.mobile);
+            solidusShareholder.employer = person.employer;
+            solidusShareholder.jobTitle = person.title;
             solidusShareholder.salaryRange = BuildSalaryRangeFromKCX(null);
             solidusShareholder.netWorth = null;
             solidusShareholder.investmentExperience = BuildInvestmentExpirienceFromKCX(null);

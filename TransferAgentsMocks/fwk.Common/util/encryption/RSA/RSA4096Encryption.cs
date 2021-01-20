@@ -2,8 +2,10 @@
 using Org.BouncyCastle.Crypto.Digests;
 using Org.BouncyCastle.Crypto.Encodings;
 using Org.BouncyCastle.Crypto.Engines;
+using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.OpenSsl;
+using Org.BouncyCastle.Security;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -16,7 +18,7 @@ namespace fwk.Common.util.encryption.RSA
     public class RSA4096Encryption
     {
         #region Protected Methods
-
+        //https://dotnetfiddle.net/rHLlsq
         protected static void RSAPrivateKey4096BitsExample()
         {
             string privateKey =
@@ -43,6 +45,29 @@ namespace fwk.Common.util.encryption.RSA
             var decryptedData = cipher.DoFinal();
             var decryptedText = Encoding.UTF8.GetString(decryptedData);
             Console.WriteLine(decryptedText);
+        }
+
+        protected static void RSAPublicKey4096BitsDecrExample()
+        {
+            RsaKeyPairGenerator rsaKeyPairGenerator = new RsaKeyPairGenerator();
+            int keySize = 4096;//in bits
+            rsaKeyPairGenerator.Init(new KeyGenerationParameters(new SecureRandom(), keySize));
+            var keyPair = rsaKeyPairGenerator.GenerateKeyPair();
+            var publicKey = keyPair.Public;
+            var privateKey = keyPair.Private;
+            var rsa = new RsaEngine();
+            rsa.Init(true, privateKey);//use private key for encryption-not recommended
+            string message = "Hello World";
+            Console.WriteLine("Original text: {message}");
+            var plainTextBytes = Encoding.UTF8.GetBytes(message);
+            byte[] cipherBytes = rsa.ProcessBlock(plainTextBytes, 0, message.Length);
+            Console.WriteLine("Encrypted text as a byte array:");
+            Console.WriteLine(BitConverter.ToString(cipherBytes));
+            rsa.Init(false, publicKey);//use public key for decryption
+            byte[] decryptedData = rsa.ProcessBlock(cipherBytes, 0, cipherBytes.Length);
+            string decipheredText = Encoding.UTF8.GetString(decryptedData);
+            Console.WriteLine("Decrypted text: {decipheredText}");
+            Console.ReadLine();
         }
 
         #endregion
@@ -86,18 +111,16 @@ namespace fwk.Common.util.encryption.RSA
                 var pr = new PemReader(new StringReader(publicKey));
                 key = (AsymmetricKeyParameter)pr.ReadObject();
             }
-            
 
-            var encryptedData = Convert.FromBase64String(textToDecrypt);
-            IAsymmetricBlockCipher cipher0 = new RsaBlindedEngine();
+            var rsa = new RsaEngine();
+            rsa.Init(false, key);//use public key for decryption
 
-            cipher0 = new Pkcs1Encoding(cipher0);
-            var cipher = new BufferedAsymmetricBlockCipher(cipher0);
-            cipher.Init(false, key);
-            cipher.ProcessBytes(encryptedData, 0, encryptedData.Length);
-            var decryptedData = cipher.DoFinal();
-            var decryptedText = Encoding.UTF8.GetString(decryptedData);
-            return decryptedText;
+            var plainTextBytes = Convert.FromBase64String(textToDecrypt);
+            byte[] decryptedData = rsa.ProcessBlock(plainTextBytes, 0, plainTextBytes.Length);
+
+            string decipheredText = Convert.ToBase64String(decryptedData);
+      
+            return null;
         }
 
         #endregion

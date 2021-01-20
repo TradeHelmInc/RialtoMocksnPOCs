@@ -204,6 +204,10 @@ namespace Rialto.DataAccessLayer
 
             cmd.Parameters.AddWithValue("@firm_id", firmId);
             cmd.Parameters["@firm_id"].Direction = ParameterDirection.Input;
+            
+            
+            cmd.Parameters.AddWithValue("@_email", null);
+            cmd.Parameters["@_email"].Direction = ParameterDirection.Input;
 
             cmd.Connection.Open();
 

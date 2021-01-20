@@ -198,6 +198,9 @@ namespace Rialto.LogicLayer
 
                 try
                 {
+                    //TODO: Correct incoming misspelling!
+                    pdField = pdField.Replace("first_name", "\"first_name");
+                    pdField = pdField.Replace("\"\"country", "\",\"country");
                     PersonMainInfo personUnEncr = JsonConvert.DeserializeObject<PersonMainInfo>(pdField);
 
                     return personUnEncr;
