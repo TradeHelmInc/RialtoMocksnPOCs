@@ -23,6 +23,8 @@ namespace KCXToRialtoEncryption
 
         protected static string PublicKeyPemFile { get; set; }
 
+        protected static string KCXPublicKeyPemFile { get; set; }
+
         protected static string PrivateKeyPemFile { get; set; }
 
         protected static string PrivateKeyXmlFile { get; set; }
@@ -133,7 +135,7 @@ namespace KCXToRialtoEncryption
 
         protected static void DecryptRSA4096WithPublicTest()
         {
-            string decriptedText = RSA4096Encryption.DecryptWithPublic(File.OpenText(EncryptedFile).ReadToEnd(), PublicKeyPemFile);
+            string decriptedText = RSA4096Encryption.DecryptWithPublic(File.OpenText(EncryptedFile).ReadToEnd(), KCXPublicKeyPemFile);
             Console.WriteLine(string.Format("The decrypted string is : {0}", decriptedText));
         }
 
@@ -184,6 +186,8 @@ namespace KCXToRialtoEncryption
         {
             PublicKeyPemFile = ConfigurationManager.AppSettings["PublicKeyPemFile"];
             PrivateKeyPemFile = ConfigurationManager.AppSettings["PrivateKeyPemFile"];
+
+            KCXPublicKeyPemFile = ConfigurationManager.AppSettings["KCXPublicKeyPemFile"];
 
             PrivateKeyXmlFile = ConfigurationManager.AppSettings["PrivateKeyXmlFile"];
             PublicKeyXmlFile = ConfigurationManager.AppSettings["PublicKeyXmlFile"];

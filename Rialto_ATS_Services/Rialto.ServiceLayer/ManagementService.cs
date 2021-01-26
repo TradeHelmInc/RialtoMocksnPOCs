@@ -46,18 +46,35 @@ namespace Rialto.ServiceLayer
 
         }
 
+        public ManagementService(string pTradingCS, string pOrderCS, string pManagementServiceURL, string pKcxURL, string pKCXPublicKeyPath,
+            string pRASPrivateKeyPath, bool pRSAKeyEncrypted, string pSolidusURL, ILogger pLogger)
+        {
+
+            ManagementServiceURL = pManagementServiceURL;
+
+            ManagementLogic = new ManagementLogic(pTradingCS, pOrderCS, pKcxURL, pKCXPublicKeyPath, pRASPrivateKeyPath, pRSAKeyEncrypted, pSolidusURL, pLogger);
+
+            Logger = pLogger;
+
+        }
+        
         #endregion
 
         #region Protected Methods
 
-        protected string OnKCXOnboardingApproved(string koreShareholderId, string key, string IV)
+        protected string OnKCXOnboardingApproved(string koreShareholderId,string companyKoreChainId, string key, string IV)
         {
-            return ManagementLogic.OnKCXOnboardingApproved(koreShareholderId, key, IV);
+            return ManagementLogic.OnKCXOnboardingApproved(koreShareholderId, companyKoreChainId, key, IV);
+        }
+        
+        protected string OnKCXOnboardingApproved_4096(string[] param)
+        {
+            return ManagementLogic.OnKCXOnboardingApproved_4096(param);
         }
 
-        protected string OnKCXOnboardingStarted(string koreShareholderId)
+        protected string OnKCXOnboardingStarted(string koreShareholderId,string companyKoreChainId)
         {
-            return ManagementLogic.OnKCXOnboardingStarted(koreShareholderId);
+            return ManagementLogic.OnKCXOnboardingStarted(koreShareholderId, companyKoreChainId);
         }
 
         #endregion
@@ -71,6 +88,7 @@ namespace Rialto.ServiceLayer
         public void Run()
         {
             ManagementController.OnKCXOnboardingApproved += OnKCXOnboardingApproved;
+            ManagementController.OnKCXOnboardingApproved_4096 += OnKCXOnboardingApproved_4096;
             //ManagementController.OnKCXOnboardingStarted += OnKCXOnboardingStarted;
 
             ManagementController.Logger = Logger;

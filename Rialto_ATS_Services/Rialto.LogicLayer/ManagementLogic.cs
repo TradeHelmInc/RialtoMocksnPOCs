@@ -14,8 +14,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
+using fwk.common.util.encryption.RSA;
+using fwk.common.util.serialization;
 using Rialto.BusinessEntities;
 using Rialto.BusinessEntities.Plaid;
+using Rialto.Common.DTO.Services;
 using Rialto.DataAccessLayer.Plaid;
 using Shareholder = Rialto.Solidus.Common.DTO.Shareholders.Shareholder;
 
@@ -41,11 +44,23 @@ namespace Rialto.LogicLayer
 
         protected AccountManager AccountManager { get; set; }
         
+        protected TransferAgentManager TransferAgentManager { get; set; }
+        
         protected PlaidCredentialsManager PlaidCredentialsManager { get; set; }
 
         protected AESManager AESmanager { get; set; }
+        
+        #region RSA Encryption
 
         protected RSAEncryption RSAEncryption { get; set; }
+        
+        protected string RSAPrivateKeyPath { get; set; }
+        
+        protected bool RSAPrivateKeyEncrypted { get; set; }
+        
+        #endregion
+        
+        protected string KCXPublicKeyPath { get; set; }
         
         protected string RSAPublicKey { get; set; }
 
@@ -72,6 +87,8 @@ namespace Rialto.LogicLayer
 
             AccountManager = new AccountManager(pTradingConnectionString);
 
+            TransferAgentManager = new TransferAgentManager(pTradingConnectionString);
+
             #region KCX
 
             PersonsServiceClient = new PersonsServiceClient(pKCXURL);
@@ -93,6 +110,40 @@ namespace Rialto.LogicLayer
             Logger = pLogger;
         }
         
+        public ManagementLogic(string pTradingConnectionString, string pOrderConnectionString,
+            string pKCXURL, string pKCXPublicKeyPath,string pRSAPrivateKeyPath, bool pRSAKeyEncrypted, string pSolidusURL, ILogger pLogger)
+        {
+            ShareholderManager = new ShareholderManager(pTradingConnectionString);
+
+            UserManager = new UserManager(pTradingConnectionString);
+
+            AccountManager = new AccountManager(pTradingConnectionString);
+
+            TransferAgentManager = new TransferAgentManager(pTradingConnectionString);
+
+            #region KCX
+
+            PersonsServiceClient = new PersonsServiceClient(pKCXURL);
+
+            RSAEncryption = new RSAEncryption(pRSAPrivateKeyPath, pRSAKeyEncrypted);
+
+            RSAPrivateKeyPath = pRSAPrivateKeyPath;
+
+            RSAPrivateKeyEncrypted = pRSAKeyEncrypted;
+
+            KCXPublicKeyPath = pKCXPublicKeyPath;
+
+            #endregion
+
+            #region Solidus
+
+            ShareholdersServiceClient = new Solidus.ServiceLayer.Client.ShareholdersServiceClient(pSolidusURL);
+
+            #endregion
+
+            Logger = pLogger;
+        }
+        
         public ManagementLogic(string pTradingConnectionString, string pOrderConnectionString,string pRSAPublicKey, ILogger pLogger)
         {
             ShareholderManager = new ShareholderManager(pTradingConnectionString);
@@ -100,6 +151,8 @@ namespace Rialto.LogicLayer
             UserManager = new UserManager(pTradingConnectionString);
 
             AccountManager = new AccountManager(pTradingConnectionString);
+            
+            TransferAgentManager = new TransferAgentManager(pTradingConnectionString);
 
             PlaidCredentialsManager = new PlaidCredentialsManager(pTradingConnectionString);
             
@@ -358,7 +411,7 @@ namespace Rialto.LogicLayer
             {
                 try
                 {
-                    shareholder.OnboardinStatus = Rialto.BusinessEntities.Shareholder._STATUS_ONBOARDING;
+                    shareholder.OnboardingStatus = Rialto.BusinessEntities.Shareholder._STATUS_ONBOARDING;
 
                     shareholder.Id = ShareholderManager.PersistShareholder(shareholder);
 
@@ -376,7 +429,6 @@ namespace Rialto.LogicLayer
 
                     ShareholderManager.PersistKCXKoreShareholderId(shareholder.Id, shareholder.KoreConXShareholderId.KoreShareholderId);
 
-                    PersonsServiceClient.RequestPerson("");
                 }
                 catch (Exception ex)
                 {
@@ -406,7 +458,45 @@ namespace Rialto.LogicLayer
 
         #region Public Methods
 
-        public string OnKCXOnboardingApproved(string koreShareholderId, string key, string IV)
+        public string OnKCXOnboardingApproved_4096(string[] param)
+        {
+            try
+            {
+                Logger.DoLog(string.Format("@ManagementLogic: Received onboarding request for KoreChainId with 4096 bits encrypted data"),
+                    fwk.Common.enums.MessageType.Information);
+
+                if (KCXPublicKeyPath == null)
+                    throw new Exception("KoreConX public key not properly loaded!");
+
+                string decryptedToRSA = "";
+                foreach (string toDecrypt in param)
+                {
+                    decryptedToRSA+=RSA4096Encryption.DecryptWithPublic(toDecrypt, KCXPublicKeyPath);
+                }
+                
+                Logger.DoLog(string.Format("@ManagementLogic: Decrypted using KCX public key:{0}",decryptedToRSA),fwk.Common.enums.MessageType.Information);
+                
+                Logger.DoLog(string.Format("@ManagementLogic: Now decrypting using Rialto private key"),fwk.Common.enums.MessageType.Information);
+
+                string koreChainAndKeys = RSA4096Encryption.DecryptWithPrivate(decryptedToRSA, RSAPrivateKeyPath);
+
+                string koreChainId = JSONExtractor.GetJSONKey("KoreChainID", koreChainAndKeys);
+                string secret_Key = JSONExtractor.GetJSONKey("Secret_Key", koreChainAndKeys);
+                string IV = JSONExtractor.GetJSONKey("IV", koreChainAndKeys);
+                //We cannot use NewtonSoft library becuase the secret and IV might contains quotes (") which might make it fail
+                //KoreChainAndKeysDTO korechainKeysDTO = JsonConvert.DeserializeObject<KoreChainAndKeysDTO>(koreChainAndKeys);
+
+                return OnKCXOnboardingApproved(koreChainId, "", secret_Key, IV);
+            }
+            catch (Exception ex)
+            {
+                Logger.DoLog(string.Format("@ManagementLogic.OnKCXOnboardingApproved_4096- ERROR: {0}", ex.Message), fwk.Common.enums.MessageType.Error);
+                throw;
+            }
+
+        }
+
+        public string OnKCXOnboardingApproved(string koreShareholderId,string companyKoreChainId, string key, string IV)
         {
             try
             {
@@ -415,7 +505,12 @@ namespace Rialto.LogicLayer
                 //1- Download user from KCX
                 Logger.DoLog(string.Format("@ManagementLogic: Retrieving shareholder (firm) for KoreChainId {0} from KoreConX", koreShareholderId), fwk.Common.enums.MessageType.Information);
 
-                PersonResponse personResp = PersonsServiceClient.RequestPerson(koreShareholderId);
+                TransferAgent transferAgent = TransferAgentManager.GetTransferAgent(TransferAgentManager._KCX_ID);
+
+                if (transferAgent == null)
+                    throw new Exception(string.Format("Could not find Kore Chain Id for ATS. Transfer Agent = {0}",TransferAgentManager._KCX_ID));
+                
+                PersonResponse personResp = PersonsServiceClient.RequestPerson(koreShareholderId,companyKoreChainId,transferAgent.TransferAgentATSId);
 
                 if (personResp != null && personResp.data != null)
                 {
@@ -463,13 +558,19 @@ namespace Rialto.LogicLayer
             }
         }
 
-        public string OnKCXOnboardingStarted(string koreShareholderId)
+        public string OnKCXOnboardingStarted(string koreShareholderId,string companyKoreChainId)
         {
             try
             {
+                TransferAgent transferAgent = TransferAgentManager.GetTransferAgent(TransferAgentManager._KCX_ID);
+
+                if (transferAgent == null)
+                    throw new Exception(string.Format("Could not find Kore Chain Id for ATS. Transfer Agent = {0}",TransferAgentManager._KCX_ID));
+                
                 //1-Validate that the KoreShareholderId has an onboarding started  
                 Logger.DoLog(string.Format("Requesting personal data for Kore Shareholder Id {0}", koreShareholderId), fwk.Common.enums.MessageType.Information);
-                PersonResponse personResp = PersonsServiceClient.RequestPerson(koreShareholderId);
+                PersonResponse personResp = PersonsServiceClient.RequestPerson(koreShareholderId, companyKoreChainId,
+                                                                               transferAgent.TransferAgentATSId);
 
                 //Now we have to send this to Solidus --> Decrypt?
 

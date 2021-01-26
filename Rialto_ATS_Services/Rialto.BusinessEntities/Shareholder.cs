@@ -20,7 +20,7 @@ namespace Rialto.BusinessEntities
 
         #region Public Static Consts
 
-        public static string _STATUS_ONBOARDING = "ONBOARDING";
+        public static string _STATUS_ONBOARDING = "APPLICATION_IN_PROGRESS";
 
         public static int _FIRM_TYPE_INDIV_RETAIL = 11;
 
@@ -66,8 +66,6 @@ namespace Rialto.BusinessEntities
 
         public bool Enabled { get; set; }
 
-        public string OnboardinStatus { get; set; }
-
         public List<User> Users { get; set; }
 
         public List<Account> Accounts { get; set; }
@@ -75,6 +73,8 @@ namespace Rialto.BusinessEntities
         public ShareholderType ShareholderType { get; set; }
 
         public KoreConXShareholderId KoreConXShareholderId { get; set; }
+        
+        public string OnboardingStatus { get; set; }
 
         #endregion
 

@@ -57,6 +57,7 @@
     <Compile Include="DTO\Generic\GetResponse.cs" />
     <Compile Include="DTO\Generic\IdEntity.cs" />
     <Compile Include="DTO\Generic\TransactionResponse.cs" />
+    <Compile Include="DTO\Services\KCX\OnKCXOnboardingApproved4096DTO.cs" />
     <Compile Include="DTO\Services\OnBuyDTO.cs" />
     <Compile Include="DTO\Services\KCX\OnKCXOnboardingApprovedDTO.cs" />
     <Compile Include="DTO\Services\KCX\OnKCXOnboardingStaredDTO.cs" />

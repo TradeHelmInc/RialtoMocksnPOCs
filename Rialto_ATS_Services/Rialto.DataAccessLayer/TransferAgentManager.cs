@@ -2,6 +2,7 @@
 using Rialto.BusinessEntities;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,14 +23,8 @@ namespace Rialto.DataAccessLayer
         #region Private Static Querys
 
         public static string _KCX_ID = "KoreConX";
-
-        private static string _GET_TRANSFER_AGENT_QUERY = @"SELECT id,transfer_agent_name,transfer_agent_chain_id as transfer_agent_ats_id  
-                                                            FROM secondarytrading.transfer_agent ta
-                                                      
-                                                          WHERE ta.transfer_agent_name='{0}' and ta.enabled=1";
-
        
-
+        private static string _SP_GET_TRANSFER_AGENT = "get_transfer_agent";
        
         #endregion
 
@@ -39,20 +34,25 @@ namespace Rialto.DataAccessLayer
 
         public TransferAgent GetTransferAgent(string transferAgent)
         {
-            DatabaseConnection = new MySqlConnection(ConnectionString);
-            MySqlCommand commandDatabase = new MySqlCommand(string.Format(_GET_TRANSFER_AGENT_QUERY, transferAgent), DatabaseConnection);
-            commandDatabase.CommandTimeout = 60;
-            MySqlDataReader reader;
+            MySqlCommand cmd = new MySqlCommand(_SP_GET_TRANSFER_AGENT, new MySqlConnection(ConnectionString));
+            cmd.CommandTimeout = 60;
+
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            cmd.Parameters.AddWithValue("@_transfer_agent_name", transferAgent);
+            cmd.Parameters["@_transfer_agent_name"].Direction = ParameterDirection.Input;
+            
             TransferAgent transfAgent = null;
+            MySqlDataReader reader;
 
 
             // Open DB
-            DatabaseConnection.Open();
+            cmd.Connection.Open();
 
             try
             {
                 // Run Query
-                reader = commandDatabase.ExecuteReader();
+                reader = cmd.ExecuteReader();
 
                 if (reader.HasRows)
                 {
@@ -69,7 +69,7 @@ namespace Rialto.DataAccessLayer
             }
             finally
             {
-                DatabaseConnection.Close();
+                cmd.Connection.Close();
             }
 
             return transfAgent;

@@ -13,5 +13,7 @@ namespace Rialto.Common.DTO.Services
         public string Key { get; set; }
 
         public string IV { get; set; }
+        
+        public string CompanyKoreChainId { get; set; }
     }
 }

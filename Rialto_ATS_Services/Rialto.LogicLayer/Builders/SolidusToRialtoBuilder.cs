@@ -11,7 +11,9 @@ namespace Rialto.LogicLayer.Builders
     {
         #region Private static consts
 
-        private static string _DEFAULT_PASSWORD = "$2a$10$n8gKFcm6QD5K9rsq3Bk.vO5Y56gOFGkGmyQqei6QXqlpvojgSmGwu";
+        //private static string _DEFAULT_PASSWORD = "$2a$10$n8gKFcm6QD5K9rsq3Bk.vO5Y56gOFGkGmyQqei6QXqlpvojgSmGwu";
+        
+        private static string _DEFAULT_PASSWORD = "$2a$10$jmV1pqMzXnwUTWtRsPaBeu.TlRMsUfAIHDKktmS3yqNfyUzuCTr8O";
 
         #endregion
 

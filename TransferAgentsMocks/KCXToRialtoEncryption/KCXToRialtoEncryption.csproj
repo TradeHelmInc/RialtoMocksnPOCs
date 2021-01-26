@@ -54,6 +54,9 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="keys\Rialto\kcx_pub_key_4096.pem">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="keys\Rialto\priv_key_4096.pem">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

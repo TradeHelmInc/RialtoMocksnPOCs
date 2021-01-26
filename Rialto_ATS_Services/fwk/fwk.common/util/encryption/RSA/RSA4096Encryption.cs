@@ -1,4 +1,7 @@
-﻿using Org.BouncyCastle.Crypto;
+﻿using System;
+using System.IO;
+using System.Text;
+using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Digests;
 using Org.BouncyCastle.Crypto.Encodings;
 using Org.BouncyCastle.Crypto.Engines;
@@ -6,15 +9,8 @@ using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.OpenSsl;
 using Org.BouncyCastle.Security;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace fwk.Common.util.encryption.RSA
+namespace fwk.common.util.encryption.RSA
 {
     public class RSA4096Encryption
     {
@@ -75,12 +71,12 @@ namespace fwk.Common.util.encryption.RSA
 
         #region Public Methods
 
-        public static string DecryptWithPrivate(string textToDecrypt, string privKeyPemFile)
+        public static string DecryptWithPrivate(string textToDecrypt, string privKeyPemFilePath)
         {
             RsaPrivateCrtKeyParameters key;
             string privateKey = "";
 
-            using (var reader = File.OpenText(privKeyPemFile))
+            using (var reader = File.OpenText(privKeyPemFilePath))
             {
                 privateKey = reader.ReadToEnd();
                 var pr = new PemReader(new StringReader(privateKey));

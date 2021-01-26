@@ -31,6 +31,15 @@
       <None Update="KCXKeys\EncRSAPrivateKey.txt">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="KCXKeys\KCXPublicKey.pem">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="KCXKeys\DecRSAPrivateKey_4096.pem">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="KCXKeys\EncRSAPrivateKey_4096.pem">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>

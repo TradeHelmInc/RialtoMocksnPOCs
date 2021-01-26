@@ -187,6 +187,9 @@ namespace Rialto.DataAccessLayer
 
             cmd.Parameters.AddWithValue("@large_trader_flag", shareholder.LargeTraderFlag);
             cmd.Parameters["@large_trader_flag"].Direction = ParameterDirection.Input;
+            
+            cmd.Parameters.AddWithValue("@onboarding_status", shareholder.OnboardingStatus);
+            cmd.Parameters["@onboarding_status"].Direction = ParameterDirection.Input;
 
 
             MySqlDataReader reader;

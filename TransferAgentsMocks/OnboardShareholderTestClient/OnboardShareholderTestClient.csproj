@@ -68,6 +68,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="4096msg_part1.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="4096msg_part2.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="enc_iv.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

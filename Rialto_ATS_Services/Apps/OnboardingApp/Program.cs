@@ -43,25 +43,28 @@ namespace OnboardingApp
                 string onboardingServiceURL = ConfigurationManager.AppSettings["OnboardingServiceURL"];
                 //string kcxKeyAndIVPath = ConfigurationManager.AppSettings["KCXKeyAndIVPath"];
                 
-                string kcxEncryptedKeyAndIVPath = ConfigurationManager.AppSettings["KCXEncryptedKeyAndIVPath"];
-                string kcxDeccryptedKeyAndIVPath = ConfigurationManager.AppSettings["KCXDecryptedKeyAndIVPath"];
+                // string kcxEncryptedKeyAndIVPath = ConfigurationManager.AppSettings["KCXEncryptedKeyAndIVPath"];
+                // string kcxDeccryptedKeyAndIVPath = ConfigurationManager.AppSettings["KCXDecryptedKeyAndIVPath"];
+                // bool AESKeyEncrypted = Convert.ToBoolean(ConfigurationManager.AppSettings["AESSKeyEncrypted"]);
+                // string kcxKeyAndIV = AESKeyEncrypted ? FileLoader.GetFileContent(kcxEncryptedKeyAndIVPath) : FileLoader.GetFileContent(kcxDeccryptedKeyAndIVPath);
 
                 string kcxEncryptedRSAPrivateKeyPath = ConfigurationManager.AppSettings["KCXEncryptedRSAPrivateKeyPath"];
                 string kcxDeccryptedRSAPrivateKeyPath = ConfigurationManager.AppSettings["KCXDeccryptedRSAPrivateKeyPath"];
+                string kcxPublicKeyPath = ConfigurationManager.AppSettings["KCXPublicKeyPath"];
 
-                bool AESKeyEncrypted = Convert.ToBoolean(ConfigurationManager.AppSettings["AESSKeyEncrypted"]);
+                
                 bool RSAKeyEncrypted = Convert.ToBoolean(ConfigurationManager.AppSettings["RSAPrivateKeyEncrypted"]);
 
                 logger.DoLog("Initializing Onboarding app service", MessageType.Information);
                 logger.DoLog("Extracting AES key", MessageType.Information);
-                string kcxKeyAndIV = AESKeyEncrypted ? FileLoader.GetFileContent(kcxEncryptedKeyAndIVPath) : FileLoader.GetFileContent(kcxDeccryptedKeyAndIVPath);
+                
 
                 string kcxRSAPrivateKeyPath = RSAKeyEncrypted ? kcxEncryptedRSAPrivateKeyPath : kcxDeccryptedRSAPrivateKeyPath;
                 
                 //string kcxKeyAndIV = FileLoader.GetFileContent(kcxKeyAndIVPath);
 
-                ManagementService transService = new ManagementService(tradingCS, orderCS, onboardingServiceURL, kcxURL, kcxKeyAndIV, AESKeyEncrypted,
-                    kcxRSAPrivateKeyPath, RSAKeyEncrypted, solidusURL, logger);
+                ManagementService transService = new ManagementService(tradingCS, orderCS, onboardingServiceURL, kcxURL,kcxPublicKeyPath,
+                                                                        kcxRSAPrivateKeyPath, RSAKeyEncrypted, solidusURL, logger);
 
                 transService.Run();
 
