@@ -1,4 +1,5 @@
 ﻿using fwk.Common.util.encryption.common;
+using Rialto.Rialto.Common.DTO.Generic;
 using Rialto.Rialto.ServiceLayer.Client.KCX;
 using System;
 using System.Collections.Generic;
@@ -65,12 +66,16 @@ namespace OnboardShareholderTestClient
 
                 string part1 = ConfigurationManager.AppSettings["4096Enc_Part1"];
                 string part2 = ConfigurationManager.AppSettings["4096Enc_Part2"];
-                svcClient.OnKCXOnboardingApproved_4096(part1, part2);
-            
+                TransactionResponse txResp =  svcClient.OnKCXOnboardingApproved_4096(part1, part2);
+
+                if (txResp.Success)
+                {
+                    Console.WriteLine(" Finished successfully invoking onbarding signal service");
+                }
+                else
+                    Console.WriteLine("Error invoking onboarding service:" + txResp.Error.msg);
             }
             
-
-            Console.WriteLine(" Finished invoking onbarding signal service");
             Console.ReadLine();
         }
     }

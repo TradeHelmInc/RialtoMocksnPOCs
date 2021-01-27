@@ -12,9 +12,9 @@ namespace Rialto.BusinessEntities
 
         public static string _CREATED_BY_ONBOARDING_SERVICE = "onboarding_service";
 
-        public static string _ROLE_USER = "USER_ROLE";
+        public static string _ROLE_USER = "ROLE_USER";
 
-        public static string _ROLE_ADMIN = "ADMIN_ROLE";
+        public static string _ROLE_ADMIN = "ROLE_ADMIN";
 
         #endregion
 
