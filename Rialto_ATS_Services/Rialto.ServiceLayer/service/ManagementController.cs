@@ -8,6 +8,7 @@ using System.IO;
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 
 namespace Rialto.ServiceLayer.service
@@ -19,6 +20,7 @@ namespace Rialto.ServiceLayer.service
     public delegate string OnKCXOnboardingStarted(string koreShareholderId);
 
     //public class ManagementController : Controller
+    [ApiController]
     public class ManagementController : BaseController
     {
 
@@ -44,44 +46,44 @@ namespace Rialto.ServiceLayer.service
 
         [Route("[controller]/OnKCXOnboardingApproved_4096")]
         [HttpPost]
-        public string Post()
+        public string  Post(HttpRequest Rq)
         {
-               try
-            {
-                
-                string jsonInput = GetBody(Request.Body, Encoding.UTF8);
-                OnKCXOnboardingApproved4096DTO onKCXOnboardingApproved = null;
-                try
-                {
-                    onKCXOnboardingApproved = JsonConvert.DeserializeObject<OnKCXOnboardingApproved4096DTO>(jsonInput);
-                    Logger.DoLog(string.Format("Incoming OnKCXOnboardingApproved for 4096 bits key received:{0}",
-                        onKCXOnboardingApproved.GetCSV()), fwk.Common.enums.MessageType.Information);
-                }
-                catch (Exception ex)
-                {
-                    string msg = string.Format("Could not process input json {1}:{0}", jsonInput, ex.Message);
-                    Logger.DoLog(msg, fwk.Common.enums.MessageType.Error);
-                    throw new Exception(msg);
-                }
+         
+        try
+         {
+             string jsonInput = GetBody(Rq.Body, Encoding.UTF8);
+             OnKCXOnboardingApproved4096DTO onKCXOnboardingApproved = null;
+             try
+             {
+                 onKCXOnboardingApproved = JsonConvert.DeserializeObject<OnKCXOnboardingApproved4096DTO>(jsonInput);
+                 Logger.DoLog(string.Format("Incoming OnKCXOnboardingApproved for 4096 bits key received:{0}",
+                     onKCXOnboardingApproved.GetCSV()), fwk.Common.enums.MessageType.Information);
+             }
+             catch (Exception ex)
+             {
+                 string msg = string.Format("Could not process input json {1}:{0}", jsonInput, ex.Message);
+                 Logger.DoLog(msg, fwk.Common.enums.MessageType.Error);
+                 throw new Exception(msg);
+             }
 
-                string txtId = OnKCXOnboardingApproved_4096( onKCXOnboardingApproved.Params);
+             string txtId = OnKCXOnboardingApproved_4096( onKCXOnboardingApproved.Params);
 
-                Logger.DoLog("OnKCXOnboardingApproved for 4096 bits key successfully processed", fwk.Common.enums.MessageType.Information);
+             Logger.DoLog("OnKCXOnboardingApproved for 4096 bits key successfully processed", fwk.Common.enums.MessageType.Information);
 
-                TransactionResponse txResp = new TransactionResponse() { Success = true, Id = new IdEntity() { id = txtId } };
+             TransactionResponse txResp = new TransactionResponse() { Success = true, Id = new IdEntity() { id = txtId } };
 
-                return JsonConvert.SerializeObject(txResp);
-            }
-            catch (Exception ex)
-            {
-                string msg = string.Format("Error @OnKCXOnboardingApproved :{0}", ex.Message);
-                Logger.DoLog(msg, fwk.Common.enums.MessageType.Error);
-                TransactionResponse txError =  CreateTransactionError(ex.Message);
-                return JsonConvert.SerializeObject(txError);
-            }
+             return JsonConvert.SerializeObject(txResp);
+         }
+         catch (Exception ex)
+         {
+             string msg = string.Format("Error @OnKCXOnboardingApproved :{0}", ex.Message);
+             Logger.DoLog(msg, fwk.Common.enums.MessageType.Error);
+             TransactionResponse txError =  CreateTransactionError(ex.Message);
+             return JsonConvert.SerializeObject(txError);
+         }
         }
 
-        /*[Route("[controller]/OnKCXOnboardingApproved")]
+        [Route("[controller]/OnKCXOnboardingApproved")]
         [HttpPost]
         public string Post()
         {
@@ -123,7 +125,7 @@ namespace Rialto.ServiceLayer.service
                 TransactionResponse txError =  CreateTransactionError(ex.Message);
                 return JsonConvert.SerializeObject(txError);
             }
-        }*/
+        }
        
         #endregion
     }

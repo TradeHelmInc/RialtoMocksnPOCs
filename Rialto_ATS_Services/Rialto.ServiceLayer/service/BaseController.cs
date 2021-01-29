@@ -6,6 +6,7 @@ using fwk.ServiceLayer.REST;
 //using Microsoft.AspNetCore.Mvc;
 using Rialto.Common.DTO.Generic;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace Rialto.ServiceLayer.service
 {
@@ -32,6 +33,18 @@ namespace Rialto.ServiceLayer.service
             };
 
             return error;
+        }
+        
+        public string CreateStrTransactionError(string msg)
+        {
+            //Error = new ErrorMessage { code = 500, msg = msg }
+
+            TransactionResponse error = new TransactionResponse()
+            {
+                Success = false,Error  = new ErrorMessage { code = 500, msg = msg }
+            };
+            
+            return JsonConvert.SerializeObject(error);
         }
 
         public GetResponse CreateGetError(string msg)

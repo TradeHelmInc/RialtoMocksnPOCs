@@ -483,11 +483,11 @@ namespace Rialto.LogicLayer
                 string koreChainId = JSONExtractor.GetJSONKey("KoreChainID", koreChainAndKeys);
                 string secret_Key = JSONExtractor.GetJSONKey("Secret_Key", koreChainAndKeys);
                 string IV = JSONExtractor.GetJSONKey("IV", koreChainAndKeys);
-                string koreCompamyId = "f8ce5b0d60a944b523ad166225e03a68f9bb86d1c5b30a67a8dbebf54ee8c24c";// missing kore company id!
+                string koreCompanyId = JSONExtractor.GetJSONKey("KoreCompanyID", koreChainAndKeys);
                 //We cannot use NewtonSoft library becuase the secret and IV might contains quotes (") which might make it fail
                 //KoreChainAndKeysDTO korechainKeysDTO = JsonConvert.DeserializeObject<KoreChainAndKeysDTO>(koreChainAndKeys);
 
-                return OnKCXOnboardingApproved(koreChainId, "", secret_Key, IV);
+                return OnKCXOnboardingApproved(koreChainId, koreCompanyId, secret_Key, IV);
             }
             catch (Exception ex)
             {

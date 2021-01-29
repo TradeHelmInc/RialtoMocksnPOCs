@@ -14,9 +14,10 @@ namespace TestSelfHost2
         }
         
         public void Configure(IApplicationBuilder app){
-            /*app.Run(context => {
-                return context.Response.WriteAsync("Hello world");
-            });*/
+            app.Run(context => {
+                Console.WriteLine("Aca:"+DateTime.Now);
+                return context.Response.WriteAsync("Hello world2");
+            });
             
             app.UseMvc();
             

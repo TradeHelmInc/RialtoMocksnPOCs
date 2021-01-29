@@ -3,20 +3,25 @@ using Rialto.LogicLayer;
 using Rialto.ServiceLayer.service;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using fwk.Common.util.logger;
 using Rialto.ServiceLayer.config;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
+using Rialto.Common.DTO.Generic;
+using Rialto.Common.DTO.Services;
 
 
 namespace Rialto.ServiceLayer
 {
     
-
+  
     public class ManagementService
     {
 
@@ -92,15 +97,17 @@ namespace Rialto.ServiceLayer
             //ManagementController.OnKCXOnboardingStarted += OnKCXOnboardingStarted;
 
             ManagementController.Logger = Logger;
+            //ManagementStartup.Logger = Logger;
             
             var host = new WebHostBuilder()
                 .UseKestrel()
                 .UseUrls(ManagementServiceURL)
-                .UseStartup<Startup>()
+                .UseStartup<ManagementStartup>()
                 .Build();
 
             host.RunAsync();
-      
+            //host.Run();
+            
             //SwaggerConfig.Register(config);
             //WebApiConfig.Register(config);
         }

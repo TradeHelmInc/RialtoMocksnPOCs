@@ -1,42 +1,17 @@
-﻿using fwk.Common.enums;
-using fwk.Common.interfaces;
-using fwk.Common.util.encryption.common;
-using Rialto.ServiceLayer;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Configuration;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using fwk.Common.enums;
+using fwk.Common.interfaces;
 using fwk.Common.util.logger;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Http;
-//using ToolsShared.Logging;
+using Rialto.ServiceLayer;
+using Rialto.ServiceLayer.config;
 
-namespace OnboardingApp
+namespace OnboardingApp2
 {
-    public class Startup{
-
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddMvc();
-        }
-        
-        public void Configure(IApplicationBuilder app){
-            app.Run(context => {
-                Console.WriteLine("Aca:"+DateTime.Now);
-                return context.Response.WriteAsync("Hello world2");
-            });
-            
-            app.UseMvc();
-            
-            
-        }
-    }
-    
     class Program : ILogger
     {
         #region Protected Attributes
@@ -52,22 +27,16 @@ namespace OnboardingApp
 
         #endregion
 
+        
         static void Main(string[] args)
         {
             Program logger = new Program() {Logger = new Logger(ConfigurationManager.AppSettings["DebugLevel"])};
 
             try
             {
-                var host = new WebHostBuilder()
-                    .UseKestrel()
-                    //.UseUrls(ManagementServiceURL)
-                    .UseStartup<Startup>()
-                    .Build();
-
-                //host.RunAsync();
-                host.Run();
+           
                 
-                /*string tradingCS = ConfigurationManager.AppSettings["TradingDBConnectionString"];
+                string tradingCS = ConfigurationManager.AppSettings["TradingDBConnectionString"];
                 string orderCS = ConfigurationManager.AppSettings["OrdersDBConnectionString"];
                 string kcxURL = ConfigurationManager.AppSettings["KCXURL"];
                 string solidusURL = ConfigurationManager.AppSettings["SolidusURL"];
@@ -87,11 +56,9 @@ namespace OnboardingApp
                 bool RSAKeyEncrypted = Convert.ToBoolean(ConfigurationManager.AppSettings["RSAPrivateKeyEncrypted"]);
 
                 logger.DoLog("Initializing Onboarding app service", MessageType.Information);
-                logger.DoLog("Extracting AES key", MessageType.Information);
                 
-
+                //logger.DoLog("Extracting AES key", MessageType.Information);
                 string kcxRSAPrivateKeyPath = RSAKeyEncrypted ? kcxEncryptedRSAPrivateKeyPath : kcxDeccryptedRSAPrivateKeyPath;
-                
                 //string kcxKeyAndIV = FileLoader.GetFileContent(kcxKeyAndIVPath);
 
                 ManagementService transService = new ManagementService(tradingCS, orderCS, onboardingServiceURL, kcxURL,kcxPublicKeyPath,
@@ -101,7 +68,7 @@ namespace OnboardingApp
 
                 logger.DoLog(string.Format("Onboarding Service successfully initialized at {0}", onboardingServiceURL), MessageType.Information);
 
-                Console.ReadKey();*/
+                Console.ReadKey();
             }
             catch (Exception ex)
             {

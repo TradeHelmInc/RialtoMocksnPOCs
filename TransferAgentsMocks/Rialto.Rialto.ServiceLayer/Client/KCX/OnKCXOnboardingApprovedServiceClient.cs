@@ -27,7 +27,7 @@ namespace Rialto.Rialto.ServiceLayer.Client.KCX
 
         protected static string _ON_ONBOARDING_APPROVED = "/Management/OnKCXOnboardingApproved/";
 
-        protected static string _ON_ONBOARDING_APPROVED_4096 = "/Management/OnKCXOnboardingApproved_4096/";
+        protected static string _ON_ONBOARDING_APPROVED_4096 = "/Management/OnKCXOnboardingApproved_4096";
 
         #endregion
 
