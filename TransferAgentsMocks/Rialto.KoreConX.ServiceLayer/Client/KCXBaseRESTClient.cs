@@ -99,11 +99,15 @@ namespace Rialto.KoreConX.ServiceLayer.Client
                 var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
                 requestMessage.Headers.Add("Accept", "application/json");
                 requestMessage.Headers.Add("ContentType", "application/json");
-                httpClient.DefaultRequestHeaders.Authorization =
-                 new AuthenticationHeaderValue(
-                     "Basic", Convert.ToBase64String(
-                         System.Text.ASCIIEncoding.ASCII.GetBytes(
-                            "admin:7nA9Bj7NaeND")));
+
+                if (User != null && Password != null)
+                {
+                    httpClient.DefaultRequestHeaders.Authorization =
+                     new AuthenticationHeaderValue(
+                         "Basic", Convert.ToBase64String(
+                             System.Text.ASCIIEncoding.ASCII.GetBytes(
+                                string.Format("{0}:{1}", User, Password))));
+                }
                 try
                 {
                     content = httpClient.SendAsync(requestMessage).Result.Content.ReadAsStringAsync().Result;
@@ -126,6 +130,9 @@ namespace Rialto.KoreConX.ServiceLayer.Client
 
             request.Method = "POST";
             request.ContentType = "application/json";
+            if (User != null && Password != null)
+                request.Headers.Add("Authorization", "Basic " + string.Format("{0}:{1}", User, Password));
+
 
             foreach (string key in headers.Keys)
             {

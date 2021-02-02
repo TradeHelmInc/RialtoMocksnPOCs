@@ -210,8 +210,10 @@ namespace HoldReleasePOC
         static void Main(string[] args)
         {
             string BaseURL = ConfigurationManager.AppSettings["BaseURL"];
+            string User = ConfigurationManager.AppSettings["User"];
+            string Password = ConfigurationManager.AppSettings["Password"];
 
-            HoldingsServiceClient  = new HoldingsServiceClient(BaseURL);
+            HoldingsServiceClient = new HoldingsServiceClient(BaseURL, User, Password);
 
             OnSell();
 

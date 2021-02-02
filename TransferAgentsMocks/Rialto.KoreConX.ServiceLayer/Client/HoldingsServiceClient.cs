@@ -15,10 +15,14 @@ namespace Rialto.KoreConX.ServiceLayer.Client
     {
         #region Constructors
 
-        public HoldingsServiceClient(string pBaseURL)
+        public HoldingsServiceClient(string pBaseURL, string pUser=null, string pPassword = null)
         {
 
             BaseURL = pBaseURL;
+
+            User = pUser;
+
+            Password = pPassword;
         
         }
 

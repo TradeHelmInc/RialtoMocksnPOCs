@@ -13,11 +13,15 @@ namespace Rialto.KoreConX.ServiceLayer.Client
     {
         #region Constructors
 
-        public PersonsServiceClient(string pBaseURL)
+        public PersonsServiceClient(string pBaseURL, string pUser, string pPassword)
         {
 
             BaseURL = pBaseURL;
-        
+
+            User = pUser;
+
+            Password = pPassword;
+
         }
 
         #endregion
