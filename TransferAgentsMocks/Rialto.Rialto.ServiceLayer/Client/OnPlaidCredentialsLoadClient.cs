@@ -24,7 +24,7 @@ namespace Rialto.Rialto.ServiceLayer.Client
 
         #region Protected Static Consts
 
-        protected static string _ON_PLAID_CREDENTIALS_LOAD = "/plaid/OnPlaidCredentialsLoad/";
+        protected static string _ON_PLAID_CREDENTIALS_LOAD = "/Plaid/OnPlaidCredentialsLoad";
 
         #endregion
 

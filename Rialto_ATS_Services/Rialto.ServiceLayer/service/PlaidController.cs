@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using fwk.Common.interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Rialto.Common.DTO.Generic;
@@ -24,11 +25,11 @@ namespace Rialto.ServiceLayer.service
         
         [Route("[controller]/OnPlaidCredentialsLoad")]
         [HttpPost]
-        public string Post()
+        public string Post(HttpRequest Rq)
         {
             try
             {
-                string jsonInput = GetBody(Request.Body, Encoding.UTF8);
+                string jsonInput = GetBody(Rq.Body, Encoding.UTF8);
                 OnPlaidCredentialsLoadDTO onPlaidCredentialsLoaddDTO = null;
                 try
                 {

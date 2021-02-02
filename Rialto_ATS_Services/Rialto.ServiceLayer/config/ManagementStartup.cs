@@ -44,7 +44,5 @@ namespace Rialto.ServiceLayer.config
             
             app.UseMvc();
         }
-
-    
     }
 }

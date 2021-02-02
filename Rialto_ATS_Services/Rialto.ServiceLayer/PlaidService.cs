@@ -64,8 +64,10 @@ namespace Rialto.ServiceLayer
             var host = new WebHostBuilder()
                 .UseKestrel()
                 .UseUrls(PlaidServiceURL)
-                .UseStartup<Startup>()
+                .UseStartup<PlaidStartup>()
                 .Build();
+                
+                
 
             host.RunAsync();
       
