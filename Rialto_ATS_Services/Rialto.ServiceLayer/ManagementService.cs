@@ -39,25 +39,13 @@ namespace Rialto.ServiceLayer
 
         #region Constructors
         
-        public ManagementService(string pTradingCS, string pOrderCS, string pManagementServiceURL, string pKcxURL, string kcxKeyAndIV, bool pAESKeyEncrypted,
+        public ManagementService(string pTradingCS, string pOrderCS, string pManagementServiceURL, string pKcxName, string pKCXPublicKeyPath,
             string pRASPrivateKeyPath, bool pRSAKeyEncrypted, string pSolidusURL, ILogger pLogger)
         {
 
             ManagementServiceURL = pManagementServiceURL;
 
-            ManagementLogic = new ManagementLogic(pTradingCS, pOrderCS, pKcxURL, kcxKeyAndIV, pAESKeyEncrypted, pRASPrivateKeyPath, pRSAKeyEncrypted, pSolidusURL, pLogger);
-
-            Logger = pLogger;
-
-        }
-
-        public ManagementService(string pTradingCS, string pOrderCS, string pManagementServiceURL, string pKcxURL, string pKCXPublicKeyPath,
-            string pRASPrivateKeyPath, bool pRSAKeyEncrypted, string pSolidusURL, ILogger pLogger)
-        {
-
-            ManagementServiceURL = pManagementServiceURL;
-
-            ManagementLogic = new ManagementLogic(pTradingCS, pOrderCS, pKcxURL, pKCXPublicKeyPath, pRASPrivateKeyPath, pRSAKeyEncrypted, pSolidusURL, pLogger);
+            ManagementLogic = new ManagementLogic(pTradingCS, pOrderCS, pKcxName, pKCXPublicKeyPath, pRASPrivateKeyPath, pRSAKeyEncrypted, pSolidusURL, pLogger);
 
             Logger = pLogger;
 

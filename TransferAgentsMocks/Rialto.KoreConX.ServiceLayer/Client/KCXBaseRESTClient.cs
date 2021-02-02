@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -94,9 +95,15 @@ namespace Rialto.KoreConX.ServiceLayer.Client
 
             using (var httpClient = new HttpClient())
             {
+                //httpClient.DefaultRequestHeaders.Authorization =new AuthenticationHeaderValue("Bearer", "YWRtaW46N25BOUJqN05hZU5E");
                 var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
                 requestMessage.Headers.Add("Accept", "application/json");
                 requestMessage.Headers.Add("ContentType", "application/json");
+                httpClient.DefaultRequestHeaders.Authorization =
+                 new AuthenticationHeaderValue(
+                     "Basic", Convert.ToBase64String(
+                         System.Text.ASCIIEncoding.ASCII.GetBytes(
+                            "admin:7nA9Bj7NaeND")));
                 try
                 {
                     content = httpClient.SendAsync(requestMessage).Result.Content.ReadAsStringAsync().Result;

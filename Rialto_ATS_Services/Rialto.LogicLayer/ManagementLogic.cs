@@ -17,8 +17,10 @@ using System.Transactions;
 using fwk.common.util.encryption.RSA;
 using fwk.common.util.serialization;
 using Rialto.BusinessEntities;
+using Rialto.BusinessEntities.KoreConX;
 using Rialto.BusinessEntities.Plaid;
 using Rialto.Common.DTO.Services;
+using Rialto.DataAccessLayer.KoreConX;
 using Rialto.DataAccessLayer.Plaid;
 using Shareholder = Rialto.Solidus.Common.DTO.Shareholders.Shareholder;
 
@@ -45,6 +47,8 @@ namespace Rialto.LogicLayer
         protected AccountManager AccountManager { get; set; }
         
         protected TransferAgentManager TransferAgentManager { get; set; }
+        
+        protected KCXConnectionSettingManager KCXConnectionSettingManager { get; set; }
         
         protected PlaidCredentialsManager PlaidCredentialsManager { get; set; }
 
@@ -79,7 +83,7 @@ namespace Rialto.LogicLayer
         #region Constructors
 
         public ManagementLogic(string pTradingConnectionString, string pOrderConnectionString,
-                                string pKCXURL, string pKCXKeyAndIV, bool pAESKeyEncrypted,string pRASPrivateKeyPath, bool pRSAKeyEncrypted, string pSolidusURL, ILogger pLogger)
+                                string pKCXName, string pKCXKeyAndIV, bool pAESKeyEncrypted,string pRASPrivateKeyPath, bool pRSAKeyEncrypted, string pSolidusURL, ILogger pLogger)
         {
             ShareholderManager = new ShareholderManager(pTradingConnectionString);
 
@@ -91,7 +95,7 @@ namespace Rialto.LogicLayer
 
             #region KCX
 
-            PersonsServiceClient = new PersonsServiceClient(pKCXURL);
+            LoadKoreConXNodeClient(pTradingConnectionString, pKCXName);
 
             AESmanager = new AESManager(pKCXKeyAndIV, pAESKeyEncrypted);
 
@@ -111,7 +115,7 @@ namespace Rialto.LogicLayer
         }
         
         public ManagementLogic(string pTradingConnectionString, string pOrderConnectionString,
-            string pKCXURL, string pKCXPublicKeyPath,string pRSAPrivateKeyPath, bool pRSAKeyEncrypted, string pSolidusURL, ILogger pLogger)
+            string pKCXName, string pKCXPublicKeyPath,string pRSAPrivateKeyPath, bool pRSAKeyEncrypted, string pSolidusURL, ILogger pLogger)
         {
             ShareholderManager = new ShareholderManager(pTradingConnectionString);
 
@@ -123,7 +127,7 @@ namespace Rialto.LogicLayer
 
             #region KCX
 
-            PersonsServiceClient = new PersonsServiceClient(pKCXURL);
+            LoadKoreConXNodeClient(pTradingConnectionString, pKCXName);
 
             RSAEncryption = new RSAEncryption(pRSAPrivateKeyPath, pRSAKeyEncrypted);
 
@@ -169,6 +173,33 @@ namespace Rialto.LogicLayer
         #region Private Methods
 
         #region KoreConX
+
+        private void LoadKoreConXNodeClient(string pTradingConnectionString, string pKCXName)
+        {
+            KCXConnectionSettingManager = new KCXConnectionSettingManager(pTradingConnectionString);
+
+            TransferAgent kcxAgent = TransferAgentManager.GetTransferAgent(pKCXName);
+
+            if (kcxAgent == null)
+                throw new Exception(string.Format("Could not find transfer agent row <table transfer_agents> for Kore Con X with name {0}", pKCXName));
+
+            KoreConXConnectionSetting kcxSetting = KCXConnectionSettingManager.GetKCXConnectionSettings(kcxAgent.Id);
+            
+            if(kcxSetting==null)
+                throw new Exception(string.Format("Could not find transfer agent settomgs <table kcx_connection_setting> for Kore Con X with name {0}", pKCXName));
+
+            PersonsServiceClient = new PersonsServiceClient(kcxSetting.URL, kcxSetting.User, kcxSetting.Password);
+        }
+
+        private string GetATSKoreChainId(TransferAgent ta)
+        {
+            KoreConXConnectionSetting kcxSetting = KCXConnectionSettingManager.GetKCXConnectionSettings(ta.Id);
+            
+            if(kcxSetting==null)
+                throw new Exception(string.Format("Could not find transfer agent settomgs <table kcx_connection_setting> for Kore Con X with Id {0}", ta.Id));
+
+            return kcxSetting.ATSId;
+        }
 
         private void ProcessKCXShareholderError(string koreShareholderId,PersonResponse personResp)
         {
@@ -251,9 +282,7 @@ namespace Rialto.LogicLayer
 
                 try
                 {
-                    //TODO: Correct incoming misspelling!
-                    pdField = pdField.Replace("first_name", "\"first_name");
-                    pdField = pdField.Replace("\"\"country", "\",\"country");
+
                     PersonMainInfo personUnEncr = JsonConvert.DeserializeObject<PersonMainInfo>(pdField);
 
                     return personUnEncr;
@@ -511,7 +540,7 @@ namespace Rialto.LogicLayer
                 if (transferAgent == null)
                     throw new Exception(string.Format("Could not find Kore Chain Id for ATS. Transfer Agent = {0}",TransferAgentManager._KCX_ID));
                 
-                PersonResponse personResp = PersonsServiceClient.RequestPerson(koreShareholderId,companyKoreChainId,transferAgent.TransferAgentATSId);
+                PersonResponse personResp = PersonsServiceClient.RequestPerson(koreShareholderId,companyKoreChainId,GetATSKoreChainId(transferAgent));
 
                 if (personResp != null && personResp.data != null)
                 {
@@ -570,8 +599,7 @@ namespace Rialto.LogicLayer
                 
                 //1-Validate that the KoreShareholderId has an onboarding started  
                 Logger.DoLog(string.Format("Requesting personal data for Kore Shareholder Id {0}", koreShareholderId), fwk.Common.enums.MessageType.Information);
-                PersonResponse personResp = PersonsServiceClient.RequestPerson(koreShareholderId, companyKoreChainId,
-                                                                               transferAgent.TransferAgentATSId);
+                PersonResponse personResp = PersonsServiceClient.RequestPerson(koreShareholderId, companyKoreChainId,GetATSKoreChainId(transferAgent));
 
                 //Now we have to send this to Solidus --> Decrypt?
 

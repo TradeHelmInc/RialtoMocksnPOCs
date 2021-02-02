@@ -38,7 +38,7 @@ namespace OnboardingApp2
                 
                 string tradingCS = ConfigurationManager.AppSettings["TradingDBConnectionString"];
                 string orderCS = ConfigurationManager.AppSettings["OrdersDBConnectionString"];
-                string kcxURL = ConfigurationManager.AppSettings["KCXURL"];
+                string kcxName = ConfigurationManager.AppSettings["KCXName"];
                 string solidusURL = ConfigurationManager.AppSettings["SolidusURL"];
                 string onboardingServiceURL = ConfigurationManager.AppSettings["OnboardingServiceURL"];
                 //string kcxKeyAndIVPath = ConfigurationManager.AppSettings["KCXKeyAndIVPath"];
@@ -61,7 +61,7 @@ namespace OnboardingApp2
                 string kcxRSAPrivateKeyPath = RSAKeyEncrypted ? kcxEncryptedRSAPrivateKeyPath : kcxDeccryptedRSAPrivateKeyPath;
                 //string kcxKeyAndIV = FileLoader.GetFileContent(kcxKeyAndIVPath);
 
-                ManagementService transService = new ManagementService(tradingCS, orderCS, onboardingServiceURL, kcxURL,kcxPublicKeyPath,
+                ManagementService transService = new ManagementService(tradingCS, orderCS, onboardingServiceURL, kcxName,kcxPublicKeyPath,
                                                                         kcxRSAPrivateKeyPath, RSAKeyEncrypted, solidusURL, logger);
 
                 transService.Run();

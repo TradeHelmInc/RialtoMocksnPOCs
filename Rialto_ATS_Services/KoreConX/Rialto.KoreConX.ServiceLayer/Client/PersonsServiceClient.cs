@@ -13,11 +13,15 @@ namespace Rialto.KoreConX.ServiceLayer.Client
     {
         #region Constructors
 
-        public PersonsServiceClient(string pBaseURL)
+        public PersonsServiceClient(string pBaseURL, string pUser, string pPassword)
         {
 
             BaseURL = pBaseURL;
-        
+
+            UserName = pUser;
+
+            Password = pPassword;
+
         }
 
         #endregion
@@ -62,7 +66,7 @@ namespace Rialto.KoreConX.ServiceLayer.Client
             Dictionary<string, string> param = new Dictionary<string, string>();
             param.Add("company_id", companyKoreChainId);
             param.Add("requestor_id", ATSId);
-            return ProcessDataResponse(DoGetJson(url, param));
+            return ProcessDataResponse(DoGetJson(url, param,UserName,Password));
         }
 
         #endregion

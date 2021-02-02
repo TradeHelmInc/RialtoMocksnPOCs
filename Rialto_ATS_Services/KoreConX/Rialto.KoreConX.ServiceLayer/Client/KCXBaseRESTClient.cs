@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -76,7 +77,8 @@ namespace Rialto.KoreConX.ServiceLayer.Client
         }
 
 
-        protected ValidationResponse DoGetJson(string url, Dictionary<string, string> body)
+        protected ValidationResponse DoGetJson(string url, Dictionary<string, string> body, string user = null,
+                                                string pwd = null)
         {
             string content = string.Empty;
 
@@ -97,6 +99,14 @@ namespace Rialto.KoreConX.ServiceLayer.Client
                 var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
                 requestMessage.Headers.Add("Accept", "application/json");
                 requestMessage.Headers.Add("ContentType", "application/json");
+
+                if (user != null && pwd != null)
+                {
+                    httpClient.DefaultRequestHeaders.Authorization =
+                        new AuthenticationHeaderValue(
+                            "Basic", Convert.ToBase64String(System.Text.ASCIIEncoding.ASCII.GetBytes(string.Format("{0}:{1}", user, pwd))));
+                }
+
                 try
                 {
                     content = httpClient.SendAsync(requestMessage).Result.Content.ReadAsStringAsync().Result;

@@ -14,6 +14,10 @@ namespace fwk.ServiceLayer.REST
         #region Protected Attributes
 
         protected string BaseURL { get; set; }
+        
+        protected string UserName { get; set; }
+        
+        protected string Password { get; set; }
 
         #endregion
 
