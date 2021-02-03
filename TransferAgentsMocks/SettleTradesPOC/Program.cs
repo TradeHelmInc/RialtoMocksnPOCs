@@ -159,9 +159,11 @@ namespace SettleTradesPOC
 
             string TransferServiceREST = ConfigurationManager.AppSettings["TransferServiceURL"];
             string GetTradesServiceREST = ConfigurationManager.AppSettings["GetTradesServiceURL"];
+            string User = ConfigurationManager.AppSettings["User"];
+            string Password = ConfigurationManager.AppSettings["Password"];
 
-            TransferServiceClient = new TransferServiceClient(TransferServiceREST);
-            GetTradesServiceClient = new GetTradesServiceClient(GetTradesServiceREST);
+            TransferServiceClient = new TransferServiceClient(TransferServiceREST, User,Password);
+            GetTradesServiceClient = new GetTradesServiceClient(GetTradesServiceREST, User, Password);
             try
             {
                 ShowCommands();

@@ -12,11 +12,15 @@ namespace Rialto.Rialto.ServiceLayer.Client
     {
         #region Constructors
 
-        public GetTradesServiceClient(string pBaseURL)
+        public GetTradesServiceClient(string pBaseURL, string pUser, string pPassword)
         {
 
             BaseURL = pBaseURL;
-        
+
+            User = pUser;
+
+            Password = pPassword;
+
         }
 
         #endregion

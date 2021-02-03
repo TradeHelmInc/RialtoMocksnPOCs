@@ -131,10 +131,13 @@ namespace Rialto.KoreConX.ServiceLayer.Client
             request.Method = "POST";
             request.ContentType = "application/json";
             if (User != null && Password != null)
-                request.Headers.Add("Authorization", "Basic " + string.Format("{0}:{1}", User, Password));
+            {
+                String encoded = System.Convert.ToBase64String(System.Text.Encoding.GetEncoding("ISO-8859-1").GetBytes(User + ":" + Password));
+                request.Headers.Add("Authorization", "Basic "+ encoded);
+            }
 
 
-            foreach (string key in headers.Keys)
+                foreach (string key in headers.Keys)
             {
                 request.Headers[key] = headers[key];
             }

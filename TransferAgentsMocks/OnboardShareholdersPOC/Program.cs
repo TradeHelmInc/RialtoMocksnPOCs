@@ -76,6 +76,9 @@ namespace OnboardShareholdersPOC
         static void Main(string[] args)
         {
             string BaseURL = ConfigurationManager.AppSettings["BaseURL"];
+            string User = ConfigurationManager.AppSettings["User"];
+            string Password = ConfigurationManager.AppSettings["Password"];
+
             KoreATSId = ConfigurationManager.AppSettings["KoreATSId"];
             CompanyId = ConfigurationManager.AppSettings["CompanyId"];
             KoreSecurityId = ConfigurationManager.AppSettings["KoreSecurityId"];
@@ -84,8 +87,8 @@ namespace OnboardShareholdersPOC
 
             AESDeccrypter = new AESManager(FileLoader.GetFileContent(AESKeyandIVPath),false);
             
-            SecuritiesServiceClient = new SecuritiesServiceClient(BaseURL);
-            PersonsServiceClient = new PersonsServiceClient(BaseURL);
+            SecuritiesServiceClient = new SecuritiesServiceClient(BaseURL, User,Password);
+            PersonsServiceClient = new PersonsServiceClient(BaseURL, User, Password);
 
             GetShareholders();
 

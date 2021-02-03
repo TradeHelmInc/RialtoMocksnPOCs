@@ -10,6 +10,8 @@
       <ProjectReference Include="..\Rialto.BusinessEntities\Rialto.BusinessEntities.csproj" />
       <ProjectReference Include="..\Rialto.Common\Rialto.Common.csproj" />
       <ProjectReference Include="..\Rialto.DataAccessLayer\Rialto.DataAccessLayer.csproj" />
+      <ProjectReference Include="..\Rialto.Plaid.Common\Rialto.Plaid.Common.csproj" />
+      <ProjectReference Include="..\Rialto.Plaid.ServiceLayer\Rialto.Plaid.ServiceLayer.csproj" />
       <ProjectReference Include="..\Solidus\Rialto.Solidus.Common\Rialto.Solidus.Common.csproj" />
       <ProjectReference Include="..\Solidus\Rialto.Solidus.ServiceLayer\Rialto.Solidus.ServiceLayer.csproj" />
     </ItemGroup>

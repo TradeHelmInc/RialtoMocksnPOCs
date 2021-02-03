@@ -20,10 +20,74 @@ namespace Rialto.DataAccessLayer.Plaid
         #region Private Static Querys
 
         private static string _SP_PERSIST_PLAID_CREDENTIALS = "persist_plaid_credentials";
+        
+        private static string _SP_GET_PLAID_CREDENTIALS = "get_plaid_credentials";
+
+        #endregion
+        
+          #region Private Methods
+
+        private PlaidCredential BuildPlaidCredential(MySqlDataReader reader)
+        {
+            PlaidCredential cred = new PlaidCredential()
+            {
+                User = new User()
+                {
+                    Id = reader.GetInt32("jhi_user_id")
+                },
+                AccessToken = GetSafeString(reader, "plaid_access_token"),
+                UserIdentifier = GetSafeString(reader, "user_identifier"),
+                PlaidItemId = GetSafeString(reader, "plaid_item_id"),
+                Secret = GetSafeString(reader, "plaid_secret"),
+                ClientId = GetSafeString(reader, "plaid_client")
+            };
+
+            return cred;
+        
+        }
 
         #endregion
         
         #region Public Methods
+        
+        
+        public PlaidCredential GetPlaidCredentials(string email)
+        {
+            //DatabaseConnection = new MySqlConnection(ConnectionString);
+            MySqlCommand cmd = new MySqlCommand(_SP_GET_PLAID_CREDENTIALS, new MySqlConnection(ConnectionString));
+            cmd.CommandTimeout = 60;
+
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            cmd.Parameters.AddWithValue("@_email", email);
+            cmd.Parameters["@_email"].Direction = ParameterDirection.Input;
+            
+            cmd.Connection.Open();
+
+            // Open DB
+            MySqlDataReader reader;
+            PlaidCredential cred = null;
+
+            try
+            {
+                // Run Query
+                reader = cmd.ExecuteReader();
+
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        cred=BuildPlaidCredential(reader);
+                    }
+                }
+            }
+            finally
+            {
+                cmd.Connection.Close();
+            }
+
+            return cred;
+        }
         
         public void PersistPlaidCredentials(PlaidCredential cred)
         {

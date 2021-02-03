@@ -27,12 +27,12 @@ namespace Rialto.ServiceLayer
         
         #region Constructors
         //tradingCS, orderCS,plaidCredentialsLoadServiceURL,RSAPublicKeyPath , logger
-        public PlaidService(string pTradingCS, string pOrderCS,string pPlaidCredentialsLoadServiceURL,string pRSAPublicKey, ILogger pLogger)
+        public PlaidService(string pTradingCS, string pOrderCS,string pPlaidCredentialsLoadServiceURL,string pRSAPublicKey, bool pPlaidTestEnv, ILogger pLogger)
         {
 
             PlaidServiceURL = pPlaidCredentialsLoadServiceURL;
 
-            ManagementLogic = new ManagementLogic(pTradingCS, pOrderCS,pRSAPublicKey, pLogger);
+            ManagementLogic = new ManagementLogic(pTradingCS, pOrderCS,pRSAPublicKey,  pPlaidTestEnv, pLogger);
 
             Logger = pLogger;
 

@@ -193,7 +193,6 @@ namespace Rialto.DataAccessLayer
             }
         }
 
-
         public List<User> GetUsers(long firmId)
         {
             //DatabaseConnection = new MySqlConnection(ConnectionString);

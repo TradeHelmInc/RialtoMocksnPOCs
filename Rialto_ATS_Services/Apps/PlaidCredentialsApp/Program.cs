@@ -35,13 +35,14 @@ namespace PlaidCredentialsLoadApp
                 string plaidCredentialsLoadServiceURL = ConfigurationManager.AppSettings["PlaidCredentialsLoadServiceURL"];
                 
                 string RSAPublicKeyPath = ConfigurationManager.AppSettings["RSAPublicKeyPath"];
-              
+                
+                bool plaidTestEnv = Convert.ToBoolean(ConfigurationManager.AppSettings["PlaidTestEnv"]);
 
                 logger.DoLog("Initializing Plaid Credential Load app service", MessageType.Information);
                 logger.DoLog("Extracting RSA public key", MessageType.Information);
                 string RSAPublicKey = FileLoader.GetFileContent(RSAPublicKeyPath);
 
-                PlaidService plaidService = new PlaidService(tradingCS, orderCS,plaidCredentialsLoadServiceURL,RSAPublicKey , logger);
+                PlaidService plaidService = new PlaidService(tradingCS, orderCS,plaidCredentialsLoadServiceURL,RSAPublicKey,plaidTestEnv , logger);
 
                 plaidService.Run();
 

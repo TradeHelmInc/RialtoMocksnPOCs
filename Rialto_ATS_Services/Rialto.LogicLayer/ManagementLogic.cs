@@ -10,10 +10,12 @@ using Rialto.Solidus.Common.Util.Builders;
 using Rialto.Solidus.ServiceLayer.Client;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
+using fwk.Common.enums;
 using fwk.common.util.encryption.RSA;
 using fwk.common.util.serialization;
 using Rialto.BusinessEntities;
@@ -22,7 +24,13 @@ using Rialto.BusinessEntities.Plaid;
 using Rialto.Common.DTO.Services;
 using Rialto.DataAccessLayer.KoreConX;
 using Rialto.DataAccessLayer.Plaid;
+using Rialto.KoreConX.Common.DTO.Generic;
+using Rialto.LogicLayer.Vendors;
+using Rialto.Plaid.Common.DTO.Generic.Auth;
+using Rialto.Plaid.Common.DTO.Generic.Balance;
+using Rialto.Plaid.ServiceLayer.Client;
 using Shareholder = Rialto.Solidus.Common.DTO.Shareholders.Shareholder;
+using User = Rialto.BusinessEntities.User;
 
 namespace Rialto.LogicLayer
 {
@@ -34,8 +42,6 @@ namespace Rialto.LogicLayer
 
         protected static string _KCX_ONBOARDING_STARTED_OK = "OK";
         
-        protected static string _PLAID_CREDENTIALS_LOADED = "OK";
-
         #endregion
 
         #region Protected Attributes
@@ -50,8 +56,6 @@ namespace Rialto.LogicLayer
         
         protected KCXConnectionSettingManager KCXConnectionSettingManager { get; set; }
         
-        protected PlaidCredentialsManager PlaidCredentialsManager { get; set; }
-
         protected AESManager AESmanager { get; set; }
         
         #region RSA Encryption
@@ -76,6 +80,12 @@ namespace Rialto.LogicLayer
 
         public ShareholdersServiceClient ShareholdersServiceClient { get; set; }
 
+        #endregion
+        
+        #region Plaid
+        
+        protected PlaidLogic PlaidLogic { get; set; }
+        
         #endregion
 
         #endregion
@@ -104,7 +114,7 @@ namespace Rialto.LogicLayer
             AESKeyEncrypted = pAESKeyEncrypted;
 
             #endregion
-
+            
             #region Solidus
 
             ShareholdersServiceClient = new Solidus.ServiceLayer.Client.ShareholdersServiceClient(pSolidusURL);
@@ -148,7 +158,7 @@ namespace Rialto.LogicLayer
             Logger = pLogger;
         }
         
-        public ManagementLogic(string pTradingConnectionString, string pOrderConnectionString,string pRSAPublicKey, ILogger pLogger)
+        public ManagementLogic(string pTradingConnectionString, string pOrderConnectionString,string pRSAPublicKey, bool pPlaidTestEnv, ILogger pLogger)
         {
             ShareholderManager = new ShareholderManager(pTradingConnectionString);
 
@@ -157,20 +167,27 @@ namespace Rialto.LogicLayer
             AccountManager = new AccountManager(pTradingConnectionString);
             
             TransferAgentManager = new TransferAgentManager(pTradingConnectionString);
-
-            PlaidCredentialsManager = new PlaidCredentialsManager(pTradingConnectionString);
             
             RSAEncryption=new  RSAEncryption();
 
             RSAPublicKey = pRSAPublicKey;
 
             Logger = pLogger;
+
+            PlaidLogic = new PlaidLogic(pTradingConnectionString, pLogger, pPlaidTestEnv);
+   
         }
 
 
         #endregion
 
         #region Private Methods
+        
+        #region Plaid
+        
+      
+
+        #endregion
 
         #region KoreConX
 
@@ -631,10 +648,8 @@ namespace Rialto.LogicLayer
                 UserIdentifier = userIdentifier,
                 PlaidItemId = plaidItemId
             };
-            
-            PlaidCredentialsManager.PersistPlaidCredentials(plaidCred);
-            
-            return _PLAID_CREDENTIALS_LOADED;
+
+            return PlaidLogic.PersistCredentialsAndUpdateBalance(plaidCred);
         }
         
         

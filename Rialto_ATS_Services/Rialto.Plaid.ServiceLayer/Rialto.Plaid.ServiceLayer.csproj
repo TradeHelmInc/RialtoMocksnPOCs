@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\fwk\fwk.common\fwk.common.csproj" />
+      <ProjectReference Include="..\fwk\fwk.ServiceLayer\fwk.ServiceLayer.csproj" />
+      <ProjectReference Include="..\Rialto.Plaid.Common\Rialto.Plaid.Common.csproj" />
+    </ItemGroup>
+
+</Project>

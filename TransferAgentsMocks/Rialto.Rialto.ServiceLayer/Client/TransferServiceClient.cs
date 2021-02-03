@@ -13,11 +13,15 @@ namespace Rialto.Rialto.ServiceLayer.Client
     {
         #region Constructors
 
-        public TransferServiceClient(string pBaseURL)
+        public TransferServiceClient(string pBaseURL, string pUser, string pPassword)
         {
 
             BaseURL = pBaseURL;
-        
+
+            User = pUser;
+
+            Password = pPassword;
+
         }
 
         #endregion

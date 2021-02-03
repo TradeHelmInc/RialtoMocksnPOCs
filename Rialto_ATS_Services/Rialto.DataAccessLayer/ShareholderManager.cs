@@ -71,6 +71,7 @@ namespace Rialto.DataAccessLayer
                 UniqueId = GetSafeString(reader, "unique_id"),
                 Status = GetSafeBoolean(reader, "status"),
                 LargeTraderFlag = GetSafeBoolean(reader, "large_trader_flag"),
+                OnboardingStatus = GetSafeString(reader, "onboarding_status"),
                 
             };
 
@@ -224,6 +225,9 @@ namespace Rialto.DataAccessLayer
 
             cmd.Parameters.AddWithValue("@firm_tax_id", firmTaxId);
             cmd.Parameters["@firm_tax_id"].Direction = ParameterDirection.Input;
+            
+            cmd.Parameters.AddWithValue("@_id", null);
+            cmd.Parameters["@_id"].Direction = ParameterDirection.Input;
 
             cmd.Connection.Open();
 
@@ -294,37 +298,49 @@ namespace Rialto.DataAccessLayer
 
         public Shareholder GetShareholder(int Id)
         {
-            DatabaseConnection = new MySqlConnection(ConnectionString);
-            MySqlCommand commandDatabase = new MySqlCommand(string.Format(_GET_SHAREHOLDER_QUERY, Id), DatabaseConnection);
-            commandDatabase.CommandTimeout = 60;
-            MySqlDataReader reader;
-            Shareholder shr = null;
+                  
+            //DatabaseConnection = new MySqlConnection(ConnectionString);
+            MySqlCommand cmd = new MySqlCommand(_SP_GET_FIRMS,new MySqlConnection(ConnectionString));
+            cmd.CommandTimeout = 60;
 
+            cmd.CommandType = CommandType.StoredProcedure;
+            
+            cmd.Parameters.AddWithValue("@kore_chain_id", null);
+            cmd.Parameters["@kore_chain_id"].Direction = ParameterDirection.Input;
 
+            cmd.Parameters.AddWithValue("@firm_tax_id", null);
+            cmd.Parameters["@firm_tax_id"].Direction = ParameterDirection.Input;
+
+            cmd.Parameters.AddWithValue("@_id", Id);
+            cmd.Parameters["@_id"].Direction = ParameterDirection.Input;
+
+            cmd.Connection.Open();
+
+            int count = 0;
             // Open DB
-            DatabaseConnection.Open();
+
+            MySqlDataReader reader;
+            Shareholder sh = null;
 
             try
             {
                 // Run Query
-                reader = commandDatabase.ExecuteReader();
+                reader = cmd.ExecuteReader();
 
                 if (reader.HasRows)
                 {
                     while (reader.Read())
                     {
-                        // En nuestra base de datos, el array contiene:  ID 0, FIRST_NAME 1,LAST_NAME 2, ADDRESS 3
-                        // Hacer algo con cada fila obtenida
-                        shr = new Shareholder() { Id = reader.GetInt32("id"), Name = GetSafeString(reader,"name") };
+                        sh=BuildShareholder(reader);
                     }
                 }
             }
             finally
             {
-                DatabaseConnection.Close();
+                cmd.Connection.Close();
             }
 
-            return shr;
+            return sh;
         }
 
         #endregion
