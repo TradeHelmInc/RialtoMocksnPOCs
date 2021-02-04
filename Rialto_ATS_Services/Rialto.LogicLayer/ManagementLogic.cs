@@ -42,6 +42,8 @@ namespace Rialto.LogicLayer
 
         protected static string _KCX_ONBOARDING_STARTED_OK = "OK";
         
+        protected static string _SOLIDUS_APPLICATION_APPROVAL_OK = "OK";
+        
         #endregion
 
         #region Protected Attributes
@@ -175,6 +177,20 @@ namespace Rialto.LogicLayer
             Logger = pLogger;
 
             PlaidLogic = new PlaidLogic(pTradingConnectionString, pLogger, pPlaidTestEnv);
+   
+        }
+        
+        public ManagementLogic(string pTradingConnectionString, string pOrderConnectionString, ILogger pLogger)
+        {
+            ShareholderManager = new ShareholderManager(pTradingConnectionString);
+
+            UserManager = new UserManager(pTradingConnectionString);
+
+            AccountManager = new AccountManager(pTradingConnectionString);
+            
+            TransferAgentManager = new TransferAgentManager(pTradingConnectionString);
+
+            Logger = pLogger;
    
         }
 
@@ -651,8 +667,39 @@ namespace Rialto.LogicLayer
 
             return PlaidLogic.PersistCredentialsAndUpdateBalance(plaidCred);
         }
-        
-        
+
+
+        public string OnApplicationApproval(string email)
+        {
+            try
+            {
+                Logger.DoLog(string.Format("Approving application for email {0}", email), fwk.Common.enums.MessageType.Information);
+                User usr = UserManager.GetUser(email);
+
+                if (usr == null)
+                    throw new Exception(string.Format("Could not find user registered with email {0}", email));
+
+                BusinessEntities.Shareholder sh = ShareholderManager.GetShareholder(usr.FirmId);
+
+
+                if (sh == null)
+                    throw new Exception(string.Format("Could not find shareholder (firm) for id {0} (email {1})",
+                                        usr.FirmId, email));
+
+                sh.OnboardingStatus = BusinessEntities.Shareholder._STATUS_APP_APPROVED;
+
+                ShareholderManager.PersistShareholder(sh);
+                
+                Logger.DoLog(string.Format("Application for email {0} sucessfully approved", email), fwk.Common.enums.MessageType.Information);
+
+                return _SOLIDUS_APPLICATION_APPROVAL_OK;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(string.Format("Critical error on Application Approval from Solidus for email{0}:{1}",e.Message,email));
+            }
+        }
+
         #endregion
     }
 }

@@ -142,7 +142,13 @@ namespace Rialto.Solidus.Common.Util.Builders
 
         private static long BuildPhoneFromKCX(string phone)
         {
-            if (string.IsNullOrEmpty(phone))
+            //we remove specaial characters because we will work with numbers
+            phone = phone.Replace("+", "");
+            phone = phone.Replace("(", "");
+            phone = phone.Replace(")", "");
+            phone = phone.Replace(" ", "");
+            
+            if (!string.IsNullOrEmpty(phone))
             {
                 try
                 {

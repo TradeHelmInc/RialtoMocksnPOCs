@@ -175,7 +175,7 @@ namespace Rialto.LogicLayer.Builders
             userInfo.LastActive = null;
             userInfo.BuyingPower =  0;
             userInfo.UsedLimit =  0;
-            userInfo.Phone =  null;
+            userInfo.Phone =  solidusSh.phoneNumber.ToString();
             userInfo.Disclaimer = true;
             userInfo.UsedLimit =  0;
             userInfo.TradeLimit =  0;

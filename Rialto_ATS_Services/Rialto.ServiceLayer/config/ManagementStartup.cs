@@ -19,6 +19,8 @@ namespace Rialto.ServiceLayer.config
 
         private string _ONBARDING_4096BITS_URL = "/Management/OnKCXOnboardingApproved_4096";
         
+        private string _ONBOARDING_APPLICATION_APPROVAL = "/Management/ApproveApplication";
+        
         #endregion
       
         #region Protected Attributes
@@ -37,6 +39,8 @@ namespace Rialto.ServiceLayer.config
             {
                 if (context.Request.Path.Value == _ONBARDING_4096BITS_URL)
                     return context.Response.WriteAsync(Management.Post(context.Request));
+                else if (context.Request.Path.Value == _ONBOARDING_APPLICATION_APPROVAL)
+                    return context.Response.WriteAsync(Management.ApproveApplication(context.Request));
                 else
                     return context.Response.WriteAsync(
                         Management.CreateStrTransactionError(string.Format("Unknown URL {0}", context.Request.Path)));

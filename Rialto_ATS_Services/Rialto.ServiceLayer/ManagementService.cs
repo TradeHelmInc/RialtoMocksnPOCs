@@ -51,6 +51,17 @@ namespace Rialto.ServiceLayer
 
         }
         
+        public ManagementService(string pTradingCS, string pOrderCS, string pManagementServiceURL,  ILogger pLogger)
+        {
+
+            ManagementServiceURL = pManagementServiceURL;
+
+            ManagementLogic = new ManagementLogic(pTradingCS, pOrderCS, pLogger);
+
+            Logger = pLogger;
+
+        }
+        
         #endregion
 
         #region Protected Methods
@@ -63,6 +74,11 @@ namespace Rialto.ServiceLayer
         protected string OnKCXOnboardingApproved_4096(string[] param)
         {
             return ManagementLogic.OnKCXOnboardingApproved_4096(param);
+        }
+        
+        protected string OnApplicationApproval(string email)
+        {
+            return ManagementLogic.OnApplicationApproval(email);
         }
 
         protected string OnKCXOnboardingStarted(string koreShareholderId,string companyKoreChainId)
@@ -82,6 +98,7 @@ namespace Rialto.ServiceLayer
         {
             ManagementController.OnKCXOnboardingApproved += OnKCXOnboardingApproved;
             ManagementController.OnKCXOnboardingApproved_4096 += OnKCXOnboardingApproved_4096;
+            ManagementController.OnApplicationApproval += OnApplicationApproval;
             //ManagementController.OnKCXOnboardingStarted += OnKCXOnboardingStarted;
 
             ManagementController.Logger = Logger;

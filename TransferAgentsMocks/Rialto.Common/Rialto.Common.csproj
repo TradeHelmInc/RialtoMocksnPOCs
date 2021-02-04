@@ -64,6 +64,7 @@
     <Compile Include="DTO\Services\OnOrderCancelledOrExpiredDTO.cs" />
     <Compile Include="DTO\Services\OnSellDTO.cs" />
     <Compile Include="DTO\Services\Plaid\OnPlaidCredentialsLoadDTO.cs" />
+    <Compile Include="DTO\Services\Solidus\OnApplicationApprovalDTO.cs" />
     <Compile Include="DTO\Services\TransferSharesDTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\setup\SwaggerConfig.cs" />

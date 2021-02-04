@@ -29,12 +29,4 @@ C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocks
 C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\fwk.ServiceLayer\bin\Debug\fwk.Common.pdb
 C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\fwk.ServiceLayer\obj\Debug\fwk.ServiceLayer.dll
 C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\fwk.ServiceLayer\obj\Debug\fwk.ServiceLayer.pdb
-C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\fwk.ServiceLayer\bin\Debug\System.Net.Http.Formatting.dll
-C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\fwk.ServiceLayer\bin\Debug\System.Web.Http.dll
-C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\fwk.ServiceLayer\bin\Debug\System.Web.Http.SelfHost.dll
-C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\fwk.ServiceLayer\bin\Debug\System.Net.Http.Formatting.xml
-C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\fwk.ServiceLayer\bin\Debug\System.Web.Http.xml
-C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\fwk.ServiceLayer\bin\Debug\System.Web.Http.SelfHost.xml
-C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\fwk.ServiceLayer\obj\Debug\fwk.ServiceLayer.csprojAssemblyReference.cache
-C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\fwk.ServiceLayer\obj\Debug\fwk.ServiceLayer.csproj.CoreCompileInputs.cache
-C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\fwk.ServiceLayer\obj\Debug\fwk.ServiceLayer.csproj.CopyComplete
+C:\Users\Compumar\Desktop\Projects\Tradehelm\Rialto\RialtoMocksnPOCs\RialtoMocksnPOCs\TransferAgentsMocks\fwk.ServiceLayer\obj\Debug\fwk.ServiceLayer.csprojResolveAssemblyReference.cache

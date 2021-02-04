@@ -46,7 +46,7 @@ namespace PlaidCredentialsLoadApp
 
                 plaidService.Run();
 
-                logger.DoLog(string.Format("Onboarding Service successfully initialized at {0}", plaidCredentialsLoadServiceURL), MessageType.Information);
+                logger.DoLog(string.Format("Plaid Credentials Load Service successfully initialized at {0}", plaidCredentialsLoadServiceURL), MessageType.Information);
 
                 Console.ReadKey();
             }

@@ -21,6 +21,8 @@ namespace Rialto.BusinessEntities
         #region Public Static Consts
 
         public static string _STATUS_ONBOARDING = "APPLICATION_IN_PROGRESS";
+        
+        public static string _STATUS_APP_APPROVED = "APPLICATION_APPROVED";
 
         public static int _FIRM_TYPE_INDIV_RETAIL = 11;
 

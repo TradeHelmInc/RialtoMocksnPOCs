@@ -9,6 +9,7 @@ using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Rialto.Common.DTO.Services.Solidus;
 
 
 namespace Rialto.ServiceLayer.service
@@ -18,6 +19,8 @@ namespace Rialto.ServiceLayer.service
     public delegate string OnKCXOnboardingApproved_4096(string[] param);
 
     public delegate string OnKCXOnboardingStarted(string koreShareholderId);
+    
+    public delegate string OnApplicationApprovalEv(string email);
 
     //public class ManagementController : Controller
     [ApiController]
@@ -29,6 +32,8 @@ namespace Rialto.ServiceLayer.service
         public static event OnKCXOnboardingApproved OnKCXOnboardingApproved;//SIGNAL!!
         
         public static event OnKCXOnboardingApproved_4096 OnKCXOnboardingApproved_4096;//SIGNAL!!
+        
+        public static event OnApplicationApprovalEv OnApplicationApproval;//APPROVAL!!
 
         //public static event OnKCXOnboardingStarted OnKCXOnboardingStarted;
 
@@ -43,6 +48,45 @@ namespace Rialto.ServiceLayer.service
         #endregion
 
         #region Public Methods
+        
+        [Route("[controller]/ApproveApplication")]
+        [HttpPost]
+        public string  ApproveApplication(HttpRequest Rq)
+        {
+         
+            try
+            {
+                string jsonInput = GetBody(Rq.Body, Encoding.UTF8);
+                OnApplicationApproval onAppApproval = null;
+                try
+                {
+                    onAppApproval = JsonConvert.DeserializeObject<OnApplicationApproval>(jsonInput);
+                    Logger.DoLog(string.Format("Incoming OnApplicationApproval received for email {0}",
+                        onAppApproval.Email), fwk.Common.enums.MessageType.Information);
+                }
+                catch (Exception ex)
+                {
+                    string msg = string.Format("Could not process input json {1}:{0}", jsonInput, ex.Message);
+                    Logger.DoLog(msg, fwk.Common.enums.MessageType.Error);
+                    throw new Exception(msg);
+                }
+
+                string txtId = OnApplicationApproval( onAppApproval.Email);
+
+                Logger.DoLog("Application approval successfully processed", fwk.Common.enums.MessageType.Information);
+
+                TransactionResponse txResp = new TransactionResponse() { Success = true, Id = new IdEntity() { id = txtId } };
+
+                return JsonConvert.SerializeObject(txResp);
+            }
+            catch (Exception ex)
+            {
+                string msg = string.Format("Error @ApproveApplication :{0}", ex.Message);
+                Logger.DoLog(msg, fwk.Common.enums.MessageType.Error);
+                TransactionResponse txError =  CreateTransactionError(ex.Message);
+                return JsonConvert.SerializeObject(txError);
+            }
+        }
 
         [Route("[controller]/OnKCXOnboardingApproved_4096")]
         [HttpPost]
