@@ -18,15 +18,6 @@
 
 
         #endregion
-        
-        #region Public Methods
-
-        public bool SecretAndClientIdLoaded()
-        {
-            return !string.IsNullOrEmpty(ClientId) && !string.IsNullOrEmpty(Secret);
-
-        }
-
-        #endregion
+      
     }
 }

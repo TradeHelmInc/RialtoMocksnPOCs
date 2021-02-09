@@ -28,6 +28,8 @@ namespace Rialto.LogicLayer.Vendors
 
         protected bool PlaidTestEnv { get; set; }
         
+        protected PlaidSetting Setting { get; set; }
+        
         protected BalanceManager BalanceManager { get; set; }
         
         protected TokenManager TokenManager { get; set; }
@@ -67,14 +69,20 @@ namespace Rialto.LogicLayer.Vendors
         
         private void LoadPlaidBalanceManager()
         {
-            PlaidSetting setting =  PlaidSettingManager.GetEnabledPlaidSetting();
+            Setting =  PlaidSettingManager.GetEnabledPlaidSetting();
 
-            if (setting == null)
+            if (Setting == null)
                 throw new Exception("Could not retrieve Plaid settings in plaid_settings table!");
             
-            BalanceManager = new BalanceManager(setting.URL);
+            if (Setting.Secret == null)
+                throw new Exception("Plaid settings does not have an ATS Secret!");
+            
+            if (Setting.ClientId == null)
+                throw new Exception("Plaid settings does not have an ATS ClientId!");
+            
+            BalanceManager = new BalanceManager(Setting.URL);
 
-            TokenManager = new TokenManager(setting.URL);
+            TokenManager = new TokenManager(Setting.URL);
         }
         
          // The authentication depends on the creation of 3 tokens
@@ -221,18 +229,17 @@ namespace Rialto.LogicLayer.Vendors
                 GetBalanceReq getBalanceReq = new GetBalanceReq()
                 {
                     access_token = cred.AccessToken,
-                    secret = cred.Secret,
-                    client_id = cred.ClientId
+                    secret = Setting.Secret,
+                    client_id = Setting.ClientId
                 };
                 
-                if (PlaidTestEnv && cred.SecretAndClientIdLoaded())//if we are in a test environment , we have to use the test env credentials
+                if (PlaidTestEnv && Setting.SecretAndClientIdLoaded())//if we are in a test environment , we have to use the test env credentials
                 {
-                    AuthReq authReq = DoAuthInPlaidTestEnv(cred.ClientId, cred.Secret);
+                    AuthReq authReq = DoAuthInPlaidTestEnv(Setting.ClientId, Setting.Secret);
                     getBalanceReq.access_token = authReq.access_token;
                 }
 
-                if (!string.IsNullOrEmpty(cred.Secret) && !string.IsNullOrEmpty(cred.ClientId) &&
-                    !string.IsNullOrEmpty(cred.AccessToken))
+                if (!string.IsNullOrEmpty(Setting.Secret) && !string.IsNullOrEmpty(Setting.ClientId) && !string.IsNullOrEmpty(cred.AccessToken))
                 {
                     Logger.DoLog(string.Format("Requesting balances for access token {0}", getBalanceReq.access_token),fwk.Common.enums.MessageType.Information);
                     BaseResponse respGetBalanceReq =BalanceManager.GetBalance(getBalanceReq);

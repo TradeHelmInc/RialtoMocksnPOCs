@@ -32,6 +32,8 @@ namespace Rialto.DataAccessLayer.Plaid
              
                 EnvName = GetSafeString(reader, "env_name"),
                 URL = GetSafeString(reader, "url"),
+                ClientId = GetSafeString(reader, "client_id"),
+                Secret = GetSafeString(reader, "secret"),
                 Enabled = GetSafeBoolean(reader, "enabled")
             };
 

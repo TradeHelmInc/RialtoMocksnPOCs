@@ -668,7 +668,6 @@ namespace Rialto.LogicLayer
             return PlaidLogic.PersistCredentialsAndUpdateBalance(plaidCred);
         }
 
-
         public string OnApplicationApproval(string email)
         {
             try
