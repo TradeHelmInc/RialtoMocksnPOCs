@@ -48,6 +48,8 @@ namespace Rialto.LogicLayer
 
         #region Protected Attributes
 
+        protected  string AppName { get; set; }
+        
         protected ShareholderManager ShareholderManager { get; set; }
 
         protected UserManager UserManager { get; set; }
@@ -94,9 +96,14 @@ namespace Rialto.LogicLayer
 
         #region Constructors
 
-        public ManagementLogic(string pTradingConnectionString, string pOrderConnectionString,
+        public ManagementLogic(string pAppName, string pTradingConnectionString, string pOrderConnectionString,
                                 string pKCXName, string pKCXKeyAndIV, bool pAESKeyEncrypted,string pRASPrivateKeyPath, bool pRSAKeyEncrypted, string pSolidusURL, ILogger pLogger)
         {
+
+            AppName = pAppName;
+
+            AuditLogic = new AuditLogic(pAppName,pTradingConnectionString);
+            
             ShareholderManager = new ShareholderManager(pTradingConnectionString);
 
             UserManager = new UserManager(pTradingConnectionString);
@@ -126,9 +133,14 @@ namespace Rialto.LogicLayer
             Logger = pLogger;
         }
         
-        public ManagementLogic(string pTradingConnectionString, string pOrderConnectionString,
+        public ManagementLogic(string pAppName,string pTradingConnectionString, string pOrderConnectionString,
             string pKCXName, string pKCXPublicKeyPath,string pRSAPrivateKeyPath, bool pRSAKeyEncrypted, string pSolidusURL, ILogger pLogger)
         {
+
+            AppName = pAppName;
+
+            AuditLogic = new AuditLogic(AppName, pTradingConnectionString);
+            
             ShareholderManager = new ShareholderManager(pTradingConnectionString);
 
             UserManager = new UserManager(pTradingConnectionString);
@@ -160,8 +172,12 @@ namespace Rialto.LogicLayer
             Logger = pLogger;
         }
         
-        public ManagementLogic(string pTradingConnectionString, string pOrderConnectionString,string pRSAPublicKey, bool pPlaidTestEnv, ILogger pLogger)
+        public ManagementLogic(string pAppName,string pTradingConnectionString, string pOrderConnectionString,string pRSAPublicKey, bool pPlaidTestEnv, ILogger pLogger)
         {
+            AppName = pAppName;
+            
+            AuditLogic = new AuditLogic(pAppName,pTradingConnectionString);
+            
             ShareholderManager = new ShareholderManager(pTradingConnectionString);
 
             UserManager = new UserManager(pTradingConnectionString);
@@ -180,9 +196,15 @@ namespace Rialto.LogicLayer
    
         }
         
-        public ManagementLogic(string pTradingConnectionString, string pOrderConnectionString, ILogger pLogger)
+        public ManagementLogic(string pAppName,string pTradingConnectionString, string pOrderConnectionString, ILogger pLogger)
         {
+            AppName = pAppName;
+            
+            AuditLogic = new AuditLogic(pAppName,pTradingConnectionString);
+            
             ShareholderManager = new ShareholderManager(pTradingConnectionString);
+            
+            AuditLogic = new AuditLogic(pAppName,pTradingConnectionString);
 
             UserManager = new UserManager(pTradingConnectionString);
 
@@ -323,14 +345,12 @@ namespace Rialto.LogicLayer
                 }
                 catch (Exception ex)
                 {
-                    //TODO- Incorporate logging
                     string msg = string.Format("Critical error unencrypting KXC shareholder PERSONAL info for Kore Shareholder Id {0}: {1}", koreShareholderId, ex.Message);
                     throw new Exception(msg);
                 }
             }
             catch (Exception ex)
             {
-                //TODO- Incorporate logging
                 string msg = string.Format("Critical error recovering KXC shareholder PERSONAL info for Kore Shareholder Id {0}: {1}", koreShareholderId, ex.Message);
                 throw new Exception(msg);
             }
@@ -351,18 +371,15 @@ namespace Rialto.LogicLayer
         
         }
 
-
         private PersonMainInfo FetchAndDecryptFromKCX(string koreShareholderId, PersonResponse personResp, string key, string IV)
         {
-
-            Logger.DoLog(string.Format("@ManagementLogic: Decripting shareholder (firm) for KoreChainId {0} from KoreConX", koreShareholderId), fwk.Common.enums.MessageType.Information);
+            DoLog(AuditLogic.NEW_ONBOARDING_DECRYPTING_PD,string.Format("@ManagementLogic: Decripting shareholder (firm) for KoreChainId {0} from KoreConX", koreShareholderId));
 
             PersonMainInfo personUnencr = UnencryptShareholderPersonalDataFromKCX(koreShareholderId, personResp.data.pd,key,IV);
 
-            Logger.DoLog(string.Format("@ManagementLogic: Building solidus shareholder for KoreChainId {0} from KoreConX", koreShareholderId), fwk.Common.enums.MessageType.Information);
+            DoLog(AuditLogic.NEW_ONBOARDING_DECRYPTED_PD,string.Format("@ManagementLogic: Building Solidus shareholder for KoreChainId {0} from KoreConX", koreShareholderId));
 
             return personUnencr;
-        
         }
 
         private void ValidateShareholdersOnKoreChainAndTaxId(string koreShareholderId,string taxIdOrSSNNumber,
@@ -380,17 +397,17 @@ namespace Rialto.LogicLayer
             }
         }
 
-
         private void ManageShareholderOnExitingKoreShareholderId(string koreShareholderId, Rialto.BusinessEntities.Shareholder shByKoreChain, PersonResponse personResp, string key, string IV)
         {
-            Logger.DoLog(string.Format("@ManagementLogic: Found shareholder (firm) {0} for KoreChainId {1}", shByKoreChain.GetFullName(), koreShareholderId), fwk.Common.enums.MessageType.Information);
-
+            DoLog(AuditLogic.NEW_ONBOARDING_FOUND_SHAREHOLDER_FOR_KORE_CHAIN,string.Format("@ManagementLogic: Found shareholder (firm) {0} for KoreChainId {1}", shByKoreChain.GetFullName(), koreShareholderId),AuditLogic.ID_NAME_KORE_SHAREHOLDER_ID,koreShareholderId);
+            
             PersonMainInfo personUnencr = FetchAndDecryptFromKCX(koreShareholderId, personResp,key,IV);
 
+            DoLog(AuditLogic.NEW_ONBOARDING_BUILDING_SHAREHOLDER_FROM_KCX_PD,"Building KCX shareholder with downloaded pd",AuditLogic.ID_NAME_KORE_SHAREHOLDER_ID,koreShareholderId);            
             Shareholder solidusShareholder = SolidusShareholderBuilder.BuildSolidusShareholderFromKCX(personUnencr);
-
-            Logger.DoLog(string.Format("@ManagementLogic: Retrieving shareholder (firm) form taxId {0} from KoreConX", solidusShareholder.taxIdOrSSNNumber), fwk.Common.enums.MessageType.Information);
-
+            DoLog(AuditLogic.NEW_ONBOARDING_BUILDED_SHAREHOLDER_FROM_KCX_PD,"KCX shareholder built with downloaded pd",AuditLogic.ID_NAME_KORE_SHAREHOLDER_ID,koreShareholderId);   
+            
+            DoLog(AuditLogic.NEW_ONBOARDING_FETCH_SHAREHOLDER_BY_TAXID,string.Format("@ManagementLogic: Retrieving shareholder (firm) for taxId {0} from KoreConX", solidusShareholder.taxIdOrSSNNumber),AuditLogic.ID_NAME_KORE_SHAREHOLDER_ID,koreShareholderId);  
             List<Rialto.BusinessEntities.Shareholder> shareholdersByTaxId = ShareholderManager.GetShareholders(null, solidusShareholder.taxIdOrSSNNumber);
 
             if (shareholdersByTaxId.Count > 0)//Exists KoreChainId AND taxId
@@ -401,43 +418,37 @@ namespace Rialto.LogicLayer
 
                 shareholderByTaxId.Accounts = AccountManager.GetAccounts(shareholderByTaxId.Id);
 
-                Logger.DoLog(string.Format("@ManagementLogic: Found shareholder (firm) {0} for taxId {1} from KoreConX. Running validations", shareholderByTaxId.GetFullName(), solidusShareholder.taxIdOrSSNNumber), fwk.Common.enums.MessageType.Information);
+                DoLog(AuditLogic.NEW_ONBOARDING_FOUND_SHAREHOLDER_BY_TAXID,string.Format("@ManagementLogic: Found shareholder (firm) {0} for taxId {1} from KoreConX. Running validations", shareholderByTaxId.GetFullName(), solidusShareholder.taxIdOrSSNNumber),AuditLogic.ID_NAME_KORE_SHAREHOLDER_ID,koreShareholderId);  
 
                 //2-EXISTS KoreChainId (#1) and shareholderByTaxId
                 //We validate that they match!
                 ValidateShareholdersOnKoreChainAndTaxId(koreShareholderId, solidusShareholder.taxIdOrSSNNumber, shByKoreChain, shareholdersByTaxId.FirstOrDefault());
 
-                Logger.DoLog(string.Format("@ManagementLogic: Putting shareholder {0} into ONBOARDING state. Invoking Solidus!", shByKoreChain.GetFullName()), fwk.Common.enums.MessageType.Information);
                 PersistShareholderAndSendToSolidus(shareholderByTaxId, solidusShareholder);
-                Logger.DoLog(string.Format("@ManagementLogic: Shareholder {0} updated and sent to SOLIDUS", shByKoreChain.GetFullName()), fwk.Common.enums.MessageType.Information);
-
-
+                
             }
             else//Exists KoreChainId but NOT taxId
             {
-                Logger.DoLog(string.Format("@ManagementLogic: NOT Found shareholder (firm) form taxId {0} from KoreConX.", solidusShareholder.taxIdOrSSNNumber), fwk.Common.enums.MessageType.Information);
+                //NEW_ONBOARDING_NOT_FOUND_SHAREHOLDER_BY_TAXID
+                DoLog(AuditLogic.NEW_ONBOARDING_NOT_FOUND_SHAREHOLDER_BY_TAXID,string.Format("@ManagementLogic: NOT Found shareholder (firm) form taxId {0} from KoreConX.", solidusShareholder.taxIdOrSSNNumber),AuditLogic.ID_NAME_KORE_SHAREHOLDER_ID,koreShareholderId);
 
                 //3- EXISTS KoreChainId (#1) but no shareholderByTaxId
-
-                Logger.DoLog(string.Format("@ManagementLogic: Putting shareholder {0} into ONBOARDING state and assigning TaxId {1}. Invoking Solidus", shByKoreChain.Name, solidusShareholder.taxIdOrSSNNumber), fwk.Common.enums.MessageType.Information);
                 PersistShareholderAndSendToSolidus(shByKoreChain, solidusShareholder);
-                Logger.DoLog(string.Format("@ManagementLogic: Shareholder {0} updated and sent to Solidus", shByKoreChain.GetFullName()), fwk.Common.enums.MessageType.Information);
-
-                
             }
         
         }
 
         private void ManageShareholdersOnNOTExistingKoreShareholderId(string koreShareholderId, PersonResponse personResp, string key, string IV)
         {
-            Logger.DoLog(string.Format("@ManagementLogic: NOT Found shareholder (firm) for KoreChainId", koreShareholderId), fwk.Common.enums.MessageType.Information);
+            DoLog(AuditLogic.NEW_ONBOARDING_NOT_FOUND_SHAREHOLDER_BY_KORECHAINID,string.Format("@ManagementLogic: NOT Found shareholder (firm) for KoreChainId", koreShareholderId),AuditLogic.ID_NAME_KORE_SHAREHOLDER_ID,koreShareholderId);
 
             PersonMainInfo personUnencr = FetchAndDecryptFromKCX(koreShareholderId, personResp,key,IV);
             
+            DoLog(AuditLogic.NEW_ONBOARDING_BUILDING_SHAREHOLDER_FROM_KCX_PD,"Building KCX shareholder with downloaded pd",AuditLogic.ID_NAME_KORE_SHAREHOLDER_ID,koreShareholderId);            
             Shareholder solidusShareholder = SolidusShareholderBuilder.BuildSolidusShareholderFromKCX(personUnencr);
+            DoLog(AuditLogic.NEW_ONBOARDING_BUILDED_SHAREHOLDER_FROM_KCX_PD,"KCX shareholder built with downloaded pd",AuditLogic.ID_NAME_KORE_SHAREHOLDER_ID,koreShareholderId);   
 
-            Logger.DoLog(string.Format("@ManagementLogic: Retrieving shareholder (firm) form taxId {0} from KoreConX", solidusShareholder.taxIdOrSSNNumber), fwk.Common.enums.MessageType.Information);
-
+            DoLog(AuditLogic.NEW_ONBOARDING_FETCH_SHAREHOLDER_BY_TAXID,string.Format("@ManagementLogic: Retrieving shareholder (firm) for taxId {0} from KoreConX", solidusShareholder.taxIdOrSSNNumber),AuditLogic.ID_NAME_KORE_SHAREHOLDER_ID,koreShareholderId);  
             List<Rialto.BusinessEntities.Shareholder> shareholdersByTaxId = ShareholderManager.GetShareholders(null, solidusShareholder.taxIdOrSSNNumber);
 
             if (shareholdersByTaxId.Count > 0)
@@ -447,23 +458,23 @@ namespace Rialto.LogicLayer
                 shareholderByTaxId.Users = UserManager.GetUsers(shareholderByTaxId.Id);
                 shareholderByTaxId.Accounts = AccountManager.GetAccounts(shareholderByTaxId.Id);
 
-                Logger.DoLog(string.Format("@ManagementLogic: Found shareholder (firm) {0} for taxId {1} from KoreConX.", shareholderByTaxId.GetFullName(), solidusShareholder.taxIdOrSSNNumber), fwk.Common.enums.MessageType.Information);
+                DoLog(AuditLogic.NEW_ONBOARDING_FOUND_SHAREHOLDER_BY_TAXID,string.Format("@ManagementLogic: Found shareholder (firm) {0} for taxId {1} from KoreConX.", shareholderByTaxId.GetFullName(), solidusShareholder.taxIdOrSSNNumber),AuditLogic.ID_NAME_KORE_SHAREHOLDER_ID,koreShareholderId);  
 
+                
                 //4-NOT EXISTS by KoreChainId but EXISTS by TaxId
-                Logger.DoLog(string.Format("@ManagementLogic: Putting shareholder {0} into ONBOARDING state. Assigning KoreChainId.. Invoking Solidus.", shareholderByTaxId.GetFullName()), fwk.Common.enums.MessageType.Information);
                 PersistShareholderAndSendToSolidus(shareholderByTaxId, solidusShareholder);
-                Logger.DoLog(string.Format("@ManagementLogic: Shareholder {0} successfully updated and sent to SOLIDUS.", shareholderByTaxId.GetFullName()), fwk.Common.enums.MessageType.Information);
-
             }
             else
             {
-                Logger.DoLog(string.Format("@ManagementLogic: NOT Found shareholder (firm) '{0}' for taxId {1} from KoreConX. Creating new firms and users ", solidusShareholder.GetFullName(), solidusShareholder.taxIdOrSSNNumber), fwk.Common.enums.MessageType.Information);
+                DoLog(AuditLogic.NEW_ONBOARDING_NOT_FOUND_BY_KORECHAIN_AND_TAXID,string.Format("@ManagementLogic: NOT Found shareholder (firm) '{0}' for taxId {1} from KoreConX. Creating new firms and users ", solidusShareholder.GetFullName(), solidusShareholder.taxIdOrSSNNumber),AuditLogic.ID_NAME_KORE_SHAREHOLDER_ID,koreShareholderId);
 
                 //5-NOT EXISTS by KoreChainId and NOT by TaxId
+                DoLog(AuditLogic.NEW_ONBOARDING_BUILD_SHAREHOLDER_FROM_KCX,string.Format("@ManagementLogic: Building ATS shareholder {0} from Solidus Shareholder for KoreChainId {1} and taxId {2} ", solidusShareholder.GetFullName(),koreShareholderId, solidusShareholder.taxIdOrSSNNumber),AuditLogic.ID_NAME_KORE_SHAREHOLDER_ID,koreShareholderId);
                 Rialto.BusinessEntities.Shareholder rialtoShareholder = new BusinessEntities.Shareholder();
                 SolidusToRialtoBuilder.BuildSolidusToRialtoShareholder(koreShareholderId, solidusShareholder,ref rialtoShareholder);
+                DoLog(AuditLogic.NEW_ONBOARDING_BUILT_SHAREHOLDER_FROM_KCX,string.Format("@ManagementLogic: ATS shareholder {0} from Solidus Shareholder for KoreChainId {1} and taxId {2} successfully built", solidusShareholder.GetFullName(),koreShareholderId, solidusShareholder.taxIdOrSSNNumber),AuditLogic.ID_NAME_KORE_SHAREHOLDER_ID,koreShareholderId);
+
                 PersistShareholderAndSendToSolidus(rialtoShareholder, solidusShareholder);
-                Logger.DoLog(string.Format("@ManagementLogic: Shareholder {0} successfully created and sent to SOLIDUS.", solidusShareholder.GetFullName()), fwk.Common.enums.MessageType.Information);
             }
         }
 
@@ -473,6 +484,7 @@ namespace Rialto.LogicLayer
             {
                 try
                 {
+                    DoLog(AuditLogic.NEW_ONBOARDING_UPDATING_ONBOARDING_STATUS,string.Format("@ManagementLogic: Putting shareholder {0} into ONBOARDING state. Invoking Solidus", shareholder.GetFullName()),AuditLogic.ID_NAME_KORE_SHAREHOLDER_ID,shareholder.KoreConXShareholderId.KoreShareholderId);
                     shareholder.OnboardingStatus = Rialto.BusinessEntities.Shareholder._STATUS_ONBOARDING;
 
                     shareholder.Id = ShareholderManager.PersistShareholder(shareholder);
@@ -490,6 +502,7 @@ namespace Rialto.LogicLayer
                     accToPersit.Id = AccountManager.PersistAccount(accToPersit);
 
                     ShareholderManager.PersistKCXKoreShareholderId(shareholder.Id, shareholder.KoreConXShareholderId.KoreShareholderId);
+                    DoLog(AuditLogic.NEW_ONBOARDING_UPDATED_ONBOARDING_STATUS,string.Format("@ManagementLogic: Shareholder {0} updated", shareholder.GetFullName()),AuditLogic.ID_NAME_KORE_SHAREHOLDER_ID,shareholder.KoreConXShareholderId.KoreShareholderId);
 
                 }
                 catch (Exception ex)
@@ -500,7 +513,10 @@ namespace Rialto.LogicLayer
 
                 try
                 {
+                    DoLog(AuditLogic.NEW_ONBOARDING_SENDING_TO_SOLIDUS,string.Format("@ManagementLogic:Sending shareholder {0} to Solidus",shareholder.KoreConXShareholderId.KoreShareholderId));
                     //TODO: t-INVOKE SOLIDUS!!
+                    DoLog(AuditLogic.NEW_ONBOARDING_SENT_TO_SOLIDUS,string.Format("@ManagementLogic:Shareholder {0} sent to Solidus",shareholder.KoreConXShareholderId.KoreShareholderId));
+
                 }
                 catch (Exception ex)
                 {
@@ -524,9 +540,7 @@ namespace Rialto.LogicLayer
         {
             try
             {
-                Logger.DoLog(string.Format("@ManagementLogic: Received onboarding request for KoreChainId with 4096 bits encrypted data"),
-                    fwk.Common.enums.MessageType.Information);
-
+                DoLog(AuditLogic.NEW_ONBOARDING_LAUNCHED, "@ManagementLogic: Received onboarding request for KoreChainId with 4096 bits encrypted data");
                 if (KCXPublicKeyPath == null)
                     throw new Exception("KoreConX public key not properly loaded!");
 
@@ -536,10 +550,9 @@ namespace Rialto.LogicLayer
                     decryptedToRSA+=RSA4096Encryption.DecryptWithPublic(toDecrypt, KCXPublicKeyPath);
                 }
                 
-                Logger.DoLog(string.Format("@ManagementLogic: Decrypted using KCX public key:{0}",decryptedToRSA),fwk.Common.enums.MessageType.Information);
+                DoLog(AuditLogic.NEW_ONBOARDING_DECR_KCX_PUBLIC_KEY, "Msg decrypted using KCX public key");
                 
-                Logger.DoLog(string.Format("@ManagementLogic: Now decrypting using Rialto private key"),fwk.Common.enums.MessageType.Information);
-
+                DoLog(AuditLogic.NEW_ONBOARDING_DECRYPTING_RIALTO_PRIVATE_KEY, "Msg decrypting using Rialto private key");
                 string koreChainAndKeys = RSA4096Encryption.DecryptWithPrivate(decryptedToRSA, RSAPrivateKeyPath);
 
                 string koreChainId = JSONExtractor.GetJSONKey("KoreChainID", koreChainAndKeys);
@@ -547,13 +560,17 @@ namespace Rialto.LogicLayer
                 string IV = JSONExtractor.GetJSONKey("IV", koreChainAndKeys);
                 string koreCompanyId = JSONExtractor.GetJSONKey("KoreCompanyID", koreChainAndKeys);
                 //We cannot use NewtonSoft library becuase the secret and IV might contains quotes (") which might make it fail
-                //KoreChainAndKeysDTO korechainKeysDTO = JsonConvert.DeserializeObject<KoreChainAndKeysDTO>(koreChainAndKeys);
+                //KoreChainAndKeysDTO korechainKeysDTO = JsonConvert.DeserializeObject<KoreChainAndKeysDTO>(koreChainAndKeys)
+                //;
+                DoLog(AuditLogic.NEW_ONBOARDING_DECRYPTED_RIALTO_PRIVATE_KEY,
+                    String.Format("Msg decrypted  using Rialto private key: KoreChainId={0} KoreCompanyId={1}",
+                        koreChainId, koreCompanyId),AuditLogic.ID_NAME_KORE_SHAREHOLDER_ID,koreChainId);
 
                 return OnKCXOnboardingApproved(koreChainId, koreCompanyId, secret_Key, IV);
             }
             catch (Exception ex)
             {
-                Logger.DoLog(string.Format("@ManagementLogic.OnKCXOnboardingApproved_4096- ERROR: {0}", ex.Message), fwk.Common.enums.MessageType.Error);
+                DoLogError(AuditLogic.ONBOARDING_FAILED,ex, string.Format("@ManagementLogic.OnKCXOnboardingApproved_4096- ERROR: {0}", ex.Message));
                 throw;
             }
 
@@ -563,25 +580,23 @@ namespace Rialto.LogicLayer
         {
             try
             {
-                Logger.DoLog(string.Format("@ManagementLogic: Received onboarding request for KoreChainId {0}", koreShareholderId), fwk.Common.enums.MessageType.Information);
+                //Logger.DoLog(string.Format("@ManagementLogic: Received onboarding request for KoreChainId {0}", koreShareholderId), fwk.Common.enums.MessageType.Information);
 
+                
                 //1- Download user from KCX
-                Logger.DoLog(string.Format("@ManagementLogic: Retrieving shareholder (firm) for KoreChainId {0} from KoreConX", koreShareholderId), fwk.Common.enums.MessageType.Information);
-
                 TransferAgent transferAgent = TransferAgentManager.GetTransferAgent(TransferAgentManager._KCX_ID);
 
                 if (transferAgent == null)
                     throw new Exception(string.Format("Could not find Kore Chain Id for ATS. Transfer Agent = {0}",TransferAgentManager._KCX_ID));
                 
+                DoLog(AuditLogic.NEW_ONBOARDING_FETCHING_SHAREHOLDER_FROM_KCX,string.Format("@ManagementLogic: Retrieving shareholder (firm) for KoreChainId {0} from KoreConX", koreShareholderId),AuditLogic.ID_NAME_KORE_SHAREHOLDER_ID,koreShareholderId);
                 PersonResponse personResp = PersonsServiceClient.RequestPerson(koreShareholderId,companyKoreChainId,GetATSKoreChainId(transferAgent));
 
                 if (personResp != null && personResp.data != null)
                 {
                     if (personResp.data.pd != null)
                     {
-                        
-                        Logger.DoLog(string.Format("@ManagementLogic: Looking for shareholders (firms) for KoreChainId {0}", koreShareholderId), fwk.Common.enums.MessageType.Information);
-
+                        DoLog(AuditLogic.NEW_ONBOARDING_RETRIEVING_SHAREHOLDER_IN_ATS,string.Format("@ManagementLogic: Looking for shareholders (firms) for KoreChainId {0} @ATS", koreShareholderId),AuditLogic.ID_NAME_KORE_SHAREHOLDER_ID,koreShareholderId);
                         List<Rialto.BusinessEntities.Shareholder> shareholdersByKoreChain = ShareholderManager.GetShareholders(koreShareholderId, null);
 
                         ValidateFoundShareholdersByKoreShareholderId(koreShareholderId, shareholdersByKoreChain);
@@ -615,8 +630,7 @@ namespace Rialto.LogicLayer
             }
             catch (Exception ex)
             {
-
-                Logger.DoLog(string.Format("@ManagementLogic- ERROR: {0}", ex.Message), fwk.Common.enums.MessageType.Error);
+                //Logger.DoLog(string.Format("@ManagementLogic- ERROR: {0}", ex.Message), fwk.Common.enums.MessageType.Error);
                 throw;
             }
         }

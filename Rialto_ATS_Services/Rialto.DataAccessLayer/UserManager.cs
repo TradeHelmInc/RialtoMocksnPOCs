@@ -73,7 +73,6 @@ namespace Rialto.DataAccessLayer
 
         #endregion
 
-
         #region Public Methods
 
         public long PersistUser(long shareholderId,User user)

@@ -29,6 +29,9 @@ namespace PlaidCredentialsLoadApp
 
             try
             {
+            
+                string appName = ConfigurationManager.AppSettings["ApplicationName"];
+                
                 string tradingCS = ConfigurationManager.AppSettings["TradingDBConnectionString"];
                 string orderCS = ConfigurationManager.AppSettings["OrdersDBConnectionString"];
                 
@@ -42,7 +45,7 @@ namespace PlaidCredentialsLoadApp
                 logger.DoLog("Extracting RSA public key", MessageType.Information);
                 string RSAPublicKey = FileLoader.GetFileContent(RSAPublicKeyPath);
 
-                PlaidService plaidService = new PlaidService(tradingCS, orderCS,plaidCredentialsLoadServiceURL,RSAPublicKey,plaidTestEnv , logger);
+                PlaidService plaidService = new PlaidService(appName,tradingCS, orderCS,plaidCredentialsLoadServiceURL,RSAPublicKey,plaidTestEnv , logger);
 
                 plaidService.Run();
 

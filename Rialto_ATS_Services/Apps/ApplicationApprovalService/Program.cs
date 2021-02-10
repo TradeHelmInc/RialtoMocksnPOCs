@@ -30,6 +30,8 @@ namespace ApplicationApprovalService
 
             try
             {
+                string appName = ConfigurationManager.AppSettings["ApplicationName"];
+                
                 string tradingCS = ConfigurationManager.AppSettings["TradingDBConnectionString"];
                 string orderCS = ConfigurationManager.AppSettings["OrdersDBConnectionString"];
                 
@@ -37,7 +39,7 @@ namespace ApplicationApprovalService
                 
                 logger.DoLog("Initializing Application Approval Service", MessageType.Information);
 
-                ManagementService transService = new ManagementService(tradingCS, orderCS, ApplicationApprovalServiceURL, logger);
+                ManagementService transService = new ManagementService(appName,tradingCS, orderCS, ApplicationApprovalServiceURL, logger);
                 
                 transService.Run();
 
