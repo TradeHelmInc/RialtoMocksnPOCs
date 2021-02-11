@@ -706,7 +706,10 @@ namespace Rialto.LogicLayer
         {
             try
             {
-                Logger.DoLog(string.Format("Approving application for email {0}", email), fwk.Common.enums.MessageType.Information);
+                
+                DoLog(AuditLogic.APP_APPROVAL_START,
+                    string.Format("Received application approval for email {0}", email));
+                
                 User usr = UserManager.GetUser(email);
 
                 if (usr == null)
@@ -718,13 +721,21 @@ namespace Rialto.LogicLayer
                 if (sh == null)
                     throw new Exception(string.Format("Could not find shareholder (firm) for id {0} (email {1})",
                                         usr.FirmId, email));
+                
+                
+                DoLog(AuditLogic.APP_APPROVAL_APPROVING_SHAREHOLDER,
+                    string.Format("Approving shareholder TaxId={0}", 
+                                        sh.FirmTaxId),AuditLogic.ID_NAME_TAX_ID, sh.FirmTaxId);
+
 
                 sh.OnboardingStatus = BusinessEntities.Shareholder._STATUS_APP_APPROVED;
 
                 ShareholderManager.PersistShareholder(sh);
                 
-                Logger.DoLog(string.Format("Application for email {0} sucessfully approved", email), fwk.Common.enums.MessageType.Information);
-
+                DoLog(AuditLogic.APP_APPROVAL_APPROVED_SHAREHOLDER,
+                    string.Format("Shareholder for TaxId={0} successfully approved", 
+                        sh.FirmTaxId),AuditLogic.ID_NAME_TAX_ID, sh.FirmTaxId);
+                
                 return _SOLIDUS_APPLICATION_APPROVAL_OK;
             }
             catch (Exception e)

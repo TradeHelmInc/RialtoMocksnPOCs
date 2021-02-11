@@ -57,7 +57,7 @@ namespace Rialto.ServiceLayer
             ManagementServiceURL = pManagementServiceURL;
 
             ManagementLogic = new ManagementLogic(pAppName,pTradingCS, pOrderCS, pLogger);
-
+            
             Logger = pLogger;
 
         }
