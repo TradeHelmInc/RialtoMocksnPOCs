@@ -90,5 +90,19 @@ namespace Rialto.BusinessEntities
 
 
         #endregion
+        
+        #region Public Methods
+
+        public string GetFullName()
+        {
+            string name = "";
+
+            name += FirstName != null ? FirstName + " " : "";
+            name += LastName != null ? LastName : "";
+
+            return name;
+        }
+
+        #endregion
     }
 }

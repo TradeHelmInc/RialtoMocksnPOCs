@@ -3,6 +3,8 @@
     public class PlaidCredential
     {
         #region Public Attributes
+        
+        public Shareholder Shareholder { get; set; }
 
         public User User { get; set; }
 

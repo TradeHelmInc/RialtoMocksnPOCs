@@ -192,7 +192,7 @@ namespace Rialto.LogicLayer
 
             Logger = pLogger;
 
-            PlaidLogic = new PlaidLogic(pTradingConnectionString, pLogger, pPlaidTestEnv);
+            PlaidLogic = new PlaidLogic(pAppName,pTradingConnectionString, pLogger, pPlaidTestEnv);
    
         }
         
@@ -216,13 +216,11 @@ namespace Rialto.LogicLayer
    
         }
 
-
         #endregion
 
         #region Private Methods
         
         #region Plaid
-        
       
 
         #endregion
@@ -663,23 +661,45 @@ namespace Rialto.LogicLayer
 
         public string OnPlaidCredentialsLoad(string userIdentifier, string plaidAccessToken, string plaidItemId)
         {
-            User user = UserManager.GetUser(userIdentifier);//User Identifier has to be the email
 
-            if (user == null)
-                throw new Exception(string.Format("Could not find user for email (user identifier){0}",
-                    userIdentifier));
-
-            string encAccessToken = RSAEncryption.EncryptToStr(RSAPublicKey, plaidAccessToken);
-
-            PlaidCredential plaidCred = new PlaidCredential()
+            try
             {
-                User = user,
-                AccessToken = encAccessToken,
-                UserIdentifier = userIdentifier,
-                PlaidItemId = plaidItemId
-            };
+                DoLog(AuditLogic.PLAID_CREDENTIALS_START, string.Format("Received Plaid Credentials for email {0}",userIdentifier));
 
-            return PlaidLogic.PersistCredentialsAndUpdateBalance(plaidCred);
+                User user = UserManager.GetUser(userIdentifier); //User Identifier has to be the email
+
+                if (user == null)
+                    throw new Exception(string.Format("Could not find user for email (user identifier){0}",
+                        userIdentifier));
+
+                BusinessEntities.Shareholder sh = ShareholderManager.GetShareholder(user.FirmId); 
+                
+                if (sh == null)
+                    throw new Exception(string.Format("Could not find firm for firmId (user identifier){0}",
+                        user.FirmId));
+
+                DoLog(AuditLogic.PLAID_CREDENTIALS_USER_FOUND,
+                    string.Format("Found user for email {0}: Name {1} TaxId={2}", userIdentifier, sh.GetFullName(),
+                        sh.FirmTaxId),AuditLogic.ID_NAME_TAX_ID, sh.FirmTaxId);
+                
+                string encAccessToken = RSAEncryption.EncryptToStr(RSAPublicKey, plaidAccessToken);
+
+                PlaidCredential plaidCred = new PlaidCredential()
+                {
+                    User = user,
+                    Shareholder = sh,
+                    AccessToken = encAccessToken,
+                    UserIdentifier = userIdentifier,
+                    PlaidItemId = plaidItemId
+                };
+
+                return PlaidLogic.PersistCredentialsAndUpdateBalance(plaidCred);
+            }
+            catch (Exception ex)
+            {
+                DoLogError(AuditLogic.PLAID_CREDENTIALS_FAILED,ex, string.Format("@ManagementLogic.OnPlaidCredentialsLoad- ERROR: {0}", ex.Message));
+                throw;
+            }
         }
 
         public string OnApplicationApproval(string email)

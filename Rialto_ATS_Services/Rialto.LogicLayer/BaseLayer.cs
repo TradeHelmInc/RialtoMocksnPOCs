@@ -21,7 +21,6 @@ namespace Rialto.LogicLayer
 
         #region Protected Methods
 
-
         protected void DoLog(string msg, MessageType type)
         {
             Logger.DoLog(msg, type);

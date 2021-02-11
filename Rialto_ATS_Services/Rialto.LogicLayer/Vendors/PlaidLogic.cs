@@ -14,7 +14,7 @@ using Rialto.Plaid.ServiceLayer.Client;
 
 namespace Rialto.LogicLayer.Vendors
 {
-    public class PlaidLogic
+    public class PlaidLogic:BaseLayer
     {
         #region Protected Attributes
         
@@ -34,8 +34,6 @@ namespace Rialto.LogicLayer.Vendors
         
         protected TokenManager TokenManager { get; set; }
         
-        protected ILogger Logger { get; set; }
-        
         #endregion
         
         #region Protected Static Consts
@@ -51,12 +49,15 @@ namespace Rialto.LogicLayer.Vendors
         #region Constructors
 
 
-        public PlaidLogic(string pTradingConnectionString,ILogger pLogger,bool pPlaidTestEnv)
+        public PlaidLogic(string pAppName,string pTradingConnectionString,ILogger pLogger,bool pPlaidTestEnv)
         {
             PlaidCredentialsManager = new PlaidCredentialsManager(pTradingConnectionString);
             PlaidSettingManager = new PlaidSettingManager(pTradingConnectionString);
             ShareholderManager = new ShareholderManager(pTradingConnectionString);
             UserManager = new UserManager(pTradingConnectionString);
+
+            AuditLogic = new AuditLogic(pAppName, pTradingConnectionString);
+            
             Logger = pLogger;
             PlaidTestEnv = pPlaidTestEnv;
             LoadPlaidBalanceManager();
@@ -187,45 +188,31 @@ namespace Rialto.LogicLayer.Vendors
         
         #region Private Methods
 
-        private void DoUpadateBalance(string userIdentifier,GetBalanceResp getBalanceResp)
+        private void DoUpadateBalance(PlaidCredential cred,GetBalanceResp getBalanceResp)
         {
-            Rialto.BusinessEntities.User user = UserManager.GetUser(userIdentifier);
-            
-            if (user == null)
-                throw new Exception(string.Format("Could not find a user for user identifier (email) {0} ",userIdentifier));
-
-            Rialto.BusinessEntities.Shareholder shareholder = ShareholderManager.GetShareholder(user.FirmId);
-
-            if (shareholder == null)
-                throw new Exception(string.Format("Could not find a firm for firmId {0} ", user.FirmId));
+            DoLog(AuditLogic.PLAID_CREDENTIALS_PERSISTING_BALANCE,string.Format("Persisting balance for Tax Id {0}",cred.Shareholder.FirmTaxId), AuditLogic.ID_NAME_TAX_ID,cred.Shareholder.FirmTaxId);
 
             double availableBalance = getBalanceResp.GetBalanceForTrading();
-            shareholder.FirmLimit = availableBalance;
-            user.BuyingPower = availableBalance;
-            user.UsedLimit = 0;
-            user.TradeLimit = availableBalance;
-            user.CashOnHand = availableBalance;
+            cred.Shareholder.FirmLimit = availableBalance;
+            cred.User.BuyingPower = availableBalance;
+            cred.User.UsedLimit = 0;
+            cred.User.TradeLimit = availableBalance;
+            cred.User.CashOnHand = availableBalance;
 
             using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required))
             {
-                UserManager.PersistUser(shareholder.Id,user);
-                ShareholderManager.PersistShareholder(shareholder);
+                UserManager.PersistUser(cred.Shareholder.Id,cred.User);
+                ShareholderManager.PersistShareholder(cred.Shareholder);
                 
                 scope.Complete();
             }
+            DoLog(AuditLogic.PLAID_CREDENTIALS_PERSISTED_BALANCE,string.Format("Persisted balance for Tax Id {0}",cred.Shareholder.FirmTaxId), AuditLogic.ID_NAME_TAX_ID,cred.Shareholder.FirmTaxId);
         }
 
-        private string UpdatePlaidBalance(string userIdentifier)
+        private string UpdatePlaidBalance(PlaidCredential cred)
         {
             try
             {
-
-                PlaidCredential cred = PlaidCredentialsManager.GetPlaidCredentials(userIdentifier);
-
-                if (cred == null)
-                    throw new Exception(string.Format("Critical error persisting Plaid credentials for email; {0}",
-                        userIdentifier));
-
                 GetBalanceReq getBalanceReq = new GetBalanceReq()
                 {
                     access_token = cred.AccessToken,
@@ -235,35 +222,41 @@ namespace Rialto.LogicLayer.Vendors
                 
                 if (PlaidTestEnv && Setting.SecretAndClientIdLoaded())//if we are in a test environment , we have to use the test env credentials
                 {
+                    DoLog(AuditLogic.PLAID_CREDENTIALS_AUTH_TEST_ENV,string.Format("Auth Plaid Credentials in test env for TaxId={0}",cred.Shareholder.FirmTaxId), AuditLogic.ID_NAME_TAX_ID,cred.Shareholder.FirmTaxId);
                     AuthReq authReq = DoAuthInPlaidTestEnv(Setting.ClientId, Setting.Secret);
                     getBalanceReq.access_token = authReq.access_token;
+                    DoLog(AuditLogic.PLAID_CREDENTIALS_AUTHENTICATED,string.Format("Plaid Credentials Authenticated for TaxId={0}",cred.Shareholder.FirmTaxId), AuditLogic.ID_NAME_TAX_ID,cred.Shareholder.FirmTaxId);
                 }
 
                 if (!string.IsNullOrEmpty(Setting.Secret) && !string.IsNullOrEmpty(Setting.ClientId) && !string.IsNullOrEmpty(cred.AccessToken))
                 {
-                    Logger.DoLog(string.Format("Requesting balances for access token {0}", getBalanceReq.access_token),fwk.Common.enums.MessageType.Information);
+                    DoLog(AuditLogic.PLAID_CREDENTIALS_REQUESTING_BALANCE,string.Format("Requesting balances for access token {0}", getBalanceReq.access_token), AuditLogic.ID_NAME_TAX_ID,cred.Shareholder.FirmTaxId);
                     BaseResponse respGetBalanceReq =BalanceManager.GetBalance(getBalanceReq);
 
                     if (respGetBalanceReq.GenericError == null)
                     {
 
                         GetBalanceResp getBalanceResp = (GetBalanceResp) respGetBalanceReq;
-                        Logger.DoLog(string.Format("Found {0} accounts",getBalanceResp.accounts != null ? getBalanceResp.accounts.Length : 0),fwk.Common.enums.MessageType.Information);
+                        DoLog(AuditLogic.PLAID_CREDENTIALS_FOUND_ACCOUNTS,string.Format("Found {0} accounts",getBalanceResp.accounts != null ? getBalanceResp.accounts.Length : 0), AuditLogic.ID_NAME_TAX_ID,cred.Shareholder.FirmTaxId);
 
-                        DoUpadateBalance(userIdentifier, getBalanceResp);
+                        DoUpadateBalance(cred, getBalanceResp);
                         
                         return _PLAID_CREDENTIALS_LOADED;
                     }
                     else
                     {
-                        Logger.DoLog(string.Format("Error requesting balances:{0}",respGetBalanceReq.GenericError.display_message), fwk.Common.enums.MessageType.Error);
+                        Exception ex = new Exception(string.Format("Error requesting balances:{0}",
+                            respGetBalanceReq.GenericError.display_message));
+                        DoLogError(AuditLogic.PLAID_CREDENTIALS_FAILED,ex,ex.Message );
                         return _PLAID_CREDENTIALS_LOADED_FAILED_BALANCE;
                     }
                 }
             }
             catch (Exception ex)
             {
-                Logger.DoLog(string.Format("Error requesting balances for populated token:{0}",ex.Message), fwk.Common.enums.MessageType.Error);
+                Exception ex2 =
+                    new Exception(string.Format("Error requesting balances for populated token:{0}", ex.Message));
+                DoLogError(AuditLogic.PLAID_CREDENTIALS_FAILED,ex2,ex2.Message );
                 return _PLAID_CREDENTIALS_LOADED_BUT_BALANCE_EXCEPTION;
             }
             
@@ -276,9 +269,21 @@ namespace Rialto.LogicLayer.Vendors
 
         public string PersistCredentialsAndUpdateBalance(PlaidCredential plaidCred)
         {
-            PlaidCredentialsManager.PersistPlaidCredentials(plaidCred);
 
-            return UpdatePlaidBalance(plaidCred.UserIdentifier);
+            DoLog(AuditLogic.PLAID_CREDENTIALS_PERSISTING,
+                string.Format("Persisting Plaid Credentials for TaxId={0}",
+                    plaidCred.Shareholder.FirmTaxId), AuditLogic.ID_NAME_TAX_ID,
+                plaidCred.Shareholder.FirmTaxId);
+
+            
+            PlaidCredentialsManager.PersistPlaidCredentials(plaidCred);
+            
+            DoLog(AuditLogic.PLAID_CREDENTIALS_PERSISTED,
+                string.Format("Plaid Credentials Persisted for TaxId={0}",
+                    plaidCred.Shareholder.FirmTaxId), AuditLogic.ID_NAME_TAX_ID,
+                plaidCred.Shareholder.FirmTaxId);
+
+            return UpdatePlaidBalance(plaidCred);
         }
 
         #endregion
